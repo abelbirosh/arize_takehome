@@ -1,0 +1,31 @@
+[project]
+name = "research-agent"
+version = "0.1.0"
+description = "Research agent with Jev-routed adaptive tool selection, traced and benchmarked in Phoenix"
+readme = "README.md"
+authors = [
+    { name = "Abel", email = "abelbirosh@berkeley.edu" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "arize-phoenix-otel>=0.17.2",
+    "beautifulsoup4>=4.15.0",
+    "httpx>=0.28.1",
+    "openai>=3.29.0",
+    "openinference-instrumentation-openai>=0.1.65",
+    "openinference-semantic-conventions>=0.1.41",
+    "python-dotenv>=1.2.4",
+    "typesafe-sdk>=0.7.4",
+]
+
+[project.scripts]
+research-agent = "research_agent.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.15,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
