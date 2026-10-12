@@ -4,7 +4,7 @@ import './styles.css';
 import { emptyResearch, validateResearch } from './research.js';
 
 const chapters = [
-  { id: 'question', name: 'Question', title: 'Can a decision model choose the next steps of a research agent as well as a reasoning model' },
+  { id: 'question', name: 'Question', title: 'Can a decision model choose the next steps of a research agent as well as a reasoning model?' },
   { id: 'results', name: 'Results', title: 'Results' },
   { id: 'phoenix', name: 'How I used Phoenix?', title: 'How I used Phoenix?' },
   { id: 'challenges', name: 'What went wrong and how we fixed it?', title: 'What went wrong and how we fixed it?' },
