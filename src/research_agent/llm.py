@@ -10,11 +10,13 @@ from __future__ import annotations
 import json
 import logging
 import re
+import time
 from dataclasses import dataclass, field
 
 from openai import OpenAI
 
 from research_agent.config import Settings
+from research_agent.ratelimit import throttle
 from research_agent.state import AgentState, Candidate, Origin
 
 NOTHING = "NOTHING_RELEVANT"
@@ -38,10 +40,13 @@ class Usage:
 class LLM:
     def __init__(self, settings: Settings, model: str | None = None, client: OpenAI | None = None):
         self.model = model or settings.llm_model
-        self.client = client or OpenAI(base_url=settings.llm_base_url, api_key=settings.llm_api_key)
+        self.client = client or OpenAI(
+            base_url=settings.llm_base_url, api_key=settings.llm_api_key, max_retries=6
+        )
         self.reasoning = settings.llm_reasoning
         self._openrouter = "openrouter.ai" in settings.llm_base_url
         self.usage = Usage()
+        self.last_latency_ms = 0.0
 
     def _extra_body(self) -> dict | None:
         if not self._openrouter:
@@ -53,6 +58,8 @@ class LLM:
         return {"usage": {"include": True}, "reasoning": reasoning}
 
     def complete(self, purpose: str, system: str, user: str, max_tokens: int = 1024) -> str:
+        throttle(self.model)
+        t0 = time.perf_counter()
         resp = self.client.chat.completions.create(
             model=self.model,
             messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -60,6 +67,7 @@ class LLM:
             max_tokens=max_tokens + (0 if self.reasoning == "off" else REASONING_HEADROOM),
             extra_body=self._extra_body(),
         )
+        self.last_latency_ms = (time.perf_counter() - t0) * 1000  # API time, no queueing
         self._track(purpose, resp)
         content = (resp.choices[0].message.content or "").strip()
         if not content:

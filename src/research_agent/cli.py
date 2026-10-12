@@ -14,7 +14,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("question")
     p.add_argument("--controller", choices=CONTROLLERS, default="jev")
-    p.add_argument("--model", help="LLM model id (default: LLM_MODEL env)")
+    p.add_argument("--model", help="generator LLM id (default: LLM_MODEL env)")
     p.add_argument("--trace", action="store_true", help="send traces to Phoenix")
     p.add_argument("--json", action="store_true", help="print the full result as JSON")
     args = p.parse_args(argv)
@@ -43,8 +43,8 @@ def main(argv: list[str] | None = None) -> int:
     st = result.stats
     print(f"\nANSWER: {result.answer}")
     print(f"\n{st['steps']} steps | {result.wall_ms / 1000:.1f}s wall | "
-          f"routing {st['decision_latency_ms']:.0f}ms | ${st['total_cost_usd']:.4f} "
-          f"(llm ${st['llm_cost_usd']:.4f}, jev ${st['jev_cost_usd']:.6f}) | "
+          f"routing {st['routing_latency_ms']:.0f}ms | ${st['total_cost_usd']:.4f} "
+          f"(generator ${st['generator_cost_usd']:.4f}, routing ${st['routing_cost_usd']:.6f}) | "
           f"invalid={st['invalid_decisions']} escalations={st['escalations']}")
     return 0
 

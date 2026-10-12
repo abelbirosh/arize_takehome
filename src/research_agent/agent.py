@@ -11,6 +11,7 @@ from openinference.instrumentation import using_metadata
 from research_agent.config import Settings
 from research_agent.controllers import Controller
 from research_agent.llm import LLM, Usage
+from research_agent.ratelimit import reset_wait, waited_ms
 from research_agent.state import Action, AgentState, Decision, Note, Origin, Search, StepRecord
 from research_agent.tools import Tools
 from research_agent.tracing import to_json, tracer
@@ -42,7 +43,8 @@ class ResearchAgent:
     def run(self, question: str) -> AgentResult:
         state = AgentState(question=question, max_steps=self.settings.max_steps)
         self.llm.usage = Usage()  # per-run accounting; one agent per thread
-        metadata = {"controller": self.controller.name, "llm_model": self.llm.model,
+        reset_wait()
+        metadata = {"controller": self.controller.name, "generator_model": self.llm.model,
                     "max_steps": self.settings.max_steps}
         t0 = time.perf_counter()
         full_answer, answer = "", ""
@@ -150,25 +152,31 @@ class ResearchAgent:
         decisions = [s.decision for s in state.steps]
         routed = [d for d in decisions if not d.forced]
         actions = [d.action.value for d in decisions]
-        jev_cost = sum(d.jev_cost_usd for d in routed)
+        routing_cost = sum(d.cost_usd for d in routed)
+        last_s1 = next((d for d in reversed(routed) if d.evidence_sufficient is not None), None)
         return {
             "steps": len(state.steps),
             "searches": len(state.searches),
             "reads": sum(1 for c in state.candidates if c.read),
             "notes": len(state.notes),
+            "used_web_search": any(a == Action.SEARCH_WEB.value for a in actions),
             "forced_answer": any(d.forced for d in decisions),
             "invalid_decisions": sum(1 for d in routed if not d.valid),
             "escalations": sum(1 for d in routed if d.escalated),
-            "decision_latency_ms": sum(d.latency_ms for d in routed),
-            "decision_cost_usd": sum(d.cost_usd for d in routed),
-            "jev_calls": sum(1 for d in routed if d.evidence_sufficient is not None),
-            "jev_cost_usd": jev_cost,
-            "llm_calls": self.llm.usage.calls,
-            "llm_empty_replies": self.llm.usage.empty_replies,
-            "llm_cost_usd": self.llm.usage.cost_usd,
-            "total_cost_usd": self.llm.usage.cost_usd + jev_cost,
-            "llm_input_tokens": self.llm.usage.input_tokens,
-            "llm_output_tokens": self.llm.usage.output_tokens,
+            "decision_calls": sum(1 for d in routed if d.model),
+            "routing_latency_ms": sum(d.latency_ms for d in routed),
+            "routing_cost_usd": routing_cost,
+            "generator_calls": self.llm.usage.calls,
+            "generator_empty_replies": self.llm.usage.empty_replies,
+            "generator_cost_usd": self.llm.usage.cost_usd,
+            "generator_input_tokens": self.llm.usage.input_tokens,
+            "generator_output_tokens": self.llm.usage.output_tokens,
+            "total_cost_usd": self.llm.usage.cost_usd + routing_cost,
+            # Decision models only: their last "notes suffice" probability, for calibration.
+            "final_evidence_sufficient": last_s1.evidence_sufficient if last_s1 else None,
             "wall_ms": wall_ms,
+            # Wall time minus time queued behind our own rate limiter.
+            "throttle_wait_ms": waited_ms(),
+            "active_ms": wall_ms - waited_ms(),
             "action_trace": " > ".join(actions),
         }

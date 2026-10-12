@@ -2,12 +2,13 @@
 
 Every controller sees the same `AgentState.snapshot()` and returns a `Decision`.
 Only the decider changes between them; query writing, note taking and answering
-always go to the LLM. That isolation is what makes the benchmark comparable.
+always go to the generator LLM. That isolation is what makes the benchmark comparable.
 
-- JevController     Jev answers typed questions (Choice/Noul) with probabilities.
-- LLMController     The LLM picks the action by emitting JSON (classic ReAct-style routing).
-- HybridController  Jev decides; if its confidence is below a threshold, the LLM decides.
-- FixedController   No model: search Wikipedia -> read -> search web -> read -> answer.
+- SystemOneController  A System One decision model (Jev) answers typed questions
+                       (Choice/Noul) with probabilities.
+- LLMController        A chat LLM picks the action by emitting JSON (ReAct-style routing).
+- HybridController     A decision model decides; below a confidence threshold, an LLM does.
+- FixedController      No model: search Wikipedia -> read -> search web -> read -> answer.
 """
 
 from __future__ import annotations
@@ -15,6 +16,7 @@ from __future__ import annotations
 import json
 import re
 import time
+from dataclasses import dataclass
 from typing import Protocol
 
 from openinference.instrumentation import get_decision_attributes
@@ -22,6 +24,7 @@ from typesafe_sdk import Choice, Noul, TypeSafeClient
 
 from research_agent.config import Settings
 from research_agent.llm import LLM
+from research_agent.ratelimit import throttle
 from research_agent.state import Action, AgentState, Decision, Origin
 from research_agent.tracing import to_json, tracer
 
@@ -66,15 +69,30 @@ def _fallback_action(state: AgentState) -> tuple[Action, str | None]:
     return (Action.ANSWER, None) if state.notes else (Action.SEARCH_WIKIPEDIA, None)
 
 
-# --------------------------------------------------------------------------- Jev
+# -------------------------------------------------------------------- System One
 
 
-class JevController:
-    name = "jev"
+@dataclass(frozen=True)
+class DecisionModel:
+    model_id: str  # as sent to the System One API (OpenRouter maps bare jev ids)
+    price_per_mtok: float  # USD per million input tokens; output is free
+    system: str  # OpenInference decision.system
 
-    def __init__(self, settings: Settings, client: TypeSafeClient | None = None):
+
+DECISION_MODELS: dict[str, DecisionModel] = {
+    "jev": DecisionModel("jev-latest", 0.042, "typesafe"),
+}
+
+
+class SystemOneController:
+    """Routes with a decision model through the System One API (OpenRouter or TypeSafe)."""
+
+    def __init__(self, settings: Settings, key: str = "jev",
+                 client: TypeSafeClient | None = None):
         self.settings = settings
-        self.model = settings.jev_model
+        self.name = key
+        self.spec = DECISION_MODELS[key]
+        self.model = settings.jev_model if key == "jev" else self.spec.model_id
         self.client = client or TypeSafeClient(
             api_key=settings.jev_api_key, base_url=settings.jev_base_url, model=self.model
         )
@@ -120,7 +138,7 @@ class JevController:
         snapshot = state.snapshot(self.settings.max_unread_candidates)
         questions = self.questions(state)
         with tracer.start_as_current_span(
-            "jev.decide", openinference_span_kind="decision"
+            f"{self.name}.decide", openinference_span_kind="decision"
         ) as span:
             span.set_input(
                 to_json({"state": snapshot, "questions": {
@@ -129,6 +147,7 @@ class JevController:
                 }}),
                 mime_type="application/json",
             )
+            throttle(self.model)
             t0 = time.perf_counter()
             resp = self.client.system_one(state=snapshot, questions=questions, model=self.model)
             latency = (time.perf_counter() - t0) * 1000
@@ -141,10 +160,10 @@ class JevController:
             sufficient = resp.answers["evidence_sufficient"].noul
             in_tok = resp.usage.input_tokens or 0
             out_tok = resp.usage.output_tokens or 0
-            cost = in_tok / 1e6 * self.settings.jev_price_per_mtok
+            cost = in_tok / 1e6 * self.spec.price_per_mtok
 
             span.set_attributes(get_decision_attributes(
-                provider=self.provider, system="typesafe",
+                provider=self.provider, system=self.spec.system,
                 request_model_name=self.model, response_model_name=resp.model,
                 token_count={"input": in_tok, "output": out_tok},
             ))
@@ -154,6 +173,7 @@ class JevController:
                 "decision.probabilities": to_json(nxt.probabilities),
                 "decision.evidence_sufficient": sufficient,
                 "decision.latency_ms": latency,
+                "decision.cost_usd": cost,
                 **({"decision.read_target": target,
                     "decision.read_target_confidence": resp.answers["read_target"].confidence}
                    if target else {}),
@@ -163,10 +183,9 @@ class JevController:
                 mime_type="application/json",
             )
         return Decision(
-            action=action, controller=self.name, target_id=target,
+            action=action, controller=self.name, model=self.model, target_id=target,
             confidence=nxt.confidence, probabilities=dict(nxt.probabilities),
             evidence_sufficient=sufficient, latency_ms=latency, cost_usd=cost,
-            jev_cost_usd=cost,
         )
 
 
@@ -194,19 +213,20 @@ def parse_llm_decision(text: str, state: AgentState) -> tuple[Action, str | None
 
 
 class LLMController:
-    name = "llm"
+    """A chat LLM as the decider. Uses its own `LLM` instance so routing cost and
+    generation cost are accounted separately, even when it is the same model."""
 
-    def __init__(self, settings: Settings, llm: LLM):
+    def __init__(self, settings: Settings, llm: LLM, name: str = "llm"):
         self.settings = settings
         self.llm = llm
+        self.name = name
 
     def decide(self, state: AgentState) -> Decision:
         snapshot = state.snapshot(self.settings.max_unread_candidates)
         options = {a.value: ACTION_CRITERIA[a] for a in state.available_actions()}
         cost0 = self.llm.usage.cost_usd
-        t0 = time.perf_counter()
         raw = self.llm.decide(snapshot, options)
-        latency = (time.perf_counter() - t0) * 1000
+        latency = self.llm.last_latency_ms  # excludes rate-limit queueing
         cost = self.llm.usage.cost_usd - cost0
         try:
             action, target, reason = parse_llm_decision(raw, state)
@@ -215,8 +235,8 @@ class LLMController:
             action, target = _fallback_action(state)
             reason, valid = f"invalid controller output ({e}); fell back", False
         return Decision(
-            action=action, controller=self.name, target_id=target, latency_ms=latency,
-            cost_usd=cost, valid=valid, reason=reason,
+            action=action, controller=self.name, model=self.llm.model, target_id=target,
+            latency_ms=latency, cost_usd=cost, valid=valid, reason=reason,
         )
 
 
@@ -226,11 +246,12 @@ class LLMController:
 class HybridController:
     name = "hybrid"
 
-    def __init__(self, jev: JevController, llm: LLMController, threshold: float):
-        self.jev, self.llm, self.threshold = jev, llm, threshold
+    def __init__(self, s1: SystemOneController, llm: LLMController, threshold: float):
+        self.s1, self.llm, self.threshold = s1, llm, threshold
+        self.name = f"hybrid-{s1.name}"
 
     def decide(self, state: AgentState) -> Decision:
-        first = self.jev.decide(state)
+        first = self.s1.decide(state)
         if first.confidence is not None and first.confidence >= self.threshold:
             first.controller = self.name
             return first
@@ -239,12 +260,11 @@ class HybridController:
         second.escalated = True
         second.latency_ms += first.latency_ms
         second.cost_usd += first.cost_usd
-        second.jev_cost_usd = first.jev_cost_usd
         second.evidence_sufficient = first.evidence_sufficient
         second.probabilities = first.probabilities
         second.confidence = first.confidence
         second.reason = (
-            f"jev picked {first.action.value} at confidence {first.confidence:.2f} "
+            f"{self.s1.name} picked {first.action.value} at confidence {first.confidence:.2f} "
             f"< {self.threshold}; llm: {second.reason}"
         )
         return second
@@ -274,14 +294,30 @@ class FixedController:
         return Decision(action=Action.ANSWER, controller=self.name)
 
 
-def build_controller(kind: str, settings: Settings, llm: LLM) -> Controller:
-    if kind == "jev":
-        return JevController(settings)
+# Claude models used as deciders (the generator stays fixed).
+LLM_DECIDERS: dict[str, str] = {
+    "claude-haiku-5.5": "anthropic/claude-haiku-5.5",
+    "claude-sonnet-5.5": "anthropic/claude-sonnet-5.5",
+    "claude-opus-5.5": "anthropic/claude-opus-5.5",
+}
+
+CONTROLLERS = (*DECISION_MODELS, *LLM_DECIDERS, "llm", "hybrid", "fixed")
+
+
+def build_controller(kind: str, settings: Settings, generator_model: str) -> Controller:
+    """`llm` routes with the generator model itself; `hybrid` is Jev + that model."""
+    if kind in DECISION_MODELS:
+        return SystemOneController(settings, kind)
+    if kind in LLM_DECIDERS:
+        return LLMController(settings, LLM(settings, model=LLM_DECIDERS[kind]), name=kind)
     if kind == "llm":
-        return LLMController(settings, llm)
+        return LLMController(settings, LLM(settings, model=generator_model))
     if kind == "hybrid":
-        return HybridController(JevController(settings), LLMController(settings, llm),
-                                settings.hybrid_threshold)
+        return HybridController(
+            SystemOneController(settings, "jev"),
+            LLMController(settings, LLM(settings, model=generator_model)),
+            settings.hybrid_threshold,
+        )
     if kind == "fixed":
         return FixedController()
-    raise ValueError(f"unknown controller {kind!r}; expected jev|llm|hybrid|fixed")
+    raise ValueError(f"unknown controller {kind!r}; expected one of {', '.join(CONTROLLERS)}")

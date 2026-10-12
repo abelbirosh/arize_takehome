@@ -2,7 +2,7 @@ from research_agent.agent import ResearchAgent
 from research_agent.controllers import (
     FixedController,
     HybridController,
-    JevController,
+    SystemOneController,
     LLMController,
 )
 from research_agent.state import Action
@@ -17,21 +17,22 @@ def make(controller, llm, settings, tools=None):
 def test_jev_loop_search_read_answer(settings):
     jev = FakeJevClient(scripted("search_wikipedia", "read_source", "answer"))
     tools = FakeTools()
-    result = make(JevController(settings, client=jev), FakeLLM(), settings, tools).run("Q?")
+    result = make(SystemOneController(settings, "jev", client=jev), FakeLLM(), settings, tools).run("Q?")
 
     assert [s.decision.action for s in result.steps] == [
         Action.SEARCH_WIKIPEDIA, Action.READ_SOURCE, Action.ANSWER]
     assert result.answer == "42"
     assert tools.reads == ["s1"]  # read_target picked the first candidate
     assert len(result.notes) == 1
-    assert result.stats["jev_calls"] == 3
-    assert result.stats["jev_cost_usd"] > 0
+    assert result.stats["decision_calls"] == 3
+    assert result.stats["routing_cost_usd"] > 0
+    assert result.stats["final_evidence_sufficient"] == 0.9
     assert result.stats["invalid_decisions"] == 0
 
 
 def test_jev_only_offered_available_actions(settings):
     jev = FakeJevClient(scripted("search_web", "answer"))
-    make(JevController(settings, client=jev), FakeLLM(), settings).run("Q?")
+    make(SystemOneController(settings, "jev", client=jev), FakeLLM(), settings).run("Q?")
 
     first, second = jev.calls
     assert "read_source" not in first["questions"]["next_action"].criteria
@@ -42,7 +43,7 @@ def test_jev_only_offered_available_actions(settings):
 
 def test_budget_forces_answer(settings):
     jev = FakeJevClient(lambda q, s: ("search_web", 0.9))  # never wants to stop
-    result = make(JevController(settings, client=jev), FakeLLM(), settings).run("Q?")
+    result = make(SystemOneController(settings, "jev", client=jev), FakeLLM(), settings).run("Q?")
 
     assert result.stats["steps"] == settings.max_steps
     assert result.steps[-1].decision.action is Action.ANSWER
@@ -54,9 +55,9 @@ def test_hybrid_escalates_only_when_unsure(settings):
     # Confident on step 0, unsure afterwards.
     jev = FakeJevClient(lambda q, s: ("search_wikipedia", 0.95 if not s["history"] else 0.2))
     llm = FakeLLM(decide_reply=llm_json("answer"))
-    ctrl = HybridController(JevController(settings, client=jev),
+    ctrl = HybridController(SystemOneController(settings, "jev", client=jev),
                             LLMController(settings, llm), threshold=0.5)
-    result = make(ctrl, llm, settings).run("Q?")
+    result = make(ctrl, FakeLLM(), settings).run("Q?")
 
     d0, d1 = result.steps[0].decision, result.steps[1].decision
     assert d0.action is Action.SEARCH_WIKIPEDIA and not d0.escalated
@@ -69,8 +70,8 @@ def test_hybrid_escalates_only_when_unsure(settings):
 def test_llm_controller_invalid_output_falls_back(settings):
     replies = iter(["sure! I think we should search", llm_json("browse_internet"),
                     llm_json("answer")])
-    llm = FakeLLM(decide_reply=lambda snap: next(replies))
-    result = make(LLMController(settings, llm), llm, settings).run("Q?")
+    decider = FakeLLM(decide_reply=lambda snap: next(replies))
+    result = make(LLMController(settings, decider), FakeLLM(), settings).run("Q?")
 
     assert result.stats["invalid_decisions"] == 2
     # fallback: no notes/candidates -> search; then candidates exist -> read
@@ -80,8 +81,8 @@ def test_llm_controller_invalid_output_falls_back(settings):
 
 def test_llm_controller_rejects_hallucinated_target(settings):
     replies = iter([llm_json("search_web"), llm_json("read_source", "s99"), llm_json("answer")])
-    llm = FakeLLM(decide_reply=lambda snap: next(replies))
-    result = make(LLMController(settings, llm), llm, settings).run("Q?")
+    decider = FakeLLM(decide_reply=lambda snap: next(replies))
+    result = make(LLMController(settings, decider), FakeLLM(), settings).run("Q?")
 
     step = result.steps[1].decision
     assert step.action is Action.READ_SOURCE and not step.valid

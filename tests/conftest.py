@@ -38,6 +38,7 @@ class FakeLLM:
         self.usage = Usage()
         self.decide_reply = decide_reply
         self.decide_calls = 0
+        self.last_latency_ms = 5.0
 
     def write_query(self, state, engine):
         self.usage.calls += 1

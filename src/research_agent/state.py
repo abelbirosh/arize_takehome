@@ -55,13 +55,13 @@ class Decision:
 
     action: Action
     controller: str
+    model: str | None = None  # decision model or decider LLM; None for fixed/forced
     target_id: str | None = None
     confidence: float | None = None
     probabilities: dict[str, float] = field(default_factory=dict)
     evidence_sufficient: float | None = None
     latency_ms: float = 0.0
-    cost_usd: float = 0.0  # cost of this routing decision (Jev and/or LLM)
-    jev_cost_usd: float = 0.0  # the Jev share, so totals don't double-count LLM usage
+    cost_usd: float = 0.0  # cost of this routing decision (decision model and/or decider LLM)
     valid: bool = True  # False if the controller produced an unusable answer
     forced: bool = False  # True if the harness overrode the controller (budget)
     escalated: bool = False  # True if the hybrid controller deferred to the LLM

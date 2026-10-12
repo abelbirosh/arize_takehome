@@ -6,7 +6,7 @@ from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
 from research_agent.agent import ResearchAgent
-from research_agent.controllers import JevController
+from research_agent.controllers import SystemOneController
 
 from conftest import FakeJevClient, FakeLLM, FakeTools, scripted
 
@@ -19,7 +19,7 @@ trace_api.set_tracer_provider(provider)
 def test_span_tree(settings):
     exporter.clear()
     jev = FakeJevClient(scripted("search_wikipedia", "read_source"))
-    ResearchAgent(JevController(settings, client=jev), FakeLLM(), FakeTools(), settings).run("Q?")
+    ResearchAgent(SystemOneController(settings, "jev", client=jev), FakeLLM(), FakeTools(), settings).run("Q?")
 
     spans = {s.name: s for s in exporter.get_finished_spans()}
     kind = lambda n: spans[n].attributes["openinference.span.kind"]
