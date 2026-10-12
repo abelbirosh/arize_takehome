@@ -105,7 +105,7 @@ function App() {
         <div className="chapter-meta"><span>{String(chapter + 1).padStart(2, '0')} <span className="meta-slash">/</span> {String(chapters.length).padStart(2, '0')}</span></div>
         <div className="chapter-content" key={current.id}>
           {chapter === 0 ? <>
-            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">{current.title}</h1><p className="intro">Empirical analysis of usage of decision model for agent design</p></div></div>
+            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">Empirical analysis of usage of decision model for agent design</h1><h2 className="question-followup">{current.title}</h2></div></div>
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
             {chapter === 1 && <>
