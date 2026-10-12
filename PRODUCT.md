@@ -27,3 +27,6 @@ README.md describes the agent. docs/benchmark_plan.md describes planned comparis
 
 ## Brand Commitments
 All frontend text uses Times New Roman. Typography hierarchy uses its sizes, regular and bold weights, and italics. The user requested removing the research upload option; research loads automatically from the bundled public JSON file.
+
+## Current Presentation Structure
+The header title is “When and When Not to Jev” without a logo. Use an abstract color blob for the browser thumbnail. The current sections supersede the earlier list: “Question”, “Results”, “How I used Phoenix?”, “What went wrong and how we fixed it?”, and “Takeaways”. Preserve their full visible wording. Remove flowcharts until the user asks to add them later.

@@ -19,3 +19,5 @@ Verification: desktop 1440 × 1000 and mobile 390 × 844 screenshots under .impe
 Update verification: five chapters checked at desktop 1440 × 1000 and mobile 390 × 844. Exact thesis section title preserved; legacy chapter hashes map to new sections; research format v2 adds thesis, learnings, challenge/solution pairs, takeaways, and attached links while accepting v1 imports.
 
 User refinement: remove the research upload/download panel and use Times New Roman for every text role.
+
+Current user refinement supersedes the previous chapter structure: text-only “When and When Not to Jev” header; abstract blob favicon; Question → Results → How I used Phoenix? → What went wrong and how we fixed it? → Takeaways. No flowcharts. The mobile index uses a wrapping two-column grid, and desktop/next-section labels also wrap in full. Thesis is retained within Question; results remain pending until supplied; Phoenix usage is linked to repository evidence.

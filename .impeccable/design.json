@@ -279,16 +279,8 @@
       "kind": "nav",
       "refersTo": "navigation-current",
       "description": "Numbered chapter links with a current step.",
-      "html": "<nav class=\"ds-nav\" aria-label=\"Chapters\"><a href=\"#question\" aria-current=\"step\"><span>01</span>The question</a><a href=\"#mechanism\"><span>02</span>The mechanism</a></nav>",
-      "css": ".ds-nav{display:flex;flex-direction:column;gap:8px;width:184px}.ds-nav a{font-family:'Times New Roman',serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;display:flex;align-items:center;gap:14px;min-height:44px;padding:10px 12px;border-radius:4px;text-decoration:none;color:var(--muted,#646c62)}.ds-nav a:hover{background:var(--soft,#eeeee5);color:var(--ink,#252c29)}.ds-nav a[aria-current]{background:#e9ecd9;color:var(--ink,#252c29);font-weight:700}.ds-nav a span{font-size:10px;font-variant-numeric:tabular-nums;opacity:.7}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
-    },
-    {
-      "name": "Routing action",
-      "kind": "button",
-      "refersTo": "action-selected",
-      "description": "Selected action in the explanatory routing diagram.",
-      "html": "<button class=\"ds-action\" aria-pressed=\"true\">Search<span></span></button>",
-      "css": ".ds-action{font-family:'Times New Roman',serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;font-size:10px;min-height:40px;min-width:90px;border:1px solid #bec77a;border-radius:4px;background:var(--accent,#e8ee95);color:var(--ink,#252c29)}.ds-action:hover{border-color:#829368}.ds-action span{width:4px;height:4px;border-radius:50%;background:#5f6f3b;display:inline-block;margin-left:7px;vertical-align:middle}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+      "html": "<nav class=\"ds-chapter-index\"><a href=\"#question\">Question</a><a href=\"#results\">Results</a><a href=\"#phoenix\">How I used Phoenix?</a><a href=\"#challenges\">What went wrong and how we fixed it?</a><a href=\"#takeaways\">Takeaways</a></nav>",
+      "css": ".ds-chapter-index{font-family:\"Times New Roman\",Times,serif;display:grid;gap:8px;max-width:228px}.ds-chapter-index a{color:#252c29;padding:10px 12px;white-space:normal;overflow-wrap:anywhere;font-size:12px;text-decoration:none}.ds-chapter-index a:hover{background:#eeeee5}.ds-chapter-index a:focus-visible{outline:2px solid #476542;outline-offset:5px}"
     },
     {
       "name": "Pending evidence",
@@ -297,14 +289,6 @@
       "description": "Honest placeholder for findings that have not been supplied.",
       "html": "<div class=\"ds-empty\"><h2>A place for the results.</h2><p>The comparison will appear here when the research is ready.</p><span><i></i>Awaiting research</span></div>",
       "css": ".ds-empty{font-family:\"Times New Roman\",serif;color:var(--ink,#252c29);border:1px dashed #c8cebb;border-radius:5px;min-height:290px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px;gap:14px}.ds-empty h2{margin:0;font-size:17px;font-weight:700;letter-spacing:-.02em}.ds-empty p{margin:0;font-size:12px;color:var(--muted,#646c62);max-width:45ch;line-height:1.8}.ds-empty>span{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:700}.ds-empty i{width:5px;height:5px;background:#858c5a;border-radius:50%}"
-    },
-    {
-      "name": "Decision node",
-      "kind": "custom",
-      "refersTo": "routing-diagram",
-      "description": "Forest focal point inside the routing diagram.",
-      "html": "<div class=\"ds-decision\"><div><strong>System one</strong><span>Choose the next action</span></div><span class=\"ds-tag\">Jev</span></div>",
-      "css": ".ds-decision{display:flex;align-items:center;gap:13px;border:1px solid #52623f;background:var(--dark,#263b31);color:var(--accent,#e8ee95);padding:20px 17px;border-radius:5px}.ds-decision>div{display:flex;flex-direction:column;gap:4px}.ds-decision strong{font-family:\"Times New Roman\",serif;font-size:28px;font-weight:400;line-height:1}.ds-decision div span{font-family:\"Times New Roman\",serif;color:#d1dcbd;font-size:10px}.ds-tag{font-family:\"Times New Roman\",serif;font-size:9px;border:1px solid #647c5e;padding:3px 7px;border-radius:4px;align-self:flex-start;margin-left:auto}"
     },
     {
       "name": "Presentation action",
@@ -331,12 +315,12 @@
   ],
   "narrative": {
     "northStar": "Conference proceedings",
-    "overview": "Conference proceedings translated into a presentation reader: large editorial titles, an open paper surface, a numbered chapter index, and a restrained interactive routing diagram. This description records the implemented visual world; it is not a claim of user-approved qualitative preferences.\n\nThe hierarchy gives the question prominence while keeping mechanisms, planned comparisons, and supplied evidence readable. Pending content has its own explicit visual state rather than simulated findings.",
+    "overview": "A Times New Roman research presentation with a text-only title, open reading surfaces, fully wrapping chapter labels, and attached evidence links. Flowcharts are deferred; the favicon is an abstract color blob.",
     "keyCharacteristics": [
-      "Paper surfaces and hairline rules.",
-      "Times New Roman throughout, with size, bold weight, and italic emphasis establishing hierarchy.",
-      "Forest decision surfaces and lime selected actions.",
-      "Explicit pending, loaded, and error states."
+      "Times New Roman throughout.",
+      "Text-only header and abstract color-blob favicon.",
+      "Fully visible chapter labels at desktop and mobile widths.",
+      "Linked evidence and explicit pending results."
     ],
     "rules": [
       {

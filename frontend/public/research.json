@@ -187,5 +187,64 @@
       "title": "Original benchmark plan and interrupted-run notes",
       "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/docs/benchmark_plan.md"
     }
+  ],
+  "results": [],
+  "phoenix": [
+    {
+      "title": "One dataset, one experiment per controller.",
+      "body": "The question set is uploaded as a Phoenix dataset. Each controller runs against the same examples, with the generator held fixed. Experiment metadata records the decider, generator, step budget, reasoning setting, and judge.",
+      "links": [
+        {
+          "title": "Dataset upload",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/prepare_dataset.py"
+        },
+        {
+          "title": "Experiment runner",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
+        }
+      ]
+    },
+    {
+      "title": "Trace the decision inside the agent.",
+      "body": "The trace follows the research loop through routing, retrieval, source reading, and generation. Decision spans record the chosen action, confidence, validity, latency, and decision-model token counts, so the routing behavior can be inspected alongside the answer.",
+      "links": [
+        {
+          "title": "Tracing integration",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/src/research_agent/tracing.py"
+        },
+        {
+          "title": "Trace structure",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/README.md"
+        }
+      ]
+    },
+    {
+      "title": "Evaluate correctness and evidence support separately.",
+      "body": "LLM evaluators compare the answer against accepted variants and check whether the collected notes support its key claim. Code evaluators record cost, active latency, steps, forced answers, invalid decisions, and routing fit.",
+      "links": [
+        {
+          "title": "Phoenix evaluators",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
+        },
+        {
+          "title": "Judging criteria",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/src/research_agent/evals.py"
+        }
+      ]
+    },
+    {
+      "title": "Keep evaluations aligned with resumed runs.",
+      "body": "After an interrupted run, failed or missing examples can be resumed. A backfill checks for missing or stale evaluations and replaces grades that predate the current task output.",
+      "links": [
+        {
+          "title": "Resume workflow",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
+        },
+        {
+          "title": "Evaluation backfill",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/backfill_evals.py"
+        }
+      ]
+    }
   ]
 }

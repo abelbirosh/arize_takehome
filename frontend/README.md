@@ -17,12 +17,15 @@ Vercel: import this repository, use the repository root as the root directory, a
 
 Edit `frontend/public/research.json` and rebuild to publish research for everyone. The presentation reads this file automatically; there are no upload or research-download controls. All text uses Times New Roman, with size, regular/bold weight, and italics defining the hierarchy.
 
-The presentation opens with the original question, followed by four sections:
+The header reads **When and When Not to Jev**, without a logo. Its browser thumbnail is an abstract color blob. The five sections are:
 
-- **When and When Not to Jev** — thesis, motivation, experiment, and conditions being tested.
-- **Learnings** — observations with attached links.
-- **Challenges & solutions** — explicit problem/solution pairs and evidence.
-- **Takeaways** — working or final recommendations with supporting links.
+- **Question** — original question, thesis, motivation, and study design.
+- **Results** — measured findings, with an honest pending state until supplied.
+- **How I used Phoenix?** — datasets, experiments, traces, and evaluations.
+- **What went wrong and how we fixed it?** — problem/solution pairs.
+- **Takeaways** — working or final recommendations.
+
+Labels wrap in the sidebar and in a two-column mobile index so the full wording remains visible. Flowcharts are deferred.
 
 ```json
 {
@@ -36,6 +39,8 @@ The presentation opens with the original question, followed by four sections:
     "method": "The experimental comparison and controls.",
     "links": [{ "title": "Study design", "url": "https://example.com/study" }]
   },
+  "results": [],
+  "phoenix": [{ "title": "How Phoenix was used", "body": "Workflow and evidence.", "links": [] }],
   "learnings": [{ "title": "A learning", "body": "What the evidence supports.", "links": [] }],
   "challenges": [{ "title": "A challenge", "challenge": "The problem.", "solution": "The fix.", "links": [] }],
   "takeaways": [{ "title": "A takeaway", "body": "A recommendation and its limits.", "links": [] }],
@@ -43,7 +48,7 @@ The presentation opens with the original question, followed by four sections:
 }
 ```
 
-Use `pending` while research is in progress, including when implementation learnings are available but a final performance analysis is not. A `ready` file requires at least one learning. All four sections and the sources list are required. Lists support up to 100 entries. Attached links are optional and accept only HTTP(S) URLs. Content renders as plain text. Version 1 files remain supported: findings become learnings and recommendations become takeaways.
+Use `pending` while research is in progress, including when implementation learnings are available but a final performance analysis is not. A `ready` file requires at least one result or legacy learning. Results and Phoenix notes are optional lists, defaulting to empty. The legacy learnings list remains supported for compatibility. Lists support up to 100 entries. Attached links are optional and accept only HTTP(S) URLs. Content renders as plain text. Version 1 files remain supported: findings become learnings and recommendations become takeaways.
 
 The initial section content is grounded in pushed repository commit `440dc8f`, with commit-pinned links beside the observations. It describes implementation and the benchmark plan, not a completed performance comparison. Ongoing local research changes are not automatically published as presentation findings.
 
@@ -51,4 +56,4 @@ The initial section content is grounded in pushed repository commit `440dc8f`, w
 
 Choose a chapter in the index or use the bottom navigation. Left/right arrows and Page Up/Page Down change chapters when focus is on the presentation; Home/End jump to the first/last chapter. Chapter links use URL fragments and work with browser back/forward. **Present** enters full screen and hides the chapter index; Escape or **Exit presentation** returns. Browsers without full-screen support use a focus view.
 
-Old chapter URLs remain compatible: mechanism/experiment open the thesis, findings/sources open learnings, and practice opens takeaways.
+Old chapter URLs remain compatible: thesis/mechanism/experiment open Question, findings opens Results, learnings/sources open Phoenix, and practice opens Takeaways.

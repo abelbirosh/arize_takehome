@@ -45,7 +45,7 @@ Jev calls use OpenInference's `DECISION` span kind, which exists for models that
 
 ## Research presentation frontend
 
-The Vercel-ready frontend presents **“When should I use a system one model, and how?”** with chapter navigation, a routing diagram, full-screen viewing, and automatically loaded research content. Its key sections are **When and When Not to Jev**, **Learnings**, **Challenges & solutions**, and **Takeaways**, with attached evidence links. Performance conclusions remain provisional until the full-run analysis is supplied.
+The Vercel-ready frontend presents **“When should I use a system one model, and how?”** under the title **When and When Not to Jev**, with chapter navigation, full-screen viewing, and automatically loaded research content. Its sections are **Question**, **Results**, **How I used Phoenix?**, **What went wrong and how we fixed it?**, and **Takeaways**, with attached evidence links. Performance conclusions remain provisional until the full-run analysis is supplied.
 
 Use Node 24 (`nvm use`), then run `npm install` and `npm run dev` from the repository root. See [frontend/README.md](frontend/README.md) for research-file format, presentation controls, and Vercel setup.
 

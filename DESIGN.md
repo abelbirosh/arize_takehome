@@ -93,14 +93,14 @@ components:
 
 **Creative North Star: "Conference proceedings"**
 
-Conference proceedings translated into a presentation reader: large editorial titles, an open paper surface, a numbered chapter index, and a restrained interactive routing diagram. This description records the implemented visual world; it is not a claim of user-approved qualitative preferences.
+Conference proceedings translated into a presentation reader: large editorial titles, an open paper surface, a numbered chapter index, and linked research notes. This description records the implemented visual world; it is not a claim of user-approved qualitative preferences.
 
 The hierarchy gives the question prominence while keeping mechanisms, planned comparisons, and supplied evidence readable. Pending content has its own explicit visual state rather than simulated findings.
 
 **Key Characteristics:**
 - Paper surfaces and hairline rules.
 - Times New Roman throughout, with size, bold weight, and italic emphasis establishing hierarchy.
-- Forest decision surfaces and lime selected actions.
+- Restrained forest and lime accents.
 - Explicit pending, loaded, and error states.
 
 ## Colors
@@ -108,11 +108,11 @@ The hierarchy gives the question prominence while keeping mechanisms, planned co
 The palette combines warm paper neutrals with a forest decision surface and a pale lime selection accent. Values in the frontmatter are normative.
 
 ### Primary
-- **Forest decision surface** (`dark`): the decision node and primary-action hover.
-- **Lime selection** (`accent`): the selected routing action, decision lettering, and text selection.
+- **Forest decision surface** (`dark`): the primary-action hover.
+- **Lime selection** (`accent`): the text selection and primary-action hover lettering.
 
 ### Neutral
-- **Paper** (`paper`): page and diagram-node backgrounds.
+- **Paper** (`paper`): page and reading backgrounds.
 - **Ink** (`ink`): primary text and primary buttons.
 - **Muted olive gray** (`muted`): explanatory copy and metadata.
 - **Hairline rule** (`rule`): structural separators and control outlines.
@@ -124,7 +124,7 @@ The palette combines warm paper neutrals with a forest decision surface and a pa
 - **Pending indicator** and **ready indicator**: status dots accompanied by text.
 - **Error surface** and **error text**: the dismissible research-load error notice.
 
-**The Decision Accent Rule.** Use the forest-and-lime pairing for the decision node and selected routing actions; keep reading surfaces on paper.
+**The Accent Rule.** Use the forest-and-lime pairing sparingly on interactive states; keep reading surfaces on paper.
 
 ## Typography
 
@@ -141,21 +141,21 @@ The palette combines warm paper neutrals with a forest decision surface and a pa
 
 ## Layout
 
-The desktop shell has an 88px header and a 228px chapter index beside a fluid reading area. The main area is capped at 1600px with responsive horizontal padding. Content occupies the available height, with the chapter footer below it. Cover content pairs prose and diagram; internal chapters use open rows, tables, and rule-separated sections.
+The desktop shell has an 88px header and a 228px chapter index beside a fluid reading area. The main area is capped at 1600px with responsive horizontal padding. Content occupies the available height, with the chapter footer below it. Cover content is an open text composition; internal chapters use open rows, tables, and rule-separated sections.
 
-At 1100px and below the index narrows to 190px. At 820px and below it becomes a horizontally scrolling chapter strip above the content. At 600px and below the cover and mechanism collapse to a single column, with 22px main-side padding. Wide tables scroll within their own wrapper. A 1550px minimum-width adjustment increases upper spacing.
+At 1100px and below the index narrows to 190px. At 820px and below it becomes a wrapping two-column chapter index. All labels remain fully visible, including long section names. At 600px and below the cover and mechanism collapse to a single column, with 22px main-side padding. Wide tables scroll within their own wrapper. A 1550px minimum-width adjustment increases upper spacing.
 
 Spacing uses compact 8–12px control gaps, 20–24px grouping, and 30–35px section breathing room, alongside responsive larger chapter separations. Presentation mode hides the index and expands the question. Print hides shell controls and retains the reading content.
 
 ## Elevation & Depth
 
-The system has no box shadows. Tonal paper fills group mechanisms, while thin borders and whitespace separate the narrative. The dark decision node provides the strongest depth cue through contrast.
+The system has no box shadows. Tonal paper fills group mechanisms, while thin borders and whitespace separate the narrative. The page stays flat and open; flowcharts are deferred.
 
 **The Flat Reading Surface Rule.** Separate content with spacing, hairline rules, and tonal fills; the implementation uses no box shadows.
 
 ## Shapes
 
-Controls and individual diagram nodes use gently rounded corners; panels are slightly softer and the outer routing diagram is the roundest regular surface. One-pixel rules remain visible. The previous-page control is circular, as are status dots; keyboard hints use compact outlined key shapes. Pending evidence uses a dashed enclosure. No large pill-shaped card vocabulary is established.
+Controls use gently rounded corners and thin borders. One-pixel rules remain visible. The previous-page control is circular, as are status dots; keyboard hints use compact outlined key shapes. Pending evidence uses a dashed enclosure. No large pill-shaped card vocabulary is established.
 
 ## Components
 
@@ -165,8 +165,6 @@ Primary actions are compact ink rectangles with paper lettering, 46px minimum he
 ### Navigation
 The chapter index combines two-digit numbers and sentence-case labels. A pale selected fill, bold text weight, and inline arrow identify the current chapter. On narrow screens the arrow disappears and the index scrolls; changing chapters automatically brings the active section into view. The top of the reading area shows only chapter position, avoiding a redundant current-chapter label. Previous and next actions remain at the foot; keyboard navigation also supports arrows, Page Up/Down, Home, and End.
 
-### Routing diagram
-The inset diagram uses paper input/output nodes connected by one-pixel paths. A forest decision node with serif naming leads to three action buttons. The active action gets lime fill, a small dot, and `aria-pressed`; changing it updates the generation description. These are explanatory interactions, not benchmark results.
 
 ### Pending and loaded evidence
 An empty findings panel has a dashed outline, a small abstract chart illustration, and explicit awaiting-research text. Practice recommendations remain visibly pending. Supplied evidence becomes rule-separated text articles, preserving long text wrapping. Ready and pending statuses use both a dot and words.
@@ -192,10 +190,12 @@ Chapter changes reveal content over 0.42s with an 8px upward travel and a shallo
 - **Do** keep chapter navigation, current position, and previous/next controls clear.
 - **Do** distinguish pending evidence from supplied findings using explicit status text.
 - **Do** retain visible keyboard focus and respect reduced-motion preferences.
-- **Do** let the mobile chapter index scroll horizontally while page content remains within the viewport.
+- **Do** wrap the full chapter wording in the mobile index while page content remains within the viewport.
 
 ### Don't:
 - **Don't** add invented result values or treat the empty-chart illustration as measured data.
 - **Don't** repeat the current chapter name as an eyebrow above its title.
 - **Don't** replace the open, rule-separated composition with a generic shadowed-card grid.
 - **Don't** infer additional approved aesthetic preferences from this observed implementation.
+
+The header is the text-only title “When and When Not to Jev”, with no adjacent mark. The browser favicon is a single abstract green/lime color blob. Current sections are Question, Results, How I used Phoenix?, What went wrong and how we fixed it?, and Takeaways. No flowcharts appear in the interface.

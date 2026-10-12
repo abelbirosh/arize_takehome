@@ -4,13 +4,13 @@ import './styles.css';
 import { emptyResearch, validateResearch } from './research.js';
 
 const chapters = [
-  { id: 'question', name: 'The question', title: 'When should I use a system one model, and how?' },
-  { id: 'when-to-jev', name: 'When and When Not to Jev', title: 'When and When Not to Jev' },
-  { id: 'learnings', name: 'Learnings', title: 'Learnings' },
-  { id: 'challenges', name: 'Challenges & solutions', title: 'Challenges & solutions' },
+  { id: 'question', name: 'Question', title: 'When should I use a system one model, and how?' },
+  { id: 'results', name: 'Results', title: 'Results' },
+  { id: 'phoenix', name: 'How I used Phoenix?', title: 'How I used Phoenix?' },
+  { id: 'challenges', name: 'What went wrong and how we fixed it?', title: 'What went wrong and how we fixed it?' },
   { id: 'takeaways', name: 'Takeaways', title: 'Takeaways' },
 ];
-const legacyHashes = { mechanism: 'when-to-jev', experiment: 'when-to-jev', findings: 'learnings', practice: 'takeaways', sources: 'learnings' };
+const legacyHashes = { 'when-to-jev': 'question', mechanism: 'question', experiment: 'question', findings: 'results', learnings: 'phoenix', practice: 'takeaways', sources: 'phoenix' };
 const indexFromHash = () => {
   const hash = window.location.hash.slice(1);
   return Math.max(0, chapters.findIndex(c => c.id === (legacyHashes[hash] || hash)));
@@ -19,22 +19,6 @@ const indexFromHash = () => {
 function Icon({ name, ...props }) {
   const paths = { arrow: <><path d="M4 12h16M14 6l6 6-6 6"/></>, expand: <path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/>, close: <path d="m6 6 12 12M6 18 18 6"/> };
   return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>{paths[name] || paths.arrow}</svg>;
-}
-
-function RoutingDiagram({ detailed = false }) {
-  const [active, setActive] = useState(0);
-  const actions = ['Search', 'Read', 'Answer'];
-  return <div className={`routing-diagram ${detailed ? 'detailed' : ''}`}>
-    <div className="diagram-top"><span>Inside the research agent</span><span className="diagram-dot"/> </div>
-    <div className="context-node"><span>Question + evidence</span><small>The current state</small></div>
-    <div className="connector"/>
-    <div className="decision-node"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m14 2-9 12h7l-2 8 9-12h-7Z"/></svg><div><strong>System one</strong><span>Choose the next action</span></div><span className="node-tag">Jev</span></div>
-    <div className="branches"><span/><span/><span/></div>
-    <div className="action-choices" role="group" aria-label="Explore routing actions">{actions.map((action, i) => <button key={action} onClick={() => setActive(i)} aria-pressed={active === i} className={active === i ? 'selected' : ''}>{action}{active === i && <span className="choice-dot"/>}</button>)}</div>
-    <div className="connector"/>
-    <div className="generation-node"><span>Language model</span><small>{['Write a search query', 'Take notes from a source', 'Write the final answer'][active]}</small></div>
-    <div className="diagram-caption"><svg className="loop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 4v11h14m-4-4 4 4-4 4"/></svg> Decide → act → observe → repeat</div>
-  </div>;
 }
 
 function ReferenceLinks({ links = [] }) {
@@ -54,7 +38,7 @@ function ResearchNotes({ items, challenges = false, emptyTitle }) {
 function Thesis({ thesis }) {
   return <>
     <p className="intro wide">{thesis.body || 'The thesis and study design will appear here when research is loaded.'}</p>
-    <div className="mechanism-grid thesis-grid"><div><h2>Why test this?</h2><p className="thesis-copy">{thesis.why || 'The motivation for the experiment is pending.'}</p><h2 className="thesis-subheading">What the experiment changes</h2><p className="thesis-copy">{thesis.method || 'The experiment design is pending.'}</p><ReferenceLinks links={thesis.links}/></div><RoutingDiagram detailed/></div>
+    <div className="thesis-grid"><div><h2>Why test this?</h2><p className="thesis-copy">{thesis.why || 'The motivation for the experiment is pending.'}</p><h2 className="thesis-subheading">What the experiment changes</h2><p className="thesis-copy">{thesis.method || 'The experiment design is pending.'}</p><ReferenceLinks links={thesis.links}/></div></div>
     <p className="study-note">These are the conditions being tested, not a measured recommendation.</p>
     <div className="when-grid"><section><h2>When Jev is worth testing</h2><ul>{thesis.when.map((text, i) => <li key={i}>{text}</li>)}</ul></section><section><h2>When to use another approach</h2><ul>{thesis.whenNot.map((text, i) => <li key={i}>{text}</li>)}</ul></section></div>
   </>;
@@ -121,7 +105,7 @@ function App() {
   const researchNote = loading ? 'Loading presentation content.' : ready ? 'Research and attached links are available.' : research.learnings.length ? 'Implementation learnings are loaded.\nFinal analysis is pending.' : 'The question is set.\nResearch content is pending.';
   return <div className={`app ${presenting ? 'presenting' : ''}`}>
     <a href="#main" className="skip-link">Skip to presentation</a>
-    <header className="topbar"><a className="brand" href="#question" onClick={() => navigate(0)} aria-label="Research presentation home"><span className="brand-symbol"><span/><span/></span><span>System one<span className="brand-divider"> / </span><span className="brand-subtitle">A research presentation</span></span></a><div className="header-actions"><button className="present-button" onClick={togglePresentation}><Icon name={presenting ? 'close' : 'expand'}/>{presenting ? 'Exit presentation' : 'Present'}</button></div></header>
+    <header className="topbar"><a className="brand" href="#question" onClick={() => navigate(0)} aria-label="Presentation home">When and When Not to Jev</a><div className="header-actions"><button className="present-button" onClick={togglePresentation}><Icon name={presenting ? 'close' : 'expand'}/>{presenting ? 'Exit presentation' : 'Present'}</button></div></header>
     <div className="workspace">
       <aside className="sidebar"><nav ref={chapterNav} aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={`#${item.id}`} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav><div className="sidebar-note"><span className={`status-label ${ready ? 'ready' : ''}`}><span/>{loading ? 'Loading research' : ready ? 'Research loaded' : 'Research in progress'}</span><p>{researchNote}</p></div></aside>
       <main id="main" className={`main chapter-${current.id}`}>
@@ -129,14 +113,19 @@ function App() {
         <div className="chapter-meta"><span>{String(chapter + 1).padStart(2, '0')} <span className="meta-slash">/</span> {String(chapters.length).padStart(2, '0')}</span></div>
         <div className="chapter-content" key={current.id}>
           {chapter === 0 ? <>
-            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">When should I use a <em>system one</em> model, and how?</h1><p className="intro">Testing how much model a research agent needs to decide what happens next.</p><button className="primary-button" onClick={() => navigate(1)}>Explore the research<Icon name="arrow"/></button><p className="cover-note">Decision models · Claude deciders · Fixed baseline</p></div><RoutingDiagram/></div>
+            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">When should I use a <em>system one</em> model, and how?</h1><p className="intro">Testing how much model a research agent needs to decide what happens next.</p><button className="primary-button" onClick={() => navigate(1)}>View the results<Icon name="arrow"/></button><p className="cover-note">Decision models · Claude deciders · Fixed baseline</p></div></div>
+            <Thesis thesis={research.thesis}/>
             <div className="cover-bottom"><span className="question-mark">?</span><p>One question. Two parts.</p><div><strong>When</strong><span>Where does a decision model belong?</span></div><div><strong>How</strong><span>How do we put it to the test?</span></div></div>
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
-            {chapter === 1 && <Thesis thesis={research.thesis}/>}
+            {chapter === 1 && <>
+              <p className="intro wide">{research.results.length ? 'The measured outcomes of the controller comparison, with supporting evidence.' : 'The study compares answer quality, evidence support, cost, and active latency. Final measured results have not been added to this presentation yet.'}</p>
+              <ResearchNotes items={research.results} emptyTitle="Results are being analyzed."/>
+              <ReferenceLinks links={research.thesis.links}/>
+            </>}
             {chapter === 2 && <>
-              <p className="intro wide">What building and evaluating the agent has taught me so far—with the implementation and methodology attached.</p>
-              <ResearchNotes items={research.learnings} emptyTitle="Learnings are on their way."/>
+              <p className="intro wide">How Phoenix helped organize the experiments, trace the research agent, and evaluate the outcomes.</p>
+              <ResearchNotes items={research.phoenix} emptyTitle="The Phoenix walkthrough is on its way."/>
               {research.sources.length > 0 && <section className="supporting-sources"><h2>Further reading & notes</h2><ReferenceLinks links={research.sources}/></section>}
             </>}
             {chapter === 3 && <>

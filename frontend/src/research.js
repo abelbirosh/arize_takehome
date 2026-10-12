@@ -1,7 +1,7 @@
 export const emptyResearch = {
   version: 2, status: 'pending',
   thesis: { body: '', why: '', when: [], whenNot: [], method: '', links: [] },
-  learnings: [], challenges: [], takeaways: [], sources: [],
+  learnings: [], results: [], phoenix: [], challenges: [], takeaways: [], sources: [],
 };
 
 function validateLinks(links, label) {
@@ -38,10 +38,12 @@ export function validateResearch(value) {
     version: 2, status: value.status,
     thesis: { body: thesis.body, why: thesis.why, method: thesis.method, when: thesis.when, whenNot: thesis.whenNot, links: validateLinks(thesis.links ?? [], 'Thesis links') },
     learnings: validateRows(value.learnings, 'learnings', ['title', 'body']),
+    results: validateRows(value.results ?? [], 'results', ['title', 'body']),
+    phoenix: validateRows(value.phoenix ?? [], 'phoenix', ['title', 'body']),
     challenges: validateRows(value.challenges, 'challenges', ['title', 'challenge', 'solution']),
     takeaways: validateRows(value.takeaways, 'takeaways', ['title', 'body']),
     sources: validateLinks(value.sources, 'Sources'),
   };
-  if (result.status === 'ready' && !result.learnings.length) throw new Error('Add at least one learning before marking the research ready.');
+  if (result.status === 'ready' && !result.results.length && !result.learnings.length) throw new Error('Add at least one result before marking the research ready.');
   return result;
 }
