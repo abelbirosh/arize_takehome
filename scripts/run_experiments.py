@@ -1,13 +1,16 @@
 """Run the benchmark as Phoenix experiments: one experiment per controller.
 
-    uv run python scripts/run_experiments.py --dataset research-bench-pilot
-    uv run python scripts/run_experiments.py --dataset research-bench-25
-    uv run python scripts/run_experiments.py --dataset research-bench-25 --tag full-v1 --resume
+    uv run python scripts/run_experiments.py --dataset research-bench-50-pilot
+    uv run python scripts/run_experiments.py --dataset research-bench-50 --tag full-v2
+    uv run python scripts/run_experiments.py --dataset research-bench-50 --tag full-v2 --resume
 
 Every controller answers the same dataset; Haiku 5.5 generates in every run, so
-only the routing decider differs. Each run is judged for correctness and scored
-on cost, latency, steps and routing behaviour; results land in Phoenix (compare
-view) and in results/<tag>.jsonl.
+only the routing decider differs. Each run is judged for correctness and
+groundedness and scored on cost, latency, steps and routing behaviour; results
+land in Phoenix (compare view) and in results/<tag>.jsonl.
+
+v2 datasets (category / answerable / needs_web metadata, accepted answer variants)
+get the v2 evaluators; v1 datasets keep the original correctness judge.
 """
 
 from __future__ import annotations
@@ -26,11 +29,12 @@ from phoenix.client import Client
 from phoenix.client.experiments import create_evaluator
 
 from research_agent import Settings, build_agent
-from research_agent.controllers import LLM_DECIDERS
+from research_agent.controllers import DECISION_MODELS, LLM_DECIDERS
 from research_agent.evals import Judge
 from research_agent.tracing import setup_tracing
 
-CONTROLLERS = ["claude-haiku-5.5", "claude-sonnet-5.5", "claude-opus-5.5", "jev", "fixed"]
+CONTROLLERS = ["jev", "msft", "oai", "claude-haiku-5.5", "claude-sonnet-5.5",
+               "claude-opus-5.5", "fixed"]
 RESULTS = Path(__file__).resolve().parent.parent / "results"
 
 _lock = threading.Lock()
@@ -54,28 +58,70 @@ def make_task(controller: str, settings: Settings):
             }
             for s in result.steps
         ]
+        notes = [{"title": n.title, "url": n.url, "facts": n.facts} for n in result.notes]
         out = {"answer": result.answer, "full_answer": result.full_answer,
-               "stats": result.stats, "steps": steps}
+               "stats": result.stats, "steps": steps, "notes": notes}
         with _lock:
             _records.append({"controller": controller, "id": metadata.get("id"),
                              "source": metadata.get("source"),
+                             "category": metadata.get("category"),
                              "question": input["question"], **out})
         return out
     return task
 
 
+def _attach(controller: str, example_id: str | None, key: str, judgement) -> None:
+    global _judge_cost
+    with _lock:
+        _judge_cost += judgement.cost_usd
+        for r in _records:
+            if r["controller"] == controller and r["id"] == example_id:
+                r[key] = asdict(judgement)
+
+
+def _result(j) -> dict:
+    out = {"label": j.label, "explanation": j.explanation}
+    if j.score is not None:
+        out["score"] = j.score
+    return out
+
+
 def make_correctness(judge: Judge, controller: str):
     @create_evaluator(kind="LLM", name="correctness")
     def correctness(input, output, expected, metadata):  # noqa: A002
-        global _judge_cost
-        j = judge(input["question"], expected["answer"], (output or {}).get("answer", ""))
-        with _lock:
-            _judge_cost += j.cost_usd
-            for r in _records:
-                if r["controller"] == controller and r["id"] == metadata.get("id"):
-                    r["judge"] = asdict(j)
-        return {"score": j.score, "label": j.label, "explanation": j.explanation}
+        predicted = (output or {}).get("answer", "")
+        if "accepted" in expected:  # v2 dataset
+            j = judge.correctness(input["question"], expected["answer"], expected["accepted"],
+                                  metadata.get("answerable", True), predicted)
+        else:
+            j = judge(input["question"], expected["answer"], predicted)
+        _attach(controller, metadata.get("id"), "judge", j)
+        return _result(j)
     return correctness
+
+
+def make_grounded(judge: Judge, controller: str):
+    @create_evaluator(kind="LLM", name="grounded")
+    def grounded(input, output, metadata):  # noqa: A002
+        output = output or {}
+        j = judge.grounded(input["question"], output.get("answer", ""), output.get("notes", []))
+        _attach(controller, metadata.get("id"), "grounded", j)
+        return _result(j)
+    return grounded
+
+
+def routing_fit(output, metadata):
+    """Did it search where the question category needs it? Web for recent or too-new
+    questions, Wikipedia first for FRAMES."""
+    if "needs_web" not in metadata:
+        return {"label": "not_applicable"}
+    actions = [s["action"] for s in (output or {}).get("steps", [])]
+    searches = [a for a in actions if a in ("search_web", "search_wikipedia")]
+    if metadata["needs_web"]:
+        fit = "search_web" in searches
+    else:
+        fit = bool(searches) and searches[0] == "search_wikipedia"
+    return {"score": 1.0 if fit else 0.0, "label": "fit" if fit else "misfit"}
 
 
 # Free, code-based evaluators over the agent's own accounting.
@@ -106,13 +152,21 @@ CODE_EVALUATORS = [
 ]
 
 
+def evaluators_for(judge: Judge, controller: str) -> list:
+    """Correctness (v1 or v2 by dataset) + groundedness + routing fit + code stats.
+    On v1 datasets, grounded still works; routing_fit reports not_applicable."""
+    return [make_correctness(judge, controller), make_grounded(judge, controller),
+            routing_fit, *CODE_EVALUATORS]
+
+
 def run_one(client: Client, dataset, controller: str, settings: Settings, judge: Judge,
             tag: str):
-    decider = LLM_DECIDERS.get(controller, controller)
+    decider = LLM_DECIDERS.get(controller) or DECISION_MODELS.get(controller)
+    decider = getattr(decider, "model_id", decider) or controller
     return client.experiments.run_experiment(
         dataset=dataset,
         task=make_task(controller, settings),
-        evaluators=[make_correctness(judge, controller), *CODE_EVALUATORS],
+        evaluators=evaluators_for(judge, controller),
         experiment_name=f"{controller} [{tag}]",
         experiment_description=f"Decider: {decider}; generator: {settings.llm_model}",
         experiment_metadata={
@@ -137,29 +191,34 @@ def resume_one(client: Client, experiment: dict, settings: Settings, judge: Judg
     )
     client.experiments.resume_evaluation(
         experiment_id=experiment["id"],
-        evaluators=[make_correctness(judge, controller), *CODE_EVALUATORS],
+        evaluators=evaluators_for(judge, controller),
         rate_limit_errors=openai.RateLimitError, timeout=300, retries=0,
         print_summary=False,
     )
 
 
 def summarize(records: list[dict]) -> None:
-    print(f"\n{'controller':20} {'n':>3} {'acc':>5} {'$/run':>8} {'route$':>8} "
-          f"{'active s':>8} {'route ms':>9} {'steps':>6} {'forced':>6} {'invalid':>7}")
+    print(f"\n{'controller':18} {'n':>3} {'acc':>5} {'hedged':>6} {'grnd':>5} {'$/run':>8} "
+          f"{'route$':>8} {'active s':>8} {'steps':>6} {'forced':>6} {'invalid':>7}")
     for c in CONTROLLERS:
         rs = [r for r in records if r["controller"] == c]
         if not rs:
             continue
         n = len(rs)
         mean = lambda k: sum(r["stats"][k] or 0 for r in rs) / n  # noqa: E731
-        acc = sum(r.get("judge", {}).get("label") == "correct" for r in rs) / n
-        print(f"{c:20} {n:>3} {acc:>5.0%} {mean('total_cost_usd'):>8.4f} "
-              f"{mean('routing_cost_usd'):>8.4f} {mean('active_ms') / 1000:>8.1f} "
-              f"{mean('routing_latency_ms'):>9.0f} {mean('steps'):>6.1f} "
+        label = lambda r, k: r.get(k, {}).get("label")  # noqa: E731
+        acc = sum(label(r, "judge") == "correct" for r in rs) / n
+        hedged = sum(label(r, "judge") == "hedged" for r in rs)
+        claims = [r for r in rs if label(r, "grounded") in ("supported", "unsupported")]
+        grnd = (sum(label(r, "grounded") == "supported" for r in claims) / len(claims)
+                if claims else 0)
+        print(f"{c:18} {n:>3} {acc:>5.0%} {hedged:>6} {grnd:>5.0%} "
+              f"{mean('total_cost_usd'):>8.4f} {mean('routing_cost_usd'):>8.4f} "
+              f"{mean('active_ms') / 1000:>8.1f} {mean('steps'):>6.1f} "
               f"{sum(r['stats']['forced_answer'] for r in rs):>6} "
               f"{sum(r['stats']['invalid_decisions'] for r in rs):>7}")
     agent_cost = sum(r["stats"]["total_cost_usd"] for r in records)
-    print(f"\nagent cost ${agent_cost:.4f} + judge ${_judge_cost:.4f} "
+    print(f"\nagent cost ${agent_cost:.4f} + judges ${_judge_cost:.4f} "
           f"= ${agent_cost + _judge_cost:.4f} for {len(records)} runs")
 
 

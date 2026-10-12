@@ -9,7 +9,10 @@ import json
 import sys
 from collections import defaultdict
 
-ORDER = ["jev", "claude-haiku-5.5", "claude-sonnet-5.5", "claude-opus-5.5", "fixed"]
+ORDER = ["jev", "msft", "oai", "claude-haiku-5.5", "claude-sonnet-5.5", "claude-opus-5.5",
+         "fixed"]
+CATEGORIES = ["control", "two_recent", "multi_entity", "arithmetic", "frames", "too_new",
+              "unanswerable"]
 
 
 def load(path: str) -> list[dict]:
@@ -62,10 +65,15 @@ def per_question(records: list[dict]) -> None:
 
 
 def calibration(records: list[dict]) -> None:
-    jev = [r for r in records if r["controller"] == "jev"]
+    for ctrl in ("jev", "msft", "oai"):
+        calibration_for(records, ctrl)
+
+
+def calibration_for(records: list[dict], ctrl: str) -> None:
+    jev = [r for r in records if r["controller"] == ctrl]
     if not jev:
         return
-    print("\n## Jev calibration: final 'notes suffice' probability vs judged correctness")
+    print(f"\n## {ctrl} calibration: final 'notes suffice' probability vs judged correctness")
     buckets = [(0, .25), (.25, .5), (.5, .75), (.75, 1.01)]
     for lo, hi in buckets:
         rs = [r for r in jev if r["stats"].get("final_evidence_sufficient") is not None
@@ -84,13 +92,52 @@ def calibration(records: list[dict]) -> None:
               f"{(sum(lo) / len(lo) if lo else 0):.0%} correct")
 
 
+def label(r: dict, key: str) -> str | None:
+    return (r.get(key) or {}).get("label")
+
+
+def by_category(records: list[dict]) -> None:
+    print("\n## Accuracy by category (unanswerable = correct premise rejection)")
+    present = [c for c in CATEGORIES if any(r.get("category") == c for r in records)]
+    print(f"{'controller':20} " + " ".join(f"{c[:11]:>11}" for c in present))
+    for ctrl in ORDER:
+        rs = [r for r in records if r["controller"] == ctrl]
+        if not rs:
+            continue
+        cells = []
+        for c in present:
+            cs = [r for r in rs if r.get("category") == c]
+            cells.append(f"{sum(map(correct, cs)) / len(cs):>11.0%}" if cs else " " * 11)
+        print(f"{ctrl:20} " + " ".join(cells))
+
+
+def outcomes(records: list[dict]) -> None:
+    print("\n## Outcomes: correctness label x grounded (did the notes support the answer?)")
+    print(f"{'controller':20} {'correct+grnd':>12} {'correct+mem':>11} {'hedged':>7} "
+          f"{'wrong':>6} {'no_ans':>7}")
+    for ctrl in ORDER:
+        rs = [r for r in records if r["controller"] == ctrl]
+        if not rs:
+            continue
+        cg = sum(label(r, "judge") == "correct" and label(r, "grounded") == "supported" for r in rs)
+        cm = sum(label(r, "judge") == "correct" and label(r, "grounded") == "unsupported" for r in rs)
+        print(f"{ctrl:20} {cg:>12} {cm:>11} "
+              f"{sum(label(r, 'judge') == 'hedged' for r in rs):>7} "
+              f"{sum(label(r, 'judge') == 'incorrect' for r in rs):>6} "
+              f"{sum(label(r, 'judge') == 'no_answer' for r in rs):>7}")
+
+
 def main(path: str) -> None:
     records = load(path)
     total = sum(r["stats"]["total_cost_usd"] for r in records)
     print(f"{len(records)} runs, agent cost ${total:.2f}")
     table(records, "All questions")
-    table([r for r in records if r["source"] == "fresh"], "Fresh (post-cutoff, needs web)")
-    table([r for r in records if r["source"] == "frames"], "FRAMES (multi-hop Wikipedia)")
+    if any(r.get("category") for r in records):  # v2 suite
+        by_category(records)
+        outcomes(records)
+    else:
+        table([r for r in records if r["source"] == "fresh"], "Fresh (post-cutoff, needs web)")
+        table([r for r in records if r["source"] == "frames"], "FRAMES (multi-hop Wikipedia)")
     per_question(records)
     calibration(records)
 

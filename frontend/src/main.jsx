@@ -10,13 +10,16 @@ import { emptyResearch, validateResearch } from './research.js';
 
 const chapters = [
   { id: 'question', name: 'The question', title: 'When should I use a system one model, and how?' },
-  { id: 'mechanism', name: 'The mechanism', title: 'Separate the decision from the generation.' },
-  { id: 'experiment', name: 'The experiment', title: 'Change the controller. Compare the outcome.' },
-  { id: 'findings', name: 'The findings', title: 'Let the evidence make the case.' },
-  { id: 'practice', name: 'In practice', title: 'From results to a routing strategy.' },
-  { id: 'sources', name: 'Sources & notes', title: 'Keep the evidence within reach.' },
+  { id: 'when-to-jev', name: 'When and When Not to Jev', title: 'When and When Not to Jev' },
+  { id: 'learnings', name: 'Learnings', title: 'Learnings' },
+  { id: 'challenges', name: 'Challenges & solutions', title: 'Challenges & solutions' },
+  { id: 'takeaways', name: 'Takeaways', title: 'Takeaways' },
 ];
-const indexFromHash = () => Math.max(0, chapters.findIndex(c => c.id === window.location.hash.slice(1)));
+const legacyHashes = { mechanism: 'when-to-jev', experiment: 'when-to-jev', findings: 'learnings', practice: 'takeaways', sources: 'learnings' };
+const indexFromHash = () => {
+  const hash = window.location.hash.slice(1);
+  return Math.max(0, chapters.findIndex(c => c.id === (legacyHashes[hash] || hash)));
+};
 
 function Icon({ name, ...props }) {
   const paths = { arrow: <><path d="M4 12h16M14 6l6 6-6 6"/></>, upload: <><path d="M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5"/></>, expand: <path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/>, close: <path d="m6 6 12 12M6 18 18 6"/>, download: <path d="M12 3v13m-5-5 5 5 5-5M4 17v4h16v-4"/>, check: <path d="m5 12 4 4L19 6"/> };
@@ -39,8 +42,27 @@ function RoutingDiagram({ detailed = false }) {
   </div>;
 }
 
-function EmptyEvidence({ title, children }) {
-  return <div className="empty-evidence"><div className="empty-chart" aria-hidden="true"><span/><span/><span/><span/><i/></div><h2>{title}</h2><p>{children}</p><span className="status-label"><span/>Awaiting research</span></div>;
+function ReferenceLinks({ links = [] }) {
+  if (!links.length) return null;
+  return <ul className="reference-links" aria-label="Attached links">{links.map((link, i) => <li key={i}><a href={link.url} target="_blank" rel="noreferrer">{link.title}<Icon name="arrow"/></a></li>)}</ul>;
+}
+
+function ResearchNotes({ items, challenges = false, emptyTitle }) {
+  if (!items.length) return <div className="empty-evidence"><h2>{emptyTitle}</h2><p>Load a research file to add this section.</p><span className="status-label"><span/>Awaiting research</span></div>;
+  return <div className={`evidence-list ${challenges ? 'challenge-list' : ''}`}>{items.map((item, i) => <article key={i}>
+    <h2>{item.title}</h2>
+    {challenges ? <div className="challenge-pair"><div><h3>Challenge</h3><p>{item.challenge}</p></div><div><h3>Solution</h3><p>{item.solution}</p></div></div> : <p>{item.body}</p>}
+    <ReferenceLinks links={item.links}/>
+  </article>)}</div>;
+}
+
+function Thesis({ thesis }) {
+  return <>
+    <p className="intro wide">{thesis.body || 'The thesis and study design will appear here when research is loaded.'}</p>
+    <div className="mechanism-grid thesis-grid"><div><h2>Why test this?</h2><p className="thesis-copy">{thesis.why || 'The motivation for the experiment is pending.'}</p><h2 className="thesis-subheading">What the experiment changes</h2><p className="thesis-copy">{thesis.method || 'The experiment design is pending.'}</p><ReferenceLinks links={thesis.links}/></div><RoutingDiagram detailed/></div>
+    <p className="study-note">These are the conditions being tested, not a measured recommendation.</p>
+    <div className="when-grid"><section><h2>When Jev is worth testing</h2><ul>{thesis.when.map((text, i) => <li key={i}>{text}</li>)}</ul></section><section><h2>When to use another approach</h2><ul>{thesis.whenNot.map((text, i) => <li key={i}>{text}</li>)}</ul></section></div>
+  </>;
 }
 
 function App() {
@@ -111,21 +133,32 @@ function App() {
     <a href="#main" className="skip-link">Skip to presentation</a>
     <header className="topbar"><a className="brand" href="#question" onClick={() => navigate(0)} aria-label="Research presentation home"><span className="brand-symbol"><span/><span/></span><span>System one<span className="brand-divider"> / </span><span className="brand-subtitle">A research presentation</span></span></a><div className="header-actions"><button className="text-button import-button" onClick={() => upload.current?.click()} disabled={importing || loading}><Icon name="upload"/>{importing ? 'Loading…' : 'Load research'}</button><button className="present-button" onClick={togglePresentation}><Icon name={presenting ? 'close' : 'expand'}/>{presenting ? 'Exit presentation' : 'Present'}</button><input ref={upload} type="file" accept=".json,application/json" onChange={loadFile} className="file-input" aria-label="Load a research JSON file"/></div></header>
     <div className="workspace">
-      <aside className="sidebar"><nav aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={`#${item.id}`} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav><div className="sidebar-note"><span className={`status-label ${ready ? 'ready' : ''}`}><span/>{loading ? 'Loading research' : ready ? 'Research loaded' : 'Research in progress'}</span><p>{ready ? (localImport ? 'Loaded for this browser session.' : 'Findings and sources are available.') : 'The question is set.\nThe evidence comes next.'}</p></div></aside>
+      <aside className="sidebar"><nav aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={`#${item.id}`} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav><div className="sidebar-note"><span className={`status-label ${ready ? 'ready' : ''}`}><span/>{loading ? 'Loading research' : ready ? 'Research loaded' : 'Research in progress'}</span><p>{ready ? (localImport ? 'Loaded for this browser session.' : 'Research and attached links are available.') : 'Implementation learnings are loaded.\nFull-run analysis is pending.'}</p></div></aside>
       <main id="main" className={`main chapter-${current.id}`}>
         {(message || error) && <div className={`notice ${error ? 'error' : ''}`} role={error ? 'alert' : 'status'}><span>{error || message}</span><button aria-label="Dismiss message" onClick={() => { setMessage(''); setError(''); }}><Icon name="close"/></button></div>}
         <div className="chapter-meta"><span>{String(chapter + 1).padStart(2, '0')} <span className="meta-slash">/</span> {String(chapters.length).padStart(2, '0')}</span></div>
         <div className="chapter-content" key={current.id}>
           {chapter === 0 ? <>
-            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">When should I use a <em>system one</em> model, and how?</h1><p className="intro">An investigation into the decisions inside an AI agent—and who should make them.</p><button className="primary-button" onClick={() => navigate(1)}>Explore the research<Icon name="arrow"/></button><p className="cover-note">Jev · LLM · Hybrid · Fixed routing</p></div><RoutingDiagram/></div>
+            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">When should I use a <em>system one</em> model, and how?</h1><p className="intro">Testing how much model a research agent needs to decide what happens next.</p><button className="primary-button" onClick={() => navigate(1)}>Explore the research<Icon name="arrow"/></button><p className="cover-note">Jev · Haiku · Sonnet · Opus · Fixed</p></div><RoutingDiagram/></div>
             <div className="cover-bottom"><span className="question-mark">?</span><p>One question. Two parts.</p><div><strong>When</strong><span>Where does a decision model belong?</span></div><div><strong>How</strong><span>How do we put it to the test?</span></div></div>
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
-            {chapter === 1 && <div className="mechanism-grid"><div><p className="intro">In this agent, the controller picks an action. A language model writes the query, takes notes, and produces the answer.</p><div className="role-row"><span>Decision</span><div><h2>What happens next?</h2><p>Choose between searching Wikipedia, searching the web, reading a source, or answering.</p></div></div><div className="role-row"><span>Generation</span><div><h2>What should it say?</h2><p>Turn the chosen action into a search query, source notes, or a final response.</p></div></div><p className="annotation">This is the architecture under study. Whether it improves outcomes is the question for the benchmark.</p></div><RoutingDiagram detailed/></div>}
-            {chapter === 2 && <><p className="intro wide">The planned comparison changes the routing strategy while keeping the research task and generation setup consistent within each model.</p><div className="table-scroll"><table><caption>Controllers in the benchmark plan</caption><thead><tr><th>Controller</th><th>Who decides?</th><th>What it tests</th></tr></thead><tbody><tr><th>Jev</th><td>System one model</td><td>Dedicated decision routing</td></tr><tr><th>LLM</th><td>The language model</td><td>The model routes itself</td></tr><tr><th>Hybrid</th><td>Jev, with LLM escalation</td><td>Confidence-based fallback</td></tr><tr><th>Fixed</th><td>A predefined sequence</td><td>A baseline without model routing</td></tr></tbody></table></div><div className="measurement-strip"><div><h2>Quality</h2><p>Answer correctness</p></div><div><h2>Cost</h2><p>Total and routing cost</p></div><div><h2>Time</h2><p>Wall time and routing latency</p></div></div><p className="annotation">Study design from the repository’s benchmark plan. Final methodology and run counts will be loaded with the research.</p></>}
-            {chapter === 3 && (research.findings.length ? <div className="evidence-list">{research.findings.map((finding, i) => <article key={i}><h2>{finding.title}</h2><p>{finding.body}</p></article>)}</div> : <><p className="intro wide">Accuracy, cost, and latency will determine the tradeoff. No measured conclusions have been loaded yet.</p><EmptyEvidence title="A place for the results.">The comparison will appear here when the research is ready. Until then, there are no benchmark numbers to interpret.</EmptyEvidence></>)}
-            {chapter === 4 && (research.recommendations.length ? <div className="evidence-list">{research.recommendations.map((item, i) => <article key={i}><h2>{item.title}</h2><p>{item.body}</p></article>)}</div> : <><p className="intro wide">The final recommendations should connect a use case to evidence—not just to a faster routing call.</p><div className="practice-questions">{[['When to use it', 'Which tasks benefit from a dedicated decision model?'], ['How to integrate it', 'What actions, state, and fallback rules does it need?'], ['How to evaluate it', 'Does the whole agent improve on quality, cost, or time?']].map(([title, body]) => <article key={title}><h2>{title}</h2><p>{body}</p><span>Recommendation pending</span></article>)}</div></>)}
-            {chapter === 5 && <><p className="intro wide">Source material stays attached to the presentation. Research citations will appear here as they are supplied.</p><div className="source-list">{research.sources.map((source, i) => <a key={i} href={source.url} target="_blank" rel="noreferrer"><div><strong>{source.title}</strong><span>{new URL(source.url).hostname}</span></div><Icon name="arrow"/></a>)}<a href="https://github.com/abelbirosh/arize_takehome" target="_blank" rel="noreferrer"><div><strong>Research agent repository</strong><span>Implementation and project documentation</span></div><Icon name="arrow"/></a></div><div className="load-panel"><div><h2>Bring the research into view.</h2><p>Load findings, recommendations, and source links from a research file. Local imports are visible only in this browser session.</p></div><a className="outline-button" href="/research.json" download="research-template.json"><Icon name="download"/>Download template</a><button className="primary-button" onClick={() => upload.current?.click()} disabled={importing || loading}><Icon name="upload"/>Load research</button></div></>}
+            {chapter === 1 && <Thesis thesis={research.thesis}/>}
+            {chapter === 2 && <>
+              <p className="intro wide">What building and evaluating the agent has taught me so far—with the implementation and methodology attached.</p>
+              <ResearchNotes items={research.learnings} emptyTitle="Learnings are on their way."/>
+              {research.sources.length > 0 && <section className="supporting-sources"><h2>Further reading & notes</h2><ReferenceLinks links={research.sources}/></section>}
+            </>}
+            {chapter === 3 && <>
+              <p className="intro wide">The problems that surfaced during the experiment, and the changes made to resolve them.</p>
+              <ResearchNotes items={research.challenges} challenges emptyTitle="Challenges and solutions are on their way."/>
+            </>}
+            {chapter === 4 && <>
+              <p className="intro wide">{ready ? 'The practical recommendations from the research, with the supporting evidence attached.' : 'Working takeaways from the implementation. Performance recommendations await the full-run analysis.'}</p>
+              <ResearchNotes items={research.takeaways} emptyTitle="Takeaways are on their way."/>
+              <div className="load-panel"><div><h2>Keep the presentation current.</h2><p>Load an updated research file to replace the thesis, learnings, challenges, takeaways, and links in this browser session.</p></div><a className="outline-button" href="/research.json" download="research-template.json"><Icon name="download"/>Download research file</a><button className="primary-button" onClick={() => upload.current?.click()} disabled={importing || loading}><Icon name="upload"/>Load research</button></div>
+            </>}
+
           </>}
         </div>
         <footer className="chapter-footer"><span className="keyboard-hint"><kbd>←</kbd><kbd>→</kbd> to navigate</span><div className="pager"><button className="previous-button" onClick={() => navigate(chapter - 1)} disabled={chapter === 0} aria-label="Previous chapter"><Icon name="arrow"/></button>{chapter < chapters.length - 1 ? <button className="next-button" onClick={() => navigate(chapter + 1)}><span>{chapters[chapter + 1].name}</span><Icon name="arrow"/></button> : <button className="next-button" onClick={() => navigate(0)}><span>Back to the question</span><Icon name="arrow"/></button>}</div></footer>

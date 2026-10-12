@@ -1,7 +1,183 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "pending",
-  "findings": [],
-  "recommendations": [],
-  "sources": []
+  "thesis": {
+    "body": "A dedicated decision model may be enough to route a research agent—without paying a general-purpose language model to make every routing decision. The test is whether Jev preserves answer quality while reducing total cost or active time.",
+    "why": "Choosing the next action and writing the next piece of text are different jobs. Separating them lets the benchmark ask a narrower question: how much model do we need for the decision?",
+    "when": [
+      "The decision is a choice among explicit actions, such as search, read, or answer.",
+      "The agent can provide structured state: evidence, unread results, history, and the remaining budget.",
+      "The complete agent can be evaluated against a language-model decider and a fixed baseline."
+    ],
+    "whenNot": [
+      "The task is to generate an open-ended query, explanation, or final answer; those remain with the language model in this design.",
+      "A fixed sequence already solves the task well enough; the benchmark includes that baseline.",
+      "The only evidence is a cheaper routing call. Answer quality and whole-agent cost still need to hold up."
+    ],
+    "method": "The current benchmark plan fixes Claude Haiku 5.5 as the generator and compares Jev, Claude Haiku 5.5, Claude Sonnet 5.5, Claude Opus 5.5, and a fixed controller. It plans 25 questions × 5 controllers, one repetition, with the same tools and an eight-step budget. Accuracy, total and routing cost, active time, and routing behavior are evaluated in Phoenix.",
+    "links": [
+      {
+        "title": "Benchmark plan",
+        "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+      },
+      {
+        "title": "Experiment runner",
+        "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+      }
+    ]
+  },
+  "learnings": [
+    {
+      "title": "Isolate the decision you are trying to measure.",
+      "body": "The generator stays fixed while the decider changes. That makes the routing strategy the comparison, rather than changing the controller and the text-generation model together.",
+      "links": [
+        {
+          "title": "Controlled comparison",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+        },
+        {
+          "title": "Controller experiments",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+        }
+      ]
+    },
+    {
+      "title": "A research benchmark needs questions that require research.",
+      "body": "Questions answered from memory tell us less about retrieval routing. The dataset preparation uses a partial closed-book screen to avoid known answers and combines fresh questions with multi-hop FRAMES questions.",
+      "links": [
+        {
+          "title": "Closed-book screening",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/screen_closed_book.py"
+        },
+        {
+          "title": "Dataset design",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+        }
+      ]
+    },
+    {
+      "title": "Measure the whole agent, then inspect the routing.",
+      "body": "Total cost and answer correctness describe the outcome; routing cost, decision latency, steps, and forced answers help explain it. Active latency excludes time queued behind the shared rate limiter.",
+      "links": [
+        {
+          "title": "Outcome and routing analysis",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/analyze.py"
+        },
+        {
+          "title": "Queue-time accounting",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/src/research_agent/ratelimit.py"
+        }
+      ]
+    },
+    {
+      "title": "An evaluation is only useful if it belongs to the current output.",
+      "body": "After a failed run is resumed, a grade from the failed attempt can remain attached to its run ID. The repair checks evaluation timestamps against the new run and backfills stale or missing evaluations.",
+      "links": [
+        {
+          "title": "Evaluation backfill",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/backfill_evals.py"
+        }
+      ]
+    }
+  ],
+  "challenges": [
+    {
+      "title": "The full run was interrupted.",
+      "challenge": "The benchmark plan records a network outage while the machine slept, leaving failed or missing runs.",
+      "solution": "The runner supports resuming failed or missing runs, then resuming evaluations. This avoids deliberately rerunning successful examples.",
+      "links": [
+        {
+          "title": "Recorded run status",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+        },
+        {
+          "title": "Resume workflow",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+        }
+      ]
+    },
+    {
+      "title": "Distinct metrics collapsed into one evaluator column.",
+      "challenge": "The code-based metric closures shared the same qualified function name, so Phoenix treated them as the same evaluator.",
+      "solution": "Assign each closure its metric name through both __name__ and __qualname__, and explicitly mark correctness as an LLM evaluator.",
+      "links": [
+        {
+          "title": "Evaluator naming fix",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+        }
+      ]
+    },
+    {
+      "title": "Resumed outputs inherited stale grades.",
+      "challenge": "Reusing a run ID meant an earlier failed attempt could still carry an empty-prediction grade after the task succeeded.",
+      "solution": "Compare evaluation and task timestamps, redo evaluations older than the current run, and upsert results by run and evaluator name.",
+      "links": [
+        {
+          "title": "Stale-grade repair",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/backfill_evals.py"
+        }
+      ]
+    },
+    {
+      "title": "Shared throttling distorted wall-clock comparisons.",
+      "challenge": "Concurrent agents queue behind a per-model request limiter. That wait can obscure the time actually spent doing the task.",
+      "solution": "Track queue wait per thread and report active latency separately from elapsed wall time.",
+      "links": [
+        {
+          "title": "Per-model limiter",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/src/research_agent/ratelimit.py"
+        },
+        {
+          "title": "Active-latency evaluator",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+        }
+      ]
+    }
+  ],
+  "takeaways": [
+    {
+      "title": "Use a decision model for a bounded decision.",
+      "body": "Define the available actions and the state the controller can inspect. Keep query writing, note taking, and answer generation with the language model in this architecture.",
+      "links": [
+        {
+          "title": "Agent architecture",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/README.md"
+        }
+      ]
+    },
+    {
+      "title": "Keep a simple baseline in the comparison.",
+      "body": "A fixed sequence establishes whether adaptive routing adds value at all. A more capable decider is useful only if the complete task benefits.",
+      "links": [
+        {
+          "title": "Fixed-controller baseline",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+        }
+      ]
+    },
+    {
+      "title": "Make the recommendation from complete, current evidence.",
+      "body": "Check answer quality, cost, and active latency together. Repair missing or stale grades before interpreting the comparison. The full-run analysis is still pending in the pushed benchmark plan, so these are working implementation takeaways—not a claim that Jev wins.",
+      "links": [
+        {
+          "title": "Analysis script",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/analyze.py"
+        },
+        {
+          "title": "Run status and limitations",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Benchmark plan and run status",
+      "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+    },
+    {
+      "title": "Research agent repository documentation",
+      "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/README.md"
+    }
+  ]
 }

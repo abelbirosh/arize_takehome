@@ -21,7 +21,7 @@ from pathlib import Path
 from phoenix.client import Client
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from run_experiments import CODE_EVALUATORS, RESULTS  # noqa: E402
+from run_experiments import CODE_EVALUATORS, RESULTS, routing_fit  # noqa: E402
 
 from research_agent import Settings  # noqa: E402
 from research_agent.evals import Judge  # noqa: E402
@@ -42,7 +42,8 @@ def main() -> None:
     examples = {ex["id"]: ex for ex in dataset.examples}
     judge = Judge(Settings())
     code = {fn.__name__: fn for fn in CODE_EVALUATORS}
-    wanted = ["correctness", *code]
+    v2 = "category" in (dataset.examples[0]["metadata"] or {})
+    wanted = ["correctness", *(["grounded", "routing_fit"] if v2 else []), *code]
 
     results_path = RESULTS / f"{args.tag}.jsonl"
     records = [json.loads(line) for line in open(results_path)]
@@ -72,17 +73,33 @@ def main() -> None:
         controller, run, name = job
         ex = examples[run["dataset_example_id"]]
         output = run["output"]
-        if name == "correctness":
-            j = judge(ex["input"]["question"], ex["output"]["answer"], output.get("answer", ""))
+        meta = ex["metadata"] or {}
+        rec = by_key.get((controller, meta.get("id")))
+        if name in ("correctness", "grounded"):
+            question, answer = ex["input"]["question"], output.get("answer", "")
+            if name == "grounded":
+                j = judge.grounded(question, answer, output.get("notes", []))
+            elif "accepted" in ex["output"]:
+                j = judge.correctness(question, ex["output"]["answer"], ex["output"]["accepted"],
+                                      meta.get("answerable", True), answer)
+            else:
+                j = judge(question, ex["output"]["answer"], answer)
+            payload = {"label": j.label, "explanation": j.explanation}
+            if j.score is not None:
+                payload["score"] = j.score
             client.experiments.log_evaluation(
                 experiment_run_id=run["id"], name=name, annotator_kind="LLM",
-                score=j.score, label=j.label, explanation=j.explanation, trace_id=run["trace_id"],
+                trace_id=run["trace_id"], **payload,
             )
-            rec = by_key.get((controller, ex["metadata"]["id"]))
             if rec is not None:
-                rec["judge"] = {"label": j.label, "explanation": j.explanation,
-                                "cost_usd": j.cost_usd}
+                rec["judge" if name == "correctness" else "grounded"] = {
+                    "label": j.label, "explanation": j.explanation, "cost_usd": j.cost_usd}
             return j.cost_usd
+        if name == "routing_fit":
+            r = routing_fit(output, meta)
+            client.experiments.log_evaluation(experiment_run_id=run["id"], name=name,
+                                              annotator_kind="CODE", **r)
+            return 0.0
         value = code[name](output)
         client.experiments.log_evaluation(
             experiment_run_id=run["id"], name=name, annotator_kind="CODE",

@@ -4,8 +4,8 @@ Every controller sees the same `AgentState.snapshot()` and returns a `Decision`.
 Only the decider changes between them; query writing, note taking and answering
 always go to the generator LLM. That isolation is what makes the benchmark comparable.
 
-- SystemOneController  A System One decision model (Jev) answers typed questions
-                       (Choice/Noul) with probabilities.
+- SystemOneController  A System One decision model (Jev, Microsoft-Decision-1, GPT-6 Luna
+                       Decisions) answers typed questions (Choice/Noul) with probabilities.
 - LLMController        A chat LLM picks the action by emitting JSON (ReAct-style routing).
 - HybridController     A decision model decides; below a confidence threshold, an LLM does.
 - FixedController      No model: search Wikipedia -> read -> search web -> read -> answer.
@@ -81,6 +81,8 @@ class DecisionModel:
 
 DECISION_MODELS: dict[str, DecisionModel] = {
     "jev": DecisionModel("jev-latest", 0.042, "typesafe"),
+    "msft": DecisionModel("microsoft/microsoft-decision-1", 0.042, "microsoft"),
+    "oai": DecisionModel("openai/gpt-6-luna-decisions", 0.10, "openai"),
 }
 
 

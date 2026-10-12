@@ -16,10 +16,14 @@ def test_every_controller_builds(settings):
         assert ctrl.name.endswith(kind) or kind == "hybrid"
 
 
-def test_jev_model_and_price(settings):
-    jev = build_controller("jev", settings, GENERATOR)
-    assert isinstance(jev, SystemOneController)
-    assert jev.model == "jev-latest" and jev.spec.price_per_mtok == 0.042
+def test_decision_models_and_prices(settings):
+    expected = {"jev": ("jev-latest", 0.042),
+                "msft": ("microsoft/microsoft-decision-1", 0.042),
+                "oai": ("openai/gpt-6-luna-decisions", 0.10)}
+    for key, (model, price) in expected.items():
+        ctrl = build_controller(key, settings, GENERATOR)
+        assert isinstance(ctrl, SystemOneController)
+        assert ctrl.model == model and ctrl.spec.price_per_mtok == price
 
 
 def test_claude_deciders_are_separate_from_generator(settings):

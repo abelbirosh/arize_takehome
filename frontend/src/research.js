@@ -1,19 +1,47 @@
-export const emptyResearch = { version: 1, status: 'pending', findings: [], recommendations: [], sources: [] };
+export const emptyResearch = {
+  version: 2, status: 'pending',
+  thesis: { body: '', why: '', when: [], whenNot: [], method: '', links: [] },
+  learnings: [], challenges: [], takeaways: [], sources: [],
+};
+
+function validateLinks(links, label) {
+  if (!Array.isArray(links) || links.length > 100) throw new Error(`${label} must be a list of up to 100 links.`);
+  for (const link of links) {
+    if (!link || typeof link.title !== 'string' || !link.title.trim()) throw new Error('Each link needs a title.');
+    let url;
+    try { url = new URL(link.url); } catch { throw new Error('Each link needs a valid web URL.'); }
+    if (!['https:', 'http:'].includes(url.protocol)) throw new Error('Links must use an http or https URL.');
+  }
+  return links.map(({ title, url }) => ({ title, url }));
+}
+
+function validateRows(rows, name, fields) {
+  if (!Array.isArray(rows) || rows.length > 100) throw new Error(`${name} must be a list of up to 100 entries.`);
+  return rows.map(row => {
+    if (!row || fields.some(key => typeof row[key] !== 'string' || !row[key].trim())) throw new Error(`Each ${name} entry needs ${fields.join(', ')}.`);
+    return { ...Object.fromEntries(fields.map(key => [key, row[key]])), links: validateLinks(row.links ?? [], 'Attached links') };
+  });
+}
 
 export function validateResearch(value) {
-  if (!value || value.version !== 1 || !['pending', 'ready'].includes(value.status)) throw new Error('Use research format version 1 with a status of pending or ready.');
-  for (const name of ['findings', 'recommendations', 'sources']) {
-    if (!Array.isArray(value[name]) || value[name].length > 100) throw new Error(`${name} must be a list of up to 100 entries.`);
+  if (!value || ![1, 2].includes(value.version) || !['pending', 'ready'].includes(value.status)) throw new Error('Use research format version 1 or 2 with a status of pending or ready.');
+  // Preserve files created with the original presentation template.
+  if (value.version === 1) {
+    return validateResearch({ ...emptyResearch, status: value.status, learnings: value.findings, takeaways: value.recommendations, sources: value.sources });
   }
-  for (const row of [...value.findings, ...value.recommendations]) {
-    if (typeof row.title !== 'string' || typeof row.body !== 'string' || !row.title.trim() || !row.body.trim()) throw new Error('Each finding and recommendation needs a title and body.');
+  const thesis = value.thesis;
+  if (!thesis || ['body', 'why', 'method'].some(key => typeof thesis[key] !== 'string')) throw new Error('The thesis needs body, why, and method text.');
+  for (const key of ['when', 'whenNot']) {
+    if (!Array.isArray(thesis[key]) || thesis[key].length > 100 || thesis[key].some(text => typeof text !== 'string' || !text.trim())) throw new Error(`Thesis ${key} must be a list of text entries.`);
   }
-  for (const source of value.sources) {
-    if (typeof source.title !== 'string' || !source.title.trim()) throw new Error('Each source needs a title.');
-    let url;
-    try { url = new URL(source.url); } catch { throw new Error('Each source needs a valid web URL.'); }
-    if (!['https:', 'http:'].includes(url.protocol)) throw new Error('Sources must use an http or https URL.');
-  }
-  if (value.status === 'ready' && !value.findings.length) throw new Error('Add at least one finding before marking the research ready.');
-  return { version: 1, status: value.status, findings: value.findings, recommendations: value.recommendations, sources: value.sources };
+  const result = {
+    version: 2, status: value.status,
+    thesis: { body: thesis.body, why: thesis.why, method: thesis.method, when: thesis.when, whenNot: thesis.whenNot, links: validateLinks(thesis.links ?? [], 'Thesis links') },
+    learnings: validateRows(value.learnings, 'learnings', ['title', 'body']),
+    challenges: validateRows(value.challenges, 'challenges', ['title', 'challenge', 'solution']),
+    takeaways: validateRows(value.takeaways, 'takeaways', ['title', 'body']),
+    sources: validateLinks(value.sources, 'Sources'),
+  };
+  if (result.status === 'ready' && !result.learnings.length) throw new Error('Add at least one learning before marking the research ready.');
+  return result;
 }
