@@ -4,7 +4,7 @@ import './styles.css';
 import { emptyResearch, validateResearch } from './research.js';
 
 const chapters = [
-  { id: 'question', name: 'Question', title: 'When should I use a system one model, and how?' },
+  { id: 'question', name: 'Question', title: 'Can a decision model choose the next steps of a research agent as well as a reasoning model' },
   { id: 'results', name: 'Results', title: 'Results' },
   { id: 'phoenix', name: 'How I used Phoenix?', title: 'How I used Phoenix?' },
   { id: 'challenges', name: 'What went wrong and how we fixed it?', title: 'What went wrong and how we fixed it?' },
@@ -34,15 +34,6 @@ function ResearchNotes({ items, challenges = false, emptyTitle }) {
     {challenges ? <div className="challenge-pair"><div><h3>Challenge</h3><p>{item.challenge}</p></div><div><h3>Solution</h3><p>{item.solution}</p></div></div> : <p>{item.body}</p>}
     <ReferenceLinks links={item.links}/>
   </article>)}</div>;
-}
-
-function Thesis({ thesis }) {
-  return <>
-    <p className="intro wide">{thesis.body || 'The thesis and study design will appear here when research is loaded.'}</p>
-    <div className="thesis-grid"><div><h2>Why test this?</h2><p className="thesis-copy">{thesis.why || 'The motivation for the experiment is pending.'}</p><h2 className="thesis-subheading">What the experiment changes</h2><p className="thesis-copy">{thesis.method || 'The experiment design is pending.'}</p><ReferenceLinks links={thesis.links}/></div></div>
-    <p className="study-note">These are the conditions being tested, not a measured recommendation.</p>
-    <div className="when-grid"><section><h2>When Jev is worth testing</h2><ul>{thesis.when.map((text, i) => <li key={i}>{text}</li>)}</ul></section><section><h2>When to use another approach</h2><ul>{thesis.whenNot.map((text, i) => <li key={i}>{text}</li>)}</ul></section></div>
-  </>;
 }
 
 function App() {
@@ -114,9 +105,7 @@ function App() {
         <div className="chapter-meta"><span>{String(chapter + 1).padStart(2, '0')} <span className="meta-slash">/</span> {String(chapters.length).padStart(2, '0')}</span></div>
         <div className="chapter-content" key={current.id}>
           {chapter === 0 ? <>
-            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">When should I use a <em>system one</em> model, and how?</h1><p className="intro">Testing how much model a research agent needs to decide what happens next.</p><button className="primary-button" onClick={() => navigate(1)}>View the results<Icon name="arrow"/></button><p className="cover-note">Decision models · Claude deciders · Fixed baseline</p></div></div>
-            <Thesis thesis={research.thesis}/>
-            <div className="cover-bottom"><span className="question-mark">?</span><p>One question. Two parts.</p><div><strong>When</strong><span>Where does a decision model belong?</span></div><div><strong>How</strong><span>How do we put it to the test?</span></div></div>
+            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">{current.title}</h1><p className="intro">Empirical analysis of usage of decision model for agent design</p></div></div>
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
             {chapter === 1 && <>
