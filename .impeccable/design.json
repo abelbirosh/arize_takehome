@@ -272,15 +272,7 @@
       "refersTo": "button-primary",
       "description": "Move into the research or load supplied evidence.",
       "html": "<button class=\"ds-primary\">Explore the research</button>",
-      "css": ".ds-primary{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;display:inline-flex;align-items:center;justify-content:center;gap:20px;padding:14px 18px;background:var(--ink,#252c29);color:var(--paper,#f6f5f0);border:0;border-radius:4px;font-weight:500;min-height:46px}.ds-primary:hover{background:var(--dark,#263b31);color:var(--accent,#e8ee95)}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
-    },
-    {
-      "name": "Outline action",
-      "kind": "button",
-      "refersTo": "button-outline",
-      "description": "Download the research template.",
-      "html": "<a class=\"ds-outline\" href=\"#template\">Download template</a>",
-      "css": ".ds-outline{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;display:inline-flex;align-items:center;justify-content:center;gap:10px;color:var(--ink,#252c29);text-decoration:none;border:1px solid #c6cbbf;padding:13px 16px;border-radius:4px;min-height:46px}.ds-outline:hover{background:var(--paper,#f6f5f0);color:var(--focus,#476542)}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+      "css": ".ds-primary{font-family:'Times New Roman',serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;display:inline-flex;align-items:center;justify-content:center;gap:20px;padding:14px 18px;background:var(--ink,#252c29);color:var(--paper,#f6f5f0);border:0;border-radius:4px;font-weight:700;min-height:46px}.ds-primary:hover{background:var(--dark,#263b31);color:var(--accent,#e8ee95)}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
     },
     {
       "name": "Chapter index",
@@ -288,7 +280,7 @@
       "refersTo": "navigation-current",
       "description": "Numbered chapter links with a current step.",
       "html": "<nav class=\"ds-nav\" aria-label=\"Chapters\"><a href=\"#question\" aria-current=\"step\"><span>01</span>The question</a><a href=\"#mechanism\"><span>02</span>The mechanism</a></nav>",
-      "css": ".ds-nav{display:flex;flex-direction:column;gap:8px;width:184px}.ds-nav a{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;display:flex;align-items:center;gap:14px;min-height:44px;padding:10px 12px;border-radius:4px;text-decoration:none;color:var(--muted,#646c62)}.ds-nav a:hover{background:var(--soft,#eeeee5);color:var(--ink,#252c29)}.ds-nav a[aria-current]{background:#e9ecd9;color:var(--ink,#252c29);font-weight:500}.ds-nav a span{font-size:10px;font-variant-numeric:tabular-nums;opacity:.7}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+      "css": ".ds-nav{display:flex;flex-direction:column;gap:8px;width:184px}.ds-nav a{font-family:'Times New Roman',serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;display:flex;align-items:center;gap:14px;min-height:44px;padding:10px 12px;border-radius:4px;text-decoration:none;color:var(--muted,#646c62)}.ds-nav a:hover{background:var(--soft,#eeeee5);color:var(--ink,#252c29)}.ds-nav a[aria-current]{background:#e9ecd9;color:var(--ink,#252c29);font-weight:700}.ds-nav a span{font-size:10px;font-variant-numeric:tabular-nums;opacity:.7}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
     },
     {
       "name": "Routing action",
@@ -296,7 +288,7 @@
       "refersTo": "action-selected",
       "description": "Selected action in the explanatory routing diagram.",
       "html": "<button class=\"ds-action\" aria-pressed=\"true\">Search<span></span></button>",
-      "css": ".ds-action{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;font-size:10px;min-height:40px;min-width:90px;border:1px solid #bec77a;border-radius:4px;background:var(--accent,#e8ee95);color:var(--ink,#252c29)}.ds-action:hover{border-color:#829368}.ds-action span{width:4px;height:4px;border-radius:50%;background:#5f6f3b;display:inline-block;margin-left:7px;vertical-align:middle}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+      "css": ".ds-action{font-family:'Times New Roman',serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;font-size:10px;min-height:40px;min-width:90px;border:1px solid #bec77a;border-radius:4px;background:var(--accent,#e8ee95);color:var(--ink,#252c29)}.ds-action:hover{border-color:#829368}.ds-action span{width:4px;height:4px;border-radius:50%;background:#5f6f3b;display:inline-block;margin-left:7px;vertical-align:middle}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
     },
     {
       "name": "Pending evidence",
@@ -304,7 +296,7 @@
       "refersTo": "empty-evidence",
       "description": "Honest placeholder for findings that have not been supplied.",
       "html": "<div class=\"ds-empty\"><h2>A place for the results.</h2><p>The comparison will appear here when the research is ready.</p><span><i></i>Awaiting research</span></div>",
-      "css": ".ds-empty{font-family:\"DM Sans\",sans-serif;color:var(--ink,#252c29);border:1px dashed #c8cebb;border-radius:5px;min-height:290px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px;gap:14px}.ds-empty h2{margin:0;font-size:17px;font-weight:500;letter-spacing:-.02em}.ds-empty p{margin:0;font-size:12px;color:var(--muted,#646c62);max-width:45ch;line-height:1.8}.ds-empty>span{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:500}.ds-empty i{width:5px;height:5px;background:#858c5a;border-radius:50%}"
+      "css": ".ds-empty{font-family:\"Times New Roman\",serif;color:var(--ink,#252c29);border:1px dashed #c8cebb;border-radius:5px;min-height:290px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px;gap:14px}.ds-empty h2{margin:0;font-size:17px;font-weight:700;letter-spacing:-.02em}.ds-empty p{margin:0;font-size:12px;color:var(--muted,#646c62);max-width:45ch;line-height:1.8}.ds-empty>span{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:700}.ds-empty i{width:5px;height:5px;background:#858c5a;border-radius:50%}"
     },
     {
       "name": "Decision node",
@@ -312,7 +304,7 @@
       "refersTo": "routing-diagram",
       "description": "Forest focal point inside the routing diagram.",
       "html": "<div class=\"ds-decision\"><div><strong>System one</strong><span>Choose the next action</span></div><span class=\"ds-tag\">Jev</span></div>",
-      "css": ".ds-decision{display:flex;align-items:center;gap:13px;border:1px solid #52623f;background:var(--dark,#263b31);color:var(--accent,#e8ee95);padding:20px 17px;border-radius:5px}.ds-decision>div{display:flex;flex-direction:column;gap:4px}.ds-decision strong{font-family:\"Instrument Serif\",serif;font-size:28px;font-weight:400;line-height:1}.ds-decision div span{font-family:\"DM Sans\",sans-serif;color:#d1dcbd;font-size:10px}.ds-tag{font-family:\"DM Sans\",sans-serif;font-size:9px;border:1px solid #647c5e;padding:3px 7px;border-radius:4px;align-self:flex-start;margin-left:auto}"
+      "css": ".ds-decision{display:flex;align-items:center;gap:13px;border:1px solid #52623f;background:var(--dark,#263b31);color:var(--accent,#e8ee95);padding:20px 17px;border-radius:5px}.ds-decision>div{display:flex;flex-direction:column;gap:4px}.ds-decision strong{font-family:\"Times New Roman\",serif;font-size:28px;font-weight:400;line-height:1}.ds-decision div span{font-family:\"Times New Roman\",serif;color:#d1dcbd;font-size:10px}.ds-tag{font-family:\"Times New Roman\",serif;font-size:9px;border:1px solid #647c5e;padding:3px 7px;border-radius:4px;align-self:flex-start;margin-left:auto}"
     },
     {
       "name": "Presentation action",
@@ -320,21 +312,21 @@
       "refersTo": "button-outline",
       "description": "Enter or exit the focused presentation view.",
       "html": "<button class=\"ds-present\">Present</button>",
-      "css": ".ds-present{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;color:var(--ink,#252c29);background:none;border:1px solid var(--rule,#dcded4);border-radius:5px;padding:10px 15px}.ds-present:hover{background:var(--soft,#eeeee5)}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+      "css": ".ds-present{font-family:'Times New Roman',serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;color:var(--ink,#252c29);background:none;border:1px solid var(--rule,#dcded4);border-radius:5px;padding:10px 15px}.ds-present:hover{background:var(--soft,#eeeee5)}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
     },
     {
       "name": "Attached references",
       "kind": "custom",
       "description": "Wrapping source links attached directly to research notes.",
       "html": "<ul class=\"ds-references\" aria-label=\"Attached links\"><li><a href=\"https://github.com/abelbirosh/arize_takehome\" target=\"_blank\" rel=\"noreferrer\">Research agent repository<svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 12h16M14 6l6 6-6 6\"/></svg></a></li></ul>",
-      "css": ".ds-references{font-family:\"DM Sans\",sans-serif;list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:10px 22px}.ds-references a{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--focus,#476542);text-decoration:underline;text-decoration-color:#a8b39d;text-underline-offset:5px;line-height:1.6;overflow-wrap:anywhere;transition:background .18s ease,color .18s ease}.ds-references a:hover{color:var(--ink,#252c29);text-decoration-color:var(--ink,#252c29)}.ds-references a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}.ds-references svg{flex-shrink:0;transform:rotate(-45deg)}@media(max-width:600px){.ds-references{gap:10px 18px}}@media(prefers-reduced-motion:reduce){.ds-references a{transition:none}}"
+      "css": ".ds-references{font-family:\"Times New Roman\",serif;list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:10px 22px}.ds-references a{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--focus,#476542);text-decoration:underline;text-decoration-color:#a8b39d;text-underline-offset:5px;line-height:1.6;overflow-wrap:anywhere;transition:background .18s ease,color .18s ease}.ds-references a:hover{color:var(--ink,#252c29);text-decoration-color:var(--ink,#252c29)}.ds-references a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}.ds-references svg{flex-shrink:0;transform:rotate(-45deg)}@media(max-width:600px){.ds-references{gap:10px 18px}}@media(prefers-reduced-motion:reduce){.ds-references a{transition:none}}"
     },
     {
       "name": "Challenge and solution pair",
       "kind": "custom",
       "description": "Two open explanatory columns that stack in reading order on mobile.",
       "html": "<article class=\"ds-challenge\"><h2>Challenge &amp; solution</h2><div class=\"ds-pair\"><div><h3>Challenge</h3><p>Describe the implementation challenge.</p></div><div><h3>Solution</h3><p>Explain the response and its supporting evidence.</p></div></div></article>",
-      "css": ".ds-challenge{font-family:\"DM Sans\",sans-serif;color:var(--ink,#252c29);border-top:1px solid var(--rule,#dcded4);padding:30px 0}.ds-challenge h2{font-family:\"Instrument Serif\",serif;font-size:32px;font-weight:500;letter-spacing:-.02em;line-height:1.5;margin:0;overflow-wrap:anywhere}.ds-pair{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:20px}.ds-pair h3{font-size:12px;font-weight:500;margin:0;line-height:1.5}.ds-pair p{font-size:14px;line-height:1.85;color:var(--muted,#646c62);margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}@media(max-width:600px){.ds-pair{grid-template-columns:1fr;gap:20px}.ds-pair p{font-size:13px}.ds-challenge h2{font-size:29px}}"
+      "css": ".ds-challenge{font-family:\"Times New Roman\",serif;color:var(--ink,#252c29);border-top:1px solid var(--rule,#dcded4);padding:30px 0}.ds-challenge h2{font-family:\"Times New Roman\",serif;font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.5;margin:0;overflow-wrap:anywhere}.ds-pair{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:20px}.ds-pair h3{font-size:12px;font-weight:700;margin:0;line-height:1.5}.ds-pair p{font-size:14px;line-height:1.85;color:var(--muted,#646c62);margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}@media(max-width:600px){.ds-pair{grid-template-columns:1fr;gap:20px}.ds-pair p{font-size:13px}.ds-challenge h2{font-size:29px}}"
     }
   ],
   "narrative": {
@@ -342,7 +334,7 @@
     "overview": "Conference proceedings translated into a presentation reader: large editorial titles, an open paper surface, a numbered chapter index, and a restrained interactive routing diagram. This description records the implemented visual world; it is not a claim of user-approved qualitative preferences.\n\nThe hierarchy gives the question prominence while keeping mechanisms, planned comparisons, and supplied evidence readable. Pending content has its own explicit visual state rather than simulated findings.",
     "keyCharacteristics": [
       "Paper surfaces and hairline rules.",
-      "Serif research titles with sans-serif explanations and controls.",
+      "Times New Roman throughout, with size, bold weight, and italic emphasis establishing hierarchy.",
       "Forest decision surfaces and lime selected actions.",
       "Explicit pending, loaded, and error states."
     ],
@@ -354,7 +346,7 @@
       },
       {
         "name": "Editorial Hierarchy",
-        "body": "Use Instrument Serif for research titles and selected section headings; use DM Sans for explanatory text, navigation, and controls.",
+        "body": "Use Times New Roman for research titles and selected section headings; use Times New Roman for explanatory text, navigation, and controls.",
         "section": "typography"
       },
       {

@@ -13,9 +13,9 @@ npm run test:frontend
 
 Vercel: import this repository, use the repository root as the root directory, and keep the checked-in Vercel configuration. The build outputs `frontend/dist`. No Python runtime or API keys are required for this frontend.
 
-## Load the research
+## Update the research
 
-Edit `frontend/public/research.json` and rebuild to publish research for everyone. The interface's **Load research** button previews a JSON file locally for the current browser session; it does not upload or publish anything. Download template returns the hosted research file.
+Edit `frontend/public/research.json` and rebuild to publish research for everyone. The presentation reads this file automatically; there are no upload or research-download controls. All text uses Times New Roman, with size, regular/bold weight, and italics defining the hierarchy.
 
 The presentation opens with the original question, followed by four sections:
 
@@ -43,7 +43,7 @@ The presentation opens with the original question, followed by four sections:
 }
 ```
 
-Use `pending` while research is in progress, including when implementation learnings are available but a final performance analysis is not. A `ready` file requires at least one learning. All four sections and the sources list are required. Lists support up to 100 entries. Attached links are optional and accept only HTTP(S) URLs. Imports are capped at 2 MB and render as plain text. Version 1 files remain supported: findings become learnings and recommendations become takeaways.
+Use `pending` while research is in progress, including when implementation learnings are available but a final performance analysis is not. A `ready` file requires at least one learning. All four sections and the sources list are required. Lists support up to 100 entries. Attached links are optional and accept only HTTP(S) URLs. Content renders as plain text. Version 1 files remain supported: findings become learnings and recommendations become takeaways.
 
 The initial section content is grounded in pushed repository commit `440dc8f`, with commit-pinned links beside the observations. It describes implementation and the benchmark plan, not a completed performance comparison. Ongoing local research changes are not automatically published as presentation findings.
 

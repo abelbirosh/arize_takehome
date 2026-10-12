@@ -4,7 +4,7 @@ Mode: Read. Build path: code for this session; no standing workflow preference r
 
 THESIS: Give the research question a clear visual center, then separate architecture, experiment, findings, practical recommendations, and sources.
 
-OWN-WORLD: Conference proceedings translated to a presentation reader. Paper #f6f5f0, ink #252c29, restrained forest decision surface #263b31, lime selected-action accent #e8ee95. Instrument Serif display and DM Sans body. Hairline rules and open composition, no invented photographic material.
+OWN-WORLD: Conference proceedings translated to a presentation reader. Paper #f6f5f0, ink #252c29, restrained forest decision surface #263b31, lime selected-action accent #e8ee95. Times New Roman throughout, with sizes, regular/bold weights, and italics establishing hierarchy. Hairline rules and open composition, no invented photographic material.
 
 STORY: Question → When and When Not to Jev → Learnings → Challenges & solutions → Takeaways. Thesis and why, attached evidence links, explicit challenge/solution pairs, and provisional takeaways use the existing visual world. Published content is grounded in pushed commit 440dc8f; full-run performance conclusions remain pending.
 
@@ -12,8 +12,10 @@ FIRST VIEWPORT: Persistent left chapter index, large research question on the le
 
 FORM: Seed 183bb1c3, assigned candidate 4. Grounded candidates in resonance order: research journal, technical documentation, lab notebook, conference proceedings, decision matrix, annotated flowchart, seminar blackboard. Conference proceedings carries the selected chapter presentation. Challenger judgments: ocean descent declined (obscures the routing mechanism; keep depth of progression), provenance ribbon competitive on evidence clarity (retain honest pending states), technical zine competitive on explanation (retain interactive action exploration), cutting bench declined (state grammar distracts from research; keep discrete chapters), noir poster declined (ambiguous hierarchy for evidence; keep a strong title silhouette), design annual competitive on readable structure (retain precise alignment and a single clear diagram). No challenger supplants the assigned direction. The existing constraints favor readable presentation content over literal material metaphors.
 
-Constraints: Do not invent benchmark outcomes. Architecture and controller copy comes from repository documentation. Research loads through public/research.json or a local browser-session import. Vercel hosting configuration is included; publishing is outside this request.
+Constraints: Do not invent benchmark outcomes. Architecture and controller copy comes from repository documentation. Research loads through public/research.json automatically; there is no research-upload control. Vercel hosting configuration is included; publishing is outside this request.
 
 Verification: desktop 1440 × 1000 and mobile 390 × 844 screenshots under .impeccable/review/. All six chapters checked for horizontal overflow. Browser tests cover navigation, full screen, diagram actions, invalid imports and populated research. Detector ran once; warning about Instrument Serif retained as an intentional readable editorial display face. No generated raster assets or approved visual comp.
 
 Update verification: five chapters checked at desktop 1440 × 1000 and mobile 390 × 844. Exact thesis section title preserved; legacy chapter hashes map to new sections; research format v2 adds thesis, learnings, challenge/solution pairs, takeaways, and attached links while accepting v1 imports.
+
+User refinement: remove the research upload/download panel and use Times New Roman for every text role.

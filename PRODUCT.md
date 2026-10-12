@@ -24,3 +24,6 @@ The user specified four key sections: “When and When Not to Jev” for the the
 
 ## Evidence on Hand
 README.md describes the agent. docs/benchmark_plan.md describes planned comparisons. Actual presentation research has not been supplied. Treat the benchmark plan as provisional.
+
+## Brand Commitments
+All frontend text uses Times New Roman. Typography hierarchy uses its sizes, regular and bold weights, and italics. The user requested removing the research upload option; research loads automatically from the bundled public JSON file.

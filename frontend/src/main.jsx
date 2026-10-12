@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import '@fontsource/dm-sans/400.css';
-import '@fontsource/dm-sans/500.css';
-import '@fontsource/dm-sans/600.css';
-import '@fontsource/instrument-serif/400.css';
-import '@fontsource/instrument-serif/400-italic.css';
 import './styles.css';
 import { emptyResearch, validateResearch } from './research.js';
 
@@ -22,7 +17,7 @@ const indexFromHash = () => {
 };
 
 function Icon({ name, ...props }) {
-  const paths = { arrow: <><path d="M4 12h16M14 6l6 6-6 6"/></>, upload: <><path d="M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5"/></>, expand: <path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/>, close: <path d="m6 6 12 12M6 18 18 6"/>, download: <path d="M12 3v13m-5-5 5 5 5-5M4 17v4h16v-4"/>, check: <path d="m5 12 4 4L19 6"/> };
+  const paths = { arrow: <><path d="M4 12h16M14 6l6 6-6 6"/></>, expand: <path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/>, close: <path d="m6 6 12 12M6 18 18 6"/> };
   return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>{paths[name] || paths.arrow}</svg>;
 }
 
@@ -48,7 +43,7 @@ function ReferenceLinks({ links = [] }) {
 }
 
 function ResearchNotes({ items, challenges = false, emptyTitle }) {
-  if (!items.length) return <div className="empty-evidence"><h2>{emptyTitle}</h2><p>Load a research file to add this section.</p><span className="status-label"><span/>Awaiting research</span></div>;
+  if (!items.length) return <div className="empty-evidence"><h2>{emptyTitle}</h2><p>Research for this section is pending.</p><span className="status-label"><span/>Awaiting research</span></div>;
   return <div className={`evidence-list ${challenges ? 'challenge-list' : ''}`}>{items.map((item, i) => <article key={i}>
     <h2>{item.title}</h2>
     {challenges ? <div className="challenge-pair"><div><h3>Challenge</h3><p>{item.challenge}</p></div><div><h3>Solution</h3><p>{item.solution}</p></div></div> : <p>{item.body}</p>}
@@ -72,16 +67,13 @@ function App() {
   const [error, setError] = useState('');
   const [presenting, setPresenting] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [importing, setImporting] = useState(false);
-  const [localImport, setLocalImport] = useState(false);
-  const upload = useRef(null);
   const heading = useRef(null);
   const chapterNav = useRef(null);
   const current = chapters[chapter];
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch('/research.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setResearch(validateResearch(data))).catch(e => { if (e.name !== 'AbortError') setError('Research could not be loaded. Retry by refreshing, or load a research file.'); }).finally(() => setLoading(false));
+    fetch('/research.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setResearch(validateResearch(data))).catch(e => { if (e.name !== 'AbortError') setError('Research could not be loaded. Please refresh to try again.'); }).finally(() => setLoading(false));
     const hash = () => setChapter(indexFromHash());
     const full = () => setPresenting(Boolean(document.fullscreenElement));
     window.addEventListener('hashchange', hash);
@@ -124,24 +116,12 @@ function App() {
       else { setPresenting(!presenting); setMessage('Focus view enabled. Use the exit button to return.'); }
     } catch { setPresenting(!presenting); setMessage('Full screen is unavailable. Focus view is enabled instead.'); }
   }
-  async function loadFile(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setImporting(true); setError(''); setMessage('');
-    try {
-      if (file.size > 2_000_000) throw new Error('Choose a research JSON file smaller than 2 MB.');
-      const parsed = validateResearch(JSON.parse(await file.text()));
-      setResearch(parsed); setLocalImport(true);
-      setMessage(`Loaded ${file.name} for this browser session. Publish the file as research.json to share it.`);
-    } catch (err) { setError(err instanceof SyntaxError ? 'This file is not valid JSON. Check its formatting and try again.' : err.message); }
-    finally { setImporting(false); e.target.value = ''; }
-  }
 
   const ready = research.status === 'ready';
-  const researchNote = loading ? 'Loading presentation content.' : ready ? (localImport ? 'Loaded for this browser session.' : 'Research and attached links are available.') : research.learnings.length ? 'Implementation learnings are loaded.\nFinal analysis is pending.' : 'The question is set.\nResearch content is pending.';
+  const researchNote = loading ? 'Loading presentation content.' : ready ? 'Research and attached links are available.' : research.learnings.length ? 'Implementation learnings are loaded.\nFinal analysis is pending.' : 'The question is set.\nResearch content is pending.';
   return <div className={`app ${presenting ? 'presenting' : ''}`}>
     <a href="#main" className="skip-link">Skip to presentation</a>
-    <header className="topbar"><a className="brand" href="#question" onClick={() => navigate(0)} aria-label="Research presentation home"><span className="brand-symbol"><span/><span/></span><span>System one<span className="brand-divider"> / </span><span className="brand-subtitle">A research presentation</span></span></a><div className="header-actions"><button className="text-button import-button" onClick={() => upload.current?.click()} disabled={importing || loading}><Icon name="upload"/>{importing ? 'Loading…' : 'Load research'}</button><button className="present-button" onClick={togglePresentation}><Icon name={presenting ? 'close' : 'expand'}/>{presenting ? 'Exit presentation' : 'Present'}</button><input ref={upload} type="file" accept=".json,application/json" onChange={loadFile} className="file-input" aria-label="Load a research JSON file"/></div></header>
+    <header className="topbar"><a className="brand" href="#question" onClick={() => navigate(0)} aria-label="Research presentation home"><span className="brand-symbol"><span/><span/></span><span>System one<span className="brand-divider"> / </span><span className="brand-subtitle">A research presentation</span></span></a><div className="header-actions"><button className="present-button" onClick={togglePresentation}><Icon name={presenting ? 'close' : 'expand'}/>{presenting ? 'Exit presentation' : 'Present'}</button></div></header>
     <div className="workspace">
       <aside className="sidebar"><nav ref={chapterNav} aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={`#${item.id}`} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav><div className="sidebar-note"><span className={`status-label ${ready ? 'ready' : ''}`}><span/>{loading ? 'Loading research' : ready ? 'Research loaded' : 'Research in progress'}</span><p>{researchNote}</p></div></aside>
       <main id="main" className={`main chapter-${current.id}`}>
@@ -166,7 +146,6 @@ function App() {
             {chapter === 4 && <>
               <p className="intro wide">{ready ? 'The practical recommendations from the research, with the supporting evidence attached.' : 'Working takeaways from the implementation. Performance recommendations await the full-run analysis.'}</p>
               <ResearchNotes items={research.takeaways} emptyTitle="Takeaways are on their way."/>
-              <div className="load-panel"><div><h2>Keep the presentation current.</h2><p>Load an updated research file to replace the thesis, learnings, challenges, takeaways, and links in this browser session.</p></div><a className="outline-button" href="/research.json" download="research-template.json"><Icon name="download"/>Download research file</a><button className="primary-button" onClick={() => upload.current?.click()} disabled={importing || loading}><Icon name="upload"/>Load research</button></div>
             </>}
 
           </>}
