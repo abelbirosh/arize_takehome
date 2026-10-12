@@ -76,6 +76,7 @@ function App() {
   const [localImport, setLocalImport] = useState(false);
   const upload = useRef(null);
   const heading = useRef(null);
+  const chapterNav = useRef(null);
   const current = chapters[chapter];
 
   useEffect(() => {
@@ -87,6 +88,14 @@ function App() {
     document.addEventListener('fullscreenchange', full);
     return () => { controller.abort(); window.removeEventListener('hashchange', hash); document.removeEventListener('fullscreenchange', full); };
   }, []);
+
+  useEffect(() => {
+    const nav = chapterNav.current;
+    const active = nav?.querySelector('[aria-current="step"]');
+    if (active && nav.scrollWidth > nav.clientWidth) {
+      nav.scrollLeft += active.getBoundingClientRect().left - nav.getBoundingClientRect().left - 10;
+    }
+  }, [chapter]);
 
   function navigate(index) {
     const next = Math.min(chapters.length - 1, Math.max(0, index));
@@ -129,17 +138,18 @@ function App() {
   }
 
   const ready = research.status === 'ready';
+  const researchNote = loading ? 'Loading presentation content.' : ready ? (localImport ? 'Loaded for this browser session.' : 'Research and attached links are available.') : research.learnings.length ? 'Implementation learnings are loaded.\nFinal analysis is pending.' : 'The question is set.\nResearch content is pending.';
   return <div className={`app ${presenting ? 'presenting' : ''}`}>
     <a href="#main" className="skip-link">Skip to presentation</a>
     <header className="topbar"><a className="brand" href="#question" onClick={() => navigate(0)} aria-label="Research presentation home"><span className="brand-symbol"><span/><span/></span><span>System one<span className="brand-divider"> / </span><span className="brand-subtitle">A research presentation</span></span></a><div className="header-actions"><button className="text-button import-button" onClick={() => upload.current?.click()} disabled={importing || loading}><Icon name="upload"/>{importing ? 'Loading…' : 'Load research'}</button><button className="present-button" onClick={togglePresentation}><Icon name={presenting ? 'close' : 'expand'}/>{presenting ? 'Exit presentation' : 'Present'}</button><input ref={upload} type="file" accept=".json,application/json" onChange={loadFile} className="file-input" aria-label="Load a research JSON file"/></div></header>
     <div className="workspace">
-      <aside className="sidebar"><nav aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={`#${item.id}`} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav><div className="sidebar-note"><span className={`status-label ${ready ? 'ready' : ''}`}><span/>{loading ? 'Loading research' : ready ? 'Research loaded' : 'Research in progress'}</span><p>{ready ? (localImport ? 'Loaded for this browser session.' : 'Research and attached links are available.') : 'Implementation learnings are loaded.\nFull-run analysis is pending.'}</p></div></aside>
+      <aside className="sidebar"><nav ref={chapterNav} aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={`#${item.id}`} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav><div className="sidebar-note"><span className={`status-label ${ready ? 'ready' : ''}`}><span/>{loading ? 'Loading research' : ready ? 'Research loaded' : 'Research in progress'}</span><p>{researchNote}</p></div></aside>
       <main id="main" className={`main chapter-${current.id}`}>
         {(message || error) && <div className={`notice ${error ? 'error' : ''}`} role={error ? 'alert' : 'status'}><span>{error || message}</span><button aria-label="Dismiss message" onClick={() => { setMessage(''); setError(''); }}><Icon name="close"/></button></div>}
         <div className="chapter-meta"><span>{String(chapter + 1).padStart(2, '0')} <span className="meta-slash">/</span> {String(chapters.length).padStart(2, '0')}</span></div>
         <div className="chapter-content" key={current.id}>
           {chapter === 0 ? <>
-            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">When should I use a <em>system one</em> model, and how?</h1><p className="intro">Testing how much model a research agent needs to decide what happens next.</p><button className="primary-button" onClick={() => navigate(1)}>Explore the research<Icon name="arrow"/></button><p className="cover-note">Jev · Haiku · Sonnet · Opus · Fixed</p></div><RoutingDiagram/></div>
+            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">When should I use a <em>system one</em> model, and how?</h1><p className="intro">Testing how much model a research agent needs to decide what happens next.</p><button className="primary-button" onClick={() => navigate(1)}>Explore the research<Icon name="arrow"/></button><p className="cover-note">Decision models · Claude deciders · Fixed baseline</p></div><RoutingDiagram/></div>
             <div className="cover-bottom"><span className="question-mark">?</span><p>One question. Two parts.</p><div><strong>When</strong><span>Where does a decision model belong?</span></div><div><strong>How</strong><span>How do we put it to the test?</span></div></div>
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>

@@ -166,7 +166,7 @@ Controls and individual diagram nodes use gently rounded corners; panels are sli
 Primary actions are compact ink rectangles with paper lettering, 46px minimum height, and forest/lime hover. Outline actions share that minimum height and use a thin border; their hover fill is paper. Presentation controls use a slightly softer corner and a soft hover fill. Text actions remain visually quiet. Disabled buttons use 0.4 opacity and the default cursor. Buttons and links retain a 2px focus outline offset by 5px.
 
 ### Navigation
-The chapter index combines two-digit numbers and sentence-case labels. A pale selected fill, medium text weight, and inline arrow identify the current chapter. On narrow screens the arrow disappears and the index scrolls. The top of the reading area shows only chapter position, avoiding a redundant current-chapter label. Previous and next actions remain at the foot; keyboard navigation also supports arrows, Page Up/Down, Home, and End.
+The chapter index combines two-digit numbers and sentence-case labels. A pale selected fill, medium text weight, and inline arrow identify the current chapter. On narrow screens the arrow disappears and the index scrolls; changing chapters automatically brings the active section into view. The top of the reading area shows only chapter position, avoiding a redundant current-chapter label. Previous and next actions remain at the foot; keyboard navigation also supports arrows, Page Up/Down, Home, and End.
 
 ### Routing diagram
 The inset diagram uses paper input/output nodes connected by one-pixel paths. A forest decision node with serif naming leads to three action buttons. The active action gets lime fill, a small dot, and `aria-pressed`; changing it updates the generation description. These are explanatory interactions, not benchmark results.
@@ -176,6 +176,12 @@ An empty findings panel has a dashed outline, a small abstract chart illustratio
 
 ### Tables and source rows
 Comparison tables have open cells separated by horizontal rules, with muted column headings and readable row labels. Source rows pair title and hostname with an inline SVG arrow; hover underlines the title. On mobile the table scrolls independently.
+
+### Attached references
+Research notes keep supporting links immediately below their text. Links form a wrapping inline list with a small external-arrow SVG, forest text, and a quiet underline; hover changes both text and underline to ink. The list starts 18px below the note, with 10px row gaps and 22px column gaps (18px on mobile). Link text stays at 12px with a 1.6 line height, wraps long words, retains the shared keyboard focus outline, and opens references in a new tab.
+
+### Challenge and solution pairs
+Each note keeps its serif article title above two equal columns, labeled Challenge and Solution in 12px medium DM Sans. The pair starts 20px below the title, with a 36px column gap and 14px supporting text at 1.85 line height. At 600px and below the pair stacks in reading order, the gap becomes 20px, and supporting text becomes 13px. Attached references follow the complete pair. This extends the existing rule-separated article pattern without new surface or color tokens.
 
 ### Notices and import panel
 The import panel uses a soft fill with outline and primary actions. File selection is a hidden native input activated by buttons, not a visible custom text field. Success/status notices and warm error notices are dismissible and expose status/alert semantics.

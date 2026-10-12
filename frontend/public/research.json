@@ -14,15 +14,19 @@
       "A fixed sequence already solves the task well enough; the benchmark includes that baseline.",
       "The only evidence is a cheaper routing call. Answer quality and whole-agent cost still need to hold up."
     ],
-    "method": "The current benchmark plan fixes Claude Haiku 5.5 as the generator and compares Jev, Claude Haiku 5.5, Claude Sonnet 5.5, Claude Opus 5.5, and a fixed controller. It plans 25 questions × 5 controllers, one repetition, with the same tools and an eight-step budget. Accuracy, total and routing cost, active time, and routing behavior are evaluated in Phoenix.",
+    "method": "The v2 suite holds Claude Haiku 5.5 generation fixed and compares three decision-model controllers (Jev, MSFT, and OAI), three Claude deciders (Haiku, Sonnet, and Opus), and a fixed baseline. The 50-question dataset spans seven categories, including multi-hop research, recent facts, arithmetic, and unanswerable questions. Phoenix evaluates correctness, groundedness, routing fit, cost, and active latency.",
     "links": [
       {
-        "title": "Benchmark plan",
-        "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+        "title": "v2 experiment runner",
+        "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
       },
       {
-        "title": "Experiment runner",
-        "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+        "title": "50-question suite",
+        "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/data/benchmark_v2.jsonl"
+      },
+      {
+        "title": "Original benchmark plan",
+        "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/docs/benchmark_plan.md"
       }
     ]
   },
@@ -32,40 +36,40 @@
       "body": "The generator stays fixed while the decider changes. That makes the routing strategy the comparison, rather than changing the controller and the text-generation model together.",
       "links": [
         {
-          "title": "Controlled comparison",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
-        },
-        {
-          "title": "Controller experiments",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+          "title": "Controlled experiment runner",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
         }
       ]
     },
     {
       "title": "A research benchmark needs questions that require research.",
-      "body": "Questions answered from memory tell us less about retrieval routing. The dataset preparation uses a partial closed-book screen to avoid known answers and combines fresh questions with multi-hop FRAMES questions.",
+      "body": "The original preparation used a partial closed-book screen to avoid known answers. The v2 suite expands to 50 questions across seven categories, including recent facts, multi-entity research, arithmetic, multi-hop FRAMES, and unanswerable questions. This tests more than one kind of routing decision.",
       "links": [
         {
-          "title": "Closed-book screening",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/screen_closed_book.py"
+          "title": "v2 dataset preparation",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/prepare_dataset.py"
         },
         {
-          "title": "Dataset design",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+          "title": "50-question dataset",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/data/benchmark_v2.jsonl"
+        },
+        {
+          "title": "Closed-book screening",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/screen_closed_book.py"
         }
       ]
     },
     {
-      "title": "Measure the whole agent, then inspect the routing.",
-      "body": "Total cost and answer correctness describe the outcome; routing cost, decision latency, steps, and forced answers help explain it. Active latency excludes time queued behind the shared rate limiter.",
+      "title": "Correctness and evidence support are different checks.",
+      "body": "The v2 evaluators grade the answer against accepted variants, distinguish a committed answer from a hedge, and separately check whether the collected notes support its key claim. Routing fit, cost, and active latency provide additional views of how the agent reached the outcome.",
       "links": [
         {
-          "title": "Outcome and routing analysis",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/analyze.py"
+          "title": "Correctness and groundedness judges",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/src/research_agent/evals.py"
         },
         {
-          "title": "Queue-time accounting",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/src/research_agent/ratelimit.py"
+          "title": "Routing-fit and latency evaluators",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
         }
       ]
     },
@@ -75,35 +79,35 @@
       "links": [
         {
           "title": "Evaluation backfill",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/backfill_evals.py"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/backfill_evals.py"
         }
       ]
     }
   ],
   "challenges": [
     {
-      "title": "The full run was interrupted.",
-      "challenge": "The benchmark plan records a network outage while the machine slept, leaving failed or missing runs.",
+      "title": "The first full run was interrupted.",
+      "challenge": "The original benchmark plan records a network outage while the machine slept, leaving failed or missing runs.",
       "solution": "The runner supports resuming failed or missing runs, then resuming evaluations. This avoids deliberately rerunning successful examples.",
       "links": [
         {
           "title": "Recorded run status",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/docs/benchmark_plan.md"
         },
         {
           "title": "Resume workflow",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
         }
       ]
     },
     {
       "title": "Distinct metrics collapsed into one evaluator column.",
       "challenge": "The code-based metric closures shared the same qualified function name, so Phoenix treated them as the same evaluator.",
-      "solution": "Assign each closure its metric name through both __name__ and __qualname__, and explicitly mark correctness as an LLM evaluator.",
+      "solution": "Give each metric evaluator a unique name that Phoenix recognizes, and explicitly mark correctness as an LLM evaluator.",
       "links": [
         {
           "title": "Evaluator naming fix",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
         }
       ]
     },
@@ -114,7 +118,7 @@
       "links": [
         {
           "title": "Stale-grade repair",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/backfill_evals.py"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/backfill_evals.py"
         }
       ]
     },
@@ -125,11 +129,11 @@
       "links": [
         {
           "title": "Per-model limiter",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/src/research_agent/ratelimit.py"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/src/research_agent/ratelimit.py"
         },
         {
           "title": "Active-latency evaluator",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/run_experiments.py"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
         }
       ]
     }
@@ -141,7 +145,7 @@
       "links": [
         {
           "title": "Agent architecture",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/README.md"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/README.md"
         }
       ]
     },
@@ -151,33 +155,37 @@
       "links": [
         {
           "title": "Fixed-controller baseline",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/docs/benchmark_plan.md"
         }
       ]
     },
     {
       "title": "Make the recommendation from complete, current evidence.",
-      "body": "Check answer quality, cost, and active latency together. Repair missing or stale grades before interpreting the comparison. The full-run analysis is still pending in the pushed benchmark plan, so these are working implementation takeaways—not a claim that Jev wins.",
+      "body": "Check correctness, evidence support, cost, and active latency together. Repair missing or stale grades before interpreting the comparison. The v2 suite and evaluators are implemented; a final performance analysis has not been loaded into this presentation, so these remain working implementation takeaways—not a claim that Jev wins.",
       "links": [
         {
           "title": "Analysis script",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/scripts/analyze.py"
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/analyze.py"
         },
         {
-          "title": "Run status and limitations",
-          "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+          "title": "v2 evaluators",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/src/research_agent/evals.py"
         }
       ]
     }
   ],
   "sources": [
     {
-      "title": "Benchmark plan and run status",
-      "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/docs/benchmark_plan.md"
+      "title": "v2 dataset and preparation",
+      "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/prepare_dataset.py"
     },
     {
-      "title": "Research agent repository documentation",
-      "url": "https://github.com/abelbirosh/arize_takehome/blob/213165fe5110738a167189b06609667f1d3f1fc4/README.md"
+      "title": "Experiment runner",
+      "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/scripts/run_experiments.py"
+    },
+    {
+      "title": "Original benchmark plan and interrupted-run notes",
+      "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/docs/benchmark_plan.md"
     }
   ]
 }

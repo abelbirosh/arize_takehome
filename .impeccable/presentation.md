@@ -6,7 +6,7 @@ THESIS: Give the research question a clear visual center, then separate architec
 
 OWN-WORLD: Conference proceedings translated to a presentation reader. Paper #f6f5f0, ink #252c29, restrained forest decision surface #263b31, lime selected-action accent #e8ee95. Instrument Serif display and DM Sans body. Hairline rules and open composition, no invented photographic material.
 
-STORY: Question → mechanism → experiment → findings → practice → sources. Findings and recommendations remain explicitly pending until supplied.
+STORY: Question → When and When Not to Jev → Learnings → Challenges & solutions → Takeaways. Thesis and why, attached evidence links, explicit challenge/solution pairs, and provisional takeaways use the existing visual world. Published content is grounded in pushed commit 440dc8f; full-run performance conclusions remain pending.
 
 FIRST VIEWPORT: Persistent left chapter index, large research question on the left, interactive agent routing diagram on the right, a quiet when/how strip below, and previous/next controls at the foot.
 
@@ -15,3 +15,5 @@ FORM: Seed 183bb1c3, assigned candidate 4. Grounded candidates in resonance orde
 Constraints: Do not invent benchmark outcomes. Architecture and controller copy comes from repository documentation. Research loads through public/research.json or a local browser-session import. Vercel hosting configuration is included; publishing is outside this request.
 
 Verification: desktop 1440 × 1000 and mobile 390 × 844 screenshots under .impeccable/review/. All six chapters checked for horizontal overflow. Browser tests cover navigation, full screen, diagram actions, invalid imports and populated research. Detector ran once; warning about Instrument Serif retained as an intentional readable editorial display face. No generated raster assets or approved visual comp.
+
+Update verification: five chapters checked at desktop 1440 × 1000 and mobile 390 × 844. Exact thesis section title preserved; legacy chapter hashes map to new sections; research format v2 adds thesis, learnings, challenge/solution pairs, takeaways, and attached links while accepting v1 imports.
