@@ -52,6 +52,15 @@ cp .env.example .env   # add OPENROUTER_API_KEY
 
 One OpenRouter key covers Jev (`/api/v1/systemone`) and every LLM provider. To call TypeSafe directly, unset `TYPESAFE_BASE_URL` and set `TYPESAFE_API_KEY`. Web search and fetch go through the [TinyFish](https://tinyfish.ai) CLI (`tinyfish auth login`). Wikipedia needs no key.
 
+### Phoenix
+
+```bash
+uv run phoenix serve                            # UI + collector on http://localhost:6006
+uv run python scripts/register_pricing.py       # teach Phoenix the OpenRouter model prices
+```
+
+Phoenix prices spans from its own model table, which doesn't know OpenRouter ids such as `anthropic/claude-haiku-5.5`. Without this step the cost columns show $0. Jev's cost is not priced by Phoenix, because decision spans report `decision.*` token counts rather than `llm.*`. The agent records it itself as `jev_cost_usd`. To use Phoenix Cloud instead, set `PHOENIX_COLLECTOR_ENDPOINT` and `PHOENIX_API_KEY` in `.env`.
+
 ## Run
 
 ```bash
