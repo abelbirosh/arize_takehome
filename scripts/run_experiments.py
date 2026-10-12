@@ -23,6 +23,7 @@ from pathlib import Path
 
 import openai
 from phoenix.client import Client
+from phoenix.client.experiments import create_evaluator
 
 from research_agent import Settings, build_agent
 from research_agent.controllers import LLM_DECIDERS
@@ -64,6 +65,7 @@ def make_task(controller: str, settings: Settings):
 
 
 def make_correctness(judge: Judge, controller: str):
+    @create_evaluator(kind="LLM", name="correctness")
     def correctness(input, output, expected, metadata):  # noqa: A002
         global _judge_cost
         j = judge(input["question"], expected["answer"], (output or {}).get("answer", ""))
@@ -80,7 +82,8 @@ def make_correctness(judge: Judge, controller: str):
 def _stat(name):
     def evaluator(output):
         return (output or {}).get("stats", {}).get(name)
-    evaluator.__name__ = name
+    # Phoenix names evaluators by __qualname__; without this every closure is "evaluator".
+    evaluator.__name__ = evaluator.__qualname__ = name
     return evaluator
 
 
