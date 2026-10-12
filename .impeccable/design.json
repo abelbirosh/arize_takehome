@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T21:02:45.526408+00:00",
+  "title": "Design System: System one research presentation",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15% 0.008 90)",
+          "oklch(26% 0.008 90)",
+          "oklch(37% 0.008 90)",
+          "oklch(49% 0.008 90)",
+          "oklch(60% 0.008 90)",
+          "oklch(72% 0.008 90)",
+          "oklch(84% 0.008 90)",
+          "oklch(95% 0.008 90)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.01 160)",
+          "oklch(26% 0.01 160)",
+          "oklch(37% 0.01 160)",
+          "oklch(49% 0.01 160)",
+          "oklch(60% 0.01 160)",
+          "oklch(72% 0.01 160)",
+          "oklch(84% 0.01 160)",
+          "oklch(95% 0.01 160)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted olive gray",
+        "tonalRamp": [
+          "oklch(15% 0.02 130)",
+          "oklch(26% 0.02 130)",
+          "oklch(37% 0.02 130)",
+          "oklch(49% 0.02 130)",
+          "oklch(60% 0.02 130)",
+          "oklch(72% 0.02 130)",
+          "oklch(84% 0.02 130)",
+          "oklch(95% 0.02 130)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline rule",
+        "tonalRamp": [
+          "oklch(15% 0.015 115)",
+          "oklch(26% 0.015 115)",
+          "oklch(37% 0.015 115)",
+          "oklch(49% 0.015 115)",
+          "oklch(60% 0.015 115)",
+          "oklch(72% 0.015 115)",
+          "oklch(84% 0.015 115)",
+          "oklch(95% 0.015 115)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Lime selection",
+        "tonalRamp": [
+          "oklch(15% 0.1 110)",
+          "oklch(26% 0.1 110)",
+          "oklch(37% 0.1 110)",
+          "oklch(49% 0.1 110)",
+          "oklch(60% 0.1 110)",
+          "oklch(72% 0.1 110)",
+          "oklch(84% 0.1 110)",
+          "oklch(95% 0.1 110)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "dark": {
+        "role": "primary",
+        "displayName": "Forest decision surface",
+        "tonalRamp": [
+          "oklch(15% 0.03 155)",
+          "oklch(26% 0.03 155)",
+          "oklch(37% 0.03 155)",
+          "oklch(49% 0.03 155)",
+          "oklch(60% 0.03 155)",
+          "oklch(72% 0.03 155)",
+          "oklch(84% 0.03 155)",
+          "oklch(95% 0.03 155)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft paper",
+        "tonalRamp": [
+          "oklch(15% 0.015 110)",
+          "oklch(26% 0.015 110)",
+          "oklch(37% 0.015 110)",
+          "oklch(49% 0.015 110)",
+          "oklch(60% 0.015 110)",
+          "oklch(72% 0.015 110)",
+          "oklch(84% 0.015 110)",
+          "oklch(95% 0.015 110)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "focus": {
+        "role": "state",
+        "displayName": "Focus forest",
+        "tonalRamp": [
+          "oklch(15% 0.055 140)",
+          "oklch(26% 0.055 140)",
+          "oklch(37% 0.055 140)",
+          "oklch(49% 0.055 140)",
+          "oklch(60% 0.055 140)",
+          "oklch(72% 0.055 140)",
+          "oklch(84% 0.055 140)",
+          "oklch(95% 0.055 140)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "selected-navigation": {
+        "role": "neutral",
+        "displayName": "Selected navigation",
+        "tonalRamp": [
+          "oklch(15% 0.035 115)",
+          "oklch(26% 0.035 115)",
+          "oklch(37% 0.035 115)",
+          "oklch(49% 0.035 115)",
+          "oklch(60% 0.035 115)",
+          "oklch(72% 0.035 115)",
+          "oklch(84% 0.035 115)",
+          "oklch(95% 0.035 115)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "diagram-surface": {
+        "role": "neutral",
+        "displayName": "Diagram surface",
+        "tonalRamp": [
+          "oklch(15% 0.02 110)",
+          "oklch(26% 0.02 110)",
+          "oklch(37% 0.02 110)",
+          "oklch(49% 0.02 110)",
+          "oklch(60% 0.02 110)",
+          "oklch(72% 0.02 110)",
+          "oklch(84% 0.02 110)",
+          "oklch(95% 0.02 110)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "pending-indicator": {
+        "role": "state",
+        "displayName": "Pending indicator",
+        "tonalRamp": [
+          "oklch(15% 0.055 115)",
+          "oklch(26% 0.055 115)",
+          "oklch(37% 0.055 115)",
+          "oklch(49% 0.055 115)",
+          "oklch(60% 0.055 115)",
+          "oklch(72% 0.055 115)",
+          "oklch(84% 0.055 115)",
+          "oklch(95% 0.055 115)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "ready-indicator": {
+        "role": "state",
+        "displayName": "Ready indicator",
+        "tonalRamp": [
+          "oklch(15% 0.07 150)",
+          "oklch(26% 0.07 150)",
+          "oklch(37% 0.07 150)",
+          "oklch(49% 0.07 150)",
+          "oklch(60% 0.07 150)",
+          "oklch(72% 0.07 150)",
+          "oklch(84% 0.07 150)",
+          "oklch(95% 0.07 150)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "error-surface": {
+        "role": "state",
+        "displayName": "Error surface",
+        "tonalRamp": [
+          "oklch(15% 0.03 50)",
+          "oklch(26% 0.03 50)",
+          "oklch(37% 0.03 50)",
+          "oklch(49% 0.03 50)",
+          "oklch(60% 0.03 50)",
+          "oklch(72% 0.03 50)",
+          "oklch(84% 0.03 50)",
+          "oklch(95% 0.03 50)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      },
+      "error-text": {
+        "role": "state",
+        "displayName": "Error text",
+        "tonalRamp": [
+          "oklch(15% 0.08 45)",
+          "oklch(26% 0.08 45)",
+          "oklch(37% 0.08 45)",
+          "oklch(49% 0.08 45)",
+          "oklch(60% 0.08 45)",
+          "oklch(72% 0.08 45)",
+          "oklch(84% 0.08 45)",
+          "oklch(95% 0.08 45)"
+        ],
+        "rampSource": "Synthesized preview ramp; not implementation tokens."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Cover question",
+        "purpose": "Main research question."
+      },
+      "headline": {
+        "displayName": "Chapter title",
+        "purpose": "Chapter opening."
+      },
+      "body": {
+        "displayName": "Introduction",
+        "purpose": "Explanatory prose."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "chapter-in",
+        "value": "0.42s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Translate from 8px to 0 and clip inset from 0 0 3% 0 to 0 on chapter entry."
+      },
+      {
+        "name": "control-transition",
+        "value": "background .18s ease, color .18s ease",
+        "purpose": "Link and button hover changes; removed for reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1550px"
+      },
+      {
+        "name": "compact-desktop",
+        "value": "1100px"
+      },
+      {
+        "name": "horizontal-index",
+        "value": "820px"
+      },
+      {
+        "name": "single-column",
+        "value": "600px"
+      }
+    ],
+    "focus": {
+      "value": "2px solid var(--focus); outline-offset: 5px",
+      "purpose": "Keyboard focus on links and buttons."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Move into the research or load supplied evidence.",
+      "html": "<button class=\"ds-primary\">Explore the research</button>",
+      "css": ".ds-primary{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;display:inline-flex;align-items:center;justify-content:center;gap:20px;padding:14px 18px;background:var(--ink,#252c29);color:var(--paper,#f6f5f0);border:0;border-radius:4px;font-weight:500;min-height:46px}.ds-primary:hover{background:var(--dark,#263b31);color:var(--accent,#e8ee95)}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+    },
+    {
+      "name": "Outline action",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Download the research template.",
+      "html": "<a class=\"ds-outline\" href=\"#template\">Download template</a>",
+      "css": ".ds-outline{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;display:inline-flex;align-items:center;justify-content:center;gap:10px;color:var(--ink,#252c29);text-decoration:none;border:1px solid #c6cbbf;padding:13px 16px;border-radius:4px;min-height:46px}.ds-outline:hover{background:var(--paper,#f6f5f0);color:var(--focus,#476542)}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+    },
+    {
+      "name": "Chapter index",
+      "kind": "nav",
+      "refersTo": "navigation-current",
+      "description": "Numbered chapter links with a current step.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Chapters\"><a href=\"#question\" aria-current=\"step\"><span>01</span>The question</a><a href=\"#mechanism\"><span>02</span>The mechanism</a></nav>",
+      "css": ".ds-nav{display:flex;flex-direction:column;gap:8px;width:184px}.ds-nav a{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;display:flex;align-items:center;gap:14px;min-height:44px;padding:10px 12px;border-radius:4px;text-decoration:none;color:var(--muted,#646c62)}.ds-nav a:hover{background:var(--soft,#eeeee5);color:var(--ink,#252c29)}.ds-nav a[aria-current]{background:#e9ecd9;color:var(--ink,#252c29);font-weight:500}.ds-nav a span{font-size:10px;font-variant-numeric:tabular-nums;opacity:.7}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+    },
+    {
+      "name": "Routing action",
+      "kind": "button",
+      "refersTo": "action-selected",
+      "description": "Selected action in the explanatory routing diagram.",
+      "html": "<button class=\"ds-action\" aria-pressed=\"true\">Search<span></span></button>",
+      "css": ".ds-action{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;font-size:10px;min-height:40px;min-width:90px;border:1px solid #bec77a;border-radius:4px;background:var(--accent,#e8ee95);color:var(--ink,#252c29)}.ds-action:hover{border-color:#829368}.ds-action span{width:4px;height:4px;border-radius:50%;background:#5f6f3b;display:inline-block;margin-left:7px;vertical-align:middle}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+    },
+    {
+      "name": "Pending evidence",
+      "kind": "card",
+      "refersTo": "empty-evidence",
+      "description": "Honest placeholder for findings that have not been supplied.",
+      "html": "<div class=\"ds-empty\"><h2>A place for the results.</h2><p>The comparison will appear here when the research is ready.</p><span><i></i>Awaiting research</span></div>",
+      "css": ".ds-empty{font-family:\"DM Sans\",sans-serif;color:var(--ink,#252c29);border:1px dashed #c8cebb;border-radius:5px;min-height:290px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:30px;gap:14px}.ds-empty h2{margin:0;font-size:17px;font-weight:500;letter-spacing:-.02em}.ds-empty p{margin:0;font-size:12px;color:var(--muted,#646c62);max-width:45ch;line-height:1.8}.ds-empty>span{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:500}.ds-empty i{width:5px;height:5px;background:#858c5a;border-radius:50%}"
+    },
+    {
+      "name": "Decision node",
+      "kind": "custom",
+      "refersTo": "routing-diagram",
+      "description": "Forest focal point inside the routing diagram.",
+      "html": "<div class=\"ds-decision\"><div><strong>System one</strong><span>Choose the next action</span></div><span class=\"ds-tag\">Jev</span></div>",
+      "css": ".ds-decision{display:flex;align-items:center;gap:13px;border:1px solid #52623f;background:var(--dark,#263b31);color:var(--accent,#e8ee95);padding:20px 17px;border-radius:5px}.ds-decision>div{display:flex;flex-direction:column;gap:4px}.ds-decision strong{font-family:\"Instrument Serif\",serif;font-size:28px;font-weight:400;line-height:1}.ds-decision div span{font-family:\"DM Sans\",sans-serif;color:#d1dcbd;font-size:10px}.ds-tag{font-family:\"DM Sans\",sans-serif;font-size:9px;border:1px solid #647c5e;padding:3px 7px;border-radius:4px;align-self:flex-start;margin-left:auto}"
+    },
+    {
+      "name": "Presentation action",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Enter or exit the focused presentation view.",
+      "html": "<button class=\"ds-present\">Present</button>",
+      "css": ".ds-present{font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.5;cursor:pointer;transition:background .18s ease,color .18s ease;color:var(--ink,#252c29);background:none;border:1px solid var(--rule,#dcded4);border-radius:5px;padding:10px 15px}.ds-present:hover{background:var(--soft,#eeeee5)}button:focus-visible,a:focus-visible{outline:2px solid var(--focus,#476542);outline-offset:5px}button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){button,a{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Conference proceedings",
+    "overview": "Conference proceedings translated into a presentation reader: large editorial titles, an open paper surface, a numbered chapter index, and a restrained interactive routing diagram. This description records the implemented visual world; it is not a claim of user-approved qualitative preferences.\n\nThe hierarchy gives the question prominence while keeping mechanisms, planned comparisons, and supplied evidence readable. Pending content has its own explicit visual state rather than simulated findings.",
+    "keyCharacteristics": [
+      "Paper surfaces and hairline rules.",
+      "Serif research titles with sans-serif explanations and controls.",
+      "Forest decision surfaces and lime selected actions.",
+      "Explicit pending, loaded, and error states."
+    ],
+    "rules": [
+      {
+        "name": "Decision Accent",
+        "body": "Use the forest-and-lime pairing for the decision node and selected routing actions; keep reading surfaces on paper.",
+        "section": "colors"
+      },
+      {
+        "name": "Editorial Hierarchy",
+        "body": "Use Instrument Serif for research titles and selected section headings; use DM Sans for explanatory text, navigation, and controls.",
+        "section": "typography"
+      },
+      {
+        "name": "Flat Reading Surface",
+        "body": "Separate content with spacing, hairline rules, and tonal fills; the implementation uses no box shadows.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve the paper, ink, forest, and lime roles defined by the frontmatter.",
+      "Do keep chapter navigation, current position, and previous/next controls clear.",
+      "Do distinguish pending evidence from supplied findings using explicit status text.",
+      "Do retain visible keyboard focus and respect reduced-motion preferences.",
+      "Do let the mobile chapter index scroll horizontally while page content remains within the viewport."
+    ],
+    "donts": [
+      "Don't add invented result values or treat the empty-chart illustration as measured data.",
+      "Don't repeat the current chapter name as an eyebrow above its title.",
+      "Don't replace the open, rule-separated composition with a generic shadowed-card grid.",
+      "Don't infer additional approved aesthetic preferences from this observed implementation."
+    ]
+  }
+}

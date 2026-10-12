@@ -43,6 +43,12 @@ research_agent                 AGENT     metadata: controller, llm_model
 
 Jev calls use OpenInference's `DECISION` span kind, which exists for models that "score or select among candidate options supplied in the request rather than generating text".
 
+## Research presentation frontend
+
+The Vercel-ready frontend presents **“When should I use a system one model, and how?”** with chapter navigation, a routing diagram, full-screen viewing, and a research JSON loader. Findings remain pending until supplied.
+
+Use Node 24 (`nvm use`), then run `npm install` and `npm run dev` from the repository root. See [frontend/README.md](frontend/README.md) for research-file format, presentation controls, and Vercel setup.
+
 ## Setup
 
 ```bash
