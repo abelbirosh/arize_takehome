@@ -49,7 +49,7 @@ export function validateResearch(value) {
   return result;
 }
 
-const METRIC_FORMATS = ['percent', 'usd', 'seconds', 'decimal', 'count', 'ms'];
+const METRIC_FORMATS = ['percent', 'usd', 'cents', 'seconds', 'decimal', 'count', 'ms'];
 
 export function validateBenchmark(value) {
   if (!value || !Array.isArray(value.deciders) || !Array.isArray(value.metrics)) throw new Error('The benchmark needs deciders and metrics.');

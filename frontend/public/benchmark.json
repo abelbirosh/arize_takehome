@@ -79,13 +79,13 @@
       "better": "lower",
       "description": "Mean total spend per run: routing + generation.",
       "values": {
-        "jev": 0.001934,
-        "msft": 0.002009,
-        "oai": 0.0022,
-        "claude-haiku-5.5": 0.002826,
-        "claude-sonnet-5.5": 0.021904,
-        "claude-opus-5.5": 0.043314,
-        "fixed": 0.002385
+        "jev": 0.0019342,
+        "msft": 0.00200941,
+        "oai": 0.00220047,
+        "claude-haiku-5.5": 0.0028262,
+        "claude-sonnet-5.5": 0.02190392,
+        "claude-opus-5.5": 0.04331413,
+        "fixed": 0.00238499
       }
     },
     {
@@ -95,16 +95,16 @@
         "Cheaper routing",
         "Costlier routing"
       ],
-      "format": "usd",
+      "format": "cents",
       "better": "lower",
-      "description": "Mean routing-only spend per run.",
+      "description": "Mean routing spend per decision call.",
       "values": {
-        "jev": 0.000403,
-        "msft": 0.000268,
-        "oai": 0.000734,
-        "claude-haiku-5.5": 0.001429,
-        "claude-sonnet-5.5": 0.020403,
-        "claude-opus-5.5": 0.041981,
+        "jev": 8.291e-05,
+        "msft": 5.461e-05,
+        "oai": 0.00015554,
+        "claude-haiku-5.5": 0.0002953,
+        "claude-sonnet-5.5": 0.00413013,
+        "claude-opus-5.5": 0.00941286,
         "fixed": 0.0
       }
     },
@@ -119,13 +119,13 @@
       "better": "lower",
       "description": "Mean wall time per run, minus rate-limiter queueing.",
       "values": {
-        "jev": 21.696881,
-        "msft": 21.929175,
-        "oai": 23.29351,
-        "claude-haiku-5.5": 195.652839,
-        "claude-sonnet-5.5": 32.423073,
-        "claude-opus-5.5": 37.373443,
-        "fixed": 26.309397
+        "jev": 21.69688097,
+        "msft": 21.92917524,
+        "oai": 23.29351031,
+        "claude-haiku-5.5": 195.65283937,
+        "claude-sonnet-5.5": 32.42307349,
+        "claude-opus-5.5": 37.37344267,
+        "fixed": 26.30939747
       },
       "excluded": {
         "claude-haiku-5.5": "Haiku 5.5 excluded: one routing call stalled 2.2 h, skewing the mean."
@@ -142,12 +142,12 @@
       "better": "lower",
       "description": "Mean latency per routing call.",
       "values": {
-        "jev": 299.070939,
-        "msft": 485.617056,
-        "oai": 363.757902,
-        "claude-haiku-5.5": 36150.642407,
-        "claude-sonnet-5.5": 2182.775183,
-        "claude-opus-5.5": 4078.911361,
+        "jev": 299.07093915,
+        "msft": 485.6170563,
+        "oai": 363.75790166,
+        "claude-haiku-5.5": 36150.64240718,
+        "claude-sonnet-5.5": 2182.77518319,
+        "claude-opus-5.5": 4078.91136098,
         "fixed": 0.0
       },
       "excluded": {

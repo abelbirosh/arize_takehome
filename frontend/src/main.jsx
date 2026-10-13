@@ -40,6 +40,7 @@ function ResearchNotes({ items, challenges = false, emptyTitle }) {
 const formatValue = (format, v) => ({
   percent: () => `${Math.round(v * 100)}%`,
   usd: () => v === 0 ? '$0' : `$${v < 0.01 ? v.toFixed(4) : v.toFixed(3)}`,
+  cents: () => v === 0 ? '0¢' : `${(v * 100).toPrecision(2)}¢`,
   seconds: () => `${v.toFixed(1)} s`,
   decimal: () => v.toFixed(1),
   count: () => String(v),

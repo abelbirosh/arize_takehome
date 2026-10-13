@@ -49,6 +49,10 @@ def main(source: str = SOURCE, target: str = TARGET) -> None:
         calls = sum(r["stats"]["decision_calls"] for r in rs)
         return sum(r["stats"]["routing_latency_ms"] for r in rs) / calls if calls else 0.0
 
+    def cost_per_decision(rs: list[dict]) -> float:
+        calls = sum(r["stats"]["decision_calls"] for r in rs)
+        return sum(r["stats"]["routing_cost_usd"] for r in rs) / calls if calls else 0.0
+
     slowest = max(s["latency_ms"] or 0 for r in by[HAIKU] for s in r["steps"])
     haiku_note = f"Haiku 5.5 excluded: one routing call stalled {slowest / 3_600_000:.1f} h, skewing the mean."
 
@@ -60,9 +64,9 @@ def main(source: str = SOURCE, target: str = TARGET) -> None:
         {"id": "cost", "label": "Cost per run", "scale": ["Cheaper", "More expensive"], "format": "usd", "better": "lower",
          "description": "Mean total spend per run: routing + generation.",
          "values": per_decider(lambda rs: mean([r["stats"]["total_cost_usd"] for r in rs]))},
-        {"id": "route-cost", "label": "Cost per decision", "scale": ["Cheaper routing", "Costlier routing"], "format": "usd", "better": "lower",
-         "description": "Mean routing-only spend per run.",
-         "values": per_decider(lambda rs: mean([r["stats"]["routing_cost_usd"] for r in rs]))},
+        {"id": "route-cost", "label": "Cost per decision", "scale": ["Cheaper routing", "Costlier routing"], "format": "cents", "better": "lower",
+         "description": "Mean routing spend per decision call.",
+         "values": per_decider(cost_per_decision)},
         {"id": "active", "label": "Time per run", "scale": ["Faster", "Slower"], "format": "seconds", "better": "lower",
          "description": "Mean wall time per run, minus rate-limiter queueing.",
          "values": per_decider(lambda rs: mean([r["stats"]["active_ms"] for r in rs]) / 1000),
@@ -79,7 +83,7 @@ def main(source: str = SOURCE, target: str = TARGET) -> None:
          "values": per_decider(lambda rs: sum(bool(r["stats"]["forced_answer"]) for r in rs))},
     ]
     for m in metrics:
-        m["values"] = {k: round(v, 6) for k, v in m["values"].items()}
+        m["values"] = {k: round(v, 8) for k, v in m["values"].items()}
 
     out = {
         "source": source,
