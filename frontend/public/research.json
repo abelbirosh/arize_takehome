@@ -188,6 +188,74 @@
       "url": "https://github.com/abelbirosh/arize_takehome/blob/440dc8f/docs/benchmark_plan.md"
     }
   ],
+  "methodology": [
+    {
+      "title": "Only the decider changes.",
+      "body": "At each step the agent chooses its next action: search Wikipedia, search the web, read a result, or answer. The decider makes that choice. Claude Haiku 5.5 (low reasoning) writes every search query, note, and final answer in every run, so differences between runs come from routing alone. Every decider gets the same eight-step budget and the same guards: the last step is always an answer, and an invalid or repeated read is replaced.",
+      "links": [
+        {
+          "title": "Agent loop",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/775beca/src/research_agent/agent.py"
+        },
+        {
+          "title": "Run settings",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/775beca/src/research_agent/config.py"
+        }
+      ]
+    },
+    {
+      "title": "Seven deciders.",
+      "body": "Three decision models return typed probabilities over the available actions: Jev (TypeSafe), Microsoft Decision 1, and OpenAI GPT-6 Luna Decisions. Three Claude models decide by replying in JSON: Haiku 5.5, Sonnet 5.5, and Opus 5.5. A fixed baseline uses no model: search Wikipedia, read two results, search the web, read two results, then answer.",
+      "links": [
+        {
+          "title": "Controllers",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/775beca/src/research_agent/controllers.py"
+        }
+      ]
+    },
+    {
+      "title": "Fifty questions in seven categories.",
+      "body": "The v2 suite contains 14 multi-hop FRAMES questions, 8 questions that combine two recent facts, 7 multi-entity questions, 6 arithmetic questions, 5 questions too new for Wikipedia, 5 unanswerable questions, and 5 easy controls. Each question has a gold answer with accepted variants, plus flags for whether it is answerable and whether it needs the web.",
+      "links": [
+        {
+          "title": "50-question suite",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/775beca/data/benchmark_v2.jsonl"
+        },
+        {
+          "title": "Dataset preparation",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/775beca/scripts/prepare_dataset.py"
+        }
+      ]
+    },
+    {
+      "title": "Every run is graded on outcome and process.",
+      "body": "A GPT-6.1 Sol judge labels each final answer as correct, hedged, incorrect, or no answer against the accepted variants, and separately checks whether the collected notes support it. Routing fit checks that the agent searched where the category requires: the web for recent questions, Wikipedia first for FRAMES. Code evaluators record total cost, routing cost and latency, steps, invalid decisions, forced answers, and active latency, which excludes time spent waiting behind the shared rate limiter.",
+      "links": [
+        {
+          "title": "Judges",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/775beca/src/research_agent/evals.py"
+        },
+        {
+          "title": "Evaluators",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/775beca/scripts/run_experiments.py"
+        }
+      ]
+    },
+    {
+      "title": "350 runs, one experiment per decider.",
+      "body": "Each decider ran as its own Phoenix experiment over the same dataset. The main run covered 43 questions. The seven pilot questions, run on the same code, were merged in afterwards, giving 50 graded runs per decider and 350 in total.",
+      "links": [
+        {
+          "title": "Pilot merge",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/775beca/scripts/merge_pilot.py"
+        },
+        {
+          "title": "Merged results",
+          "url": "https://github.com/abelbirosh/arize_takehome/blob/775beca/results/full-v2-merged.jsonl"
+        }
+      ]
+    }
+  ],
   "results": [],
   "phoenix": [
     {

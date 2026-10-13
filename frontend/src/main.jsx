@@ -5,12 +5,13 @@ import { emptyResearch, validateResearch } from './research.js';
 
 const chapters = [
   { id: 'question', name: 'Question', title: 'Can a decision model choose the next steps of a research agent as well as a reasoning model?' },
-  { id: 'results', name: 'Results', title: 'Results' },
+  { id: 'methodology', name: 'Methodology', title: 'Methodology' },
+  { id: 'detailed-results', name: 'Detailed results', title: 'Detailed results' },
   { id: 'phoenix', name: 'How I used Phoenix?', title: 'How I used Phoenix?' },
   { id: 'challenges', name: 'What went wrong and how we fixed it?', title: 'What went wrong and how we fixed it?' },
   { id: 'takeaways', name: 'Takeaways', title: 'Takeaways' },
 ];
-const legacyHashes = { 'when-to-jev': 'question', mechanism: 'question', experiment: 'question', findings: 'results', learnings: 'phoenix', practice: 'takeaways', sources: 'phoenix' };
+const legacyHashes = { 'when-to-jev': 'question', mechanism: 'methodology', experiment: 'methodology', results: 'detailed-results', findings: 'detailed-results', learnings: 'phoenix', practice: 'takeaways', sources: 'phoenix' };
 const indexFromHash = () => {
   const hash = window.location.hash.slice(1);
   return Math.max(0, chapters.findIndex(c => c.id === (legacyHashes[hash] || hash)));
@@ -105,21 +106,25 @@ function App() {
             <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">Empirical analysis of usage of decision model for agent design</h1><h2 className="question-followup">{current.title}</h2></div></div>
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
-            {chapter === 1 && <>
-              <p className="intro wide">{research.results.length ? 'The measured outcomes of the controller comparison, with supporting evidence.' : 'The study compares answer quality, evidence support, cost, and active latency. Final measured results have not been added to this presentation yet.'}</p>
-              <ResearchNotes items={research.results} emptyTitle="Results are being analyzed."/>
+            {current.id === 'methodology' && <>
+              <p className="intro wide">How the benchmark was set up: what changes between runs, what stays fixed, and how each run is graded.</p>
+              <ResearchNotes items={research.methodology} emptyTitle="The methodology is on its way."/>
               <ReferenceLinks links={research.thesis.links}/>
             </>}
-            {chapter === 2 && <>
+            {current.id === 'detailed-results' && <>
+              <p className="intro wide">{research.results.length ? 'The measured outcomes of the controller comparison, with supporting evidence.' : 'The study compares answer quality, evidence support, cost, and active latency. Final measured results have not been added to this presentation yet.'}</p>
+              <ResearchNotes items={research.results} emptyTitle="Results are being analyzed."/>
+            </>}
+            {current.id === 'phoenix' && <>
               <p className="intro wide">How Phoenix helped organize the experiments, trace the research agent, and evaluate the outcomes.</p>
               <ResearchNotes items={research.phoenix} emptyTitle="The Phoenix walkthrough is on its way."/>
               {research.sources.length > 0 && <section className="supporting-sources"><h2>Further reading & notes</h2><ReferenceLinks links={research.sources}/></section>}
             </>}
-            {chapter === 3 && <>
+            {current.id === 'challenges' && <>
               <p className="intro wide">The problems that surfaced during the experiment, and the changes made to resolve them.</p>
               <ResearchNotes items={research.challenges} challenges emptyTitle="Challenges and solutions are on their way."/>
             </>}
-            {chapter === 4 && <>
+            {current.id === 'takeaways' && <>
               <p className="intro wide">{ready ? 'The practical recommendations from the research, with the supporting evidence attached.' : 'Working takeaways from the implementation. Performance recommendations await the full-run analysis.'}</p>
               <ResearchNotes items={research.takeaways} emptyTitle="Takeaways are on their way."/>
             </>}
