@@ -34,7 +34,7 @@ TIERS = [
 DECIDERS = [
     ("jev", "Jev", "Jev (TypeSafe)", "decision"),
     ("msft", "MSFT", "Microsoft Decision 1", "decision"),
-    ("oai", "OAI", "OpenAI GPT-6 Luna Decisions", "decision"),
+    ("oai", "Luna", "OpenAI GPT-6 Luna Decisions", "decision"),
     ("claude-haiku-5.5", "Haiku", "Claude Haiku 5.5", "reasoning"),
     ("claude-sonnet-5.5", "Sonnet", "Claude Sonnet 5.5", "reasoning"),
     ("claude-opus-5.5", "Opus", "Claude Opus 5.5", "reasoning"),

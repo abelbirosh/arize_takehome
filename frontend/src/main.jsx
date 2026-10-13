@@ -238,6 +238,24 @@ function PhoenixUsage() {
   </>;
 }
 
+const takeaways = [
+  'Decision models matched reasoning models in accuracy for a basic research agent design at a fraction of cost and latency.',
+  'Bigger reasoning models do not necessarily route better.',
+  'For lookup based questions, fixed sequences had comparable accuracy.',
+  "Fixed sequences are still more expensive than Jev due to more reading across steps (6.9 steps vs Jev's 5).",
+  'Jev and Opus performed better on declining to answer than Microsoft Decision 1 and Luna Decisions.',
+  'Decision 1 gave the best citation supported answers.',
+];
+
+function Takeaways() {
+  return <>
+    <ul className="method-list takeaway-list">{takeaways.map(t => <li key={t}>{t}</li>)}</ul>
+    <section className="subsection conclusion"><h2>In conclusion,</h2>
+      <p className="subsection-copy">Decision models are promising when the tool call triggers are clear, and state can be effectively structured. The writing itself can be handled by an LLM, with the routing tasks being delegated to a router model. There is also potential for a decider router because each failed on different test tasks.</p>
+    </section>
+  </>;
+}
+
 function DetailedResults({ benchmark }) {
   const { tests, deciders } = benchmark;
   return <>
@@ -327,6 +345,7 @@ function App() {
             {current.id === 'detailed-results' && benchmark && <DetailedResults benchmark={benchmark}/>}
             {current.id === 'phoenix' && <PhoenixUsage/>}
             {current.id === 'challenges' && <FixList items={research.challenges}/>}
+            {current.id === 'takeaways' && <Takeaways/>}
 
           </>}
         </div>

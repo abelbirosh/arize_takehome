@@ -14,7 +14,7 @@
       "A fixed sequence already solves the task well enough; the benchmark includes that baseline.",
       "The only evidence is a cheaper routing call. Answer quality and whole-agent cost still need to hold up."
     ],
-    "method": "The v2 suite holds Claude Haiku 5.5 generation fixed and compares three decision-model controllers (Jev, MSFT, and OAI), three Claude deciders (Haiku, Sonnet, and Opus), and a fixed baseline. The 50-question dataset spans seven categories, including multi-hop research, recent facts, arithmetic, and unanswerable questions. Phoenix evaluates correctness, groundedness, routing fit, cost, and active latency.",
+    "method": "The v2 suite holds Claude Haiku 5.5 generation fixed and compares three decision-model controllers (Jev, Microsoft Decision 1, and OpenAI GPT-6 Luna Decisions), three Claude deciders (Haiku, Sonnet, and Opus), and a fixed baseline. The 50-question dataset spans seven categories, including multi-hop research, recent facts, arithmetic, and unanswerable questions. Phoenix evaluates correctness, groundedness, routing fit, cost, and active latency.",
     "links": [
       {
         "title": "v2 experiment runner",
