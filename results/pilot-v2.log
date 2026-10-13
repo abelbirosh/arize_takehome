@@ -1,0 +1,693 @@
+7 examples x 7 controllers = 49 runs  [pilot-v2]
+🧪 Experiment started.
+📺 View dataset experiments: http://localhost:6006/datasets/RGF0YXNldDo0/experiments
+🔗 View this experiment: http://localhost:6006/datasets/RGF0YXNldDo0/compare?experimentId=RXhwZXJpbWVudDoxMQ==
+running tasks |          | 0/7 (0.0%) | ⏳ 00:00<? | ?it/s🧪 Experiment started.
+📺 View dataset experiments: http://localhost:6006/datasets/RGF0YXNldDo0/experiments
+🔗 View this experiment: http://localhost:6006/datasets/RGF0YXNldDo0/compare?experimentId=RXhwZXJpbWVudDoxMg==
+
+running tasks |          | 0/7 (0.0%) | ⏳ 00:00<? | ?it/s[A🧪 Experiment started.
+📺 View dataset experiments: http://localhost:6006/datasets/RGF0YXNldDo0/experiments
+🔗 View this experiment: http://localhost:6006/datasets/RGF0YXNldDo0/compare?experimentId=RXhwZXJpbWVudDoxMw==
+
+
+running tasks |          | 0/7 (0.0%) | ⏳ 00:00<? | ?it/s[A[A🧪 Experiment started.
+📺 View dataset experiments: http://localhost:6006/datasets/RGF0YXNldDo0/experiments
+🔗 View this experiment: http://localhost:6006/datasets/RGF0YXNldDo0/compare?experimentId=RXhwZXJpbWVudDoxNA==
+
+
+
+running tasks |          | 0/7 (0.0%) | ⏳ 00:00<? | ?it/s[A[A[A🧪 Experiment started.
+📺 View dataset experiments: http://localhost:6006/datasets/RGF0YXNldDo0/experiments
+🔗 View this experiment: http://localhost:6006/datasets/RGF0YXNldDo0/compare?experimentId=RXhwZXJpbWVudDoxNQ==
+
+
+
+
+running tasks |          | 0/7 (0.0%) | ⏳ 00:00<? | ?it/s[A[A[A[A🧪 Experiment started.
+📺 View dataset experiments: http://localhost:6006/datasets/RGF0YXNldDo0/experiments
+🔗 View this experiment: http://localhost:6006/datasets/RGF0YXNldDo0/compare?experimentId=RXhwZXJpbWVudDoxNg==
+
+
+
+
+
+running tasks |          | 0/7 (0.0%) | ⏳ 00:00<? | ?it/s[A[A[A[A[A🧪 Experiment started.
+📺 View dataset experiments: http://localhost:6006/datasets/RGF0YXNldDo0/experiments
+🔗 View this experiment: http://localhost:6006/datasets/RGF0YXNldDo0/compare?experimentId=RXhwZXJpbWVudDoxNw==
+
+
+
+
+
+
+running tasks |          | 0/7 (0.0%) | ⏳ 00:00<? | ?it/s[A[A[A[A[A[AI1012 15:54:26.705021  536145 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+I1012 15:54:26.784926  536148 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+I1012 15:54:26.789514  536775 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:54:27.259936  536829 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:54:27.370094  536871 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:54:29.686194  537159 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:54:32.865507  537420 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:54:33.306446  537481 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+running tasks |█▍        | 1/7 (14.3%) | ⏳ 00:11<01:08 | 11.50s/it[A[A[A[AI1012 15:54:34.380766  537579 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:54:35.392038  537628 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:54:36.582246  537723 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:54:36.929711  537767 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+
+running tasks |█▍        | 1/7 (14.3%) | ⏳ 01:03<06:20 | 63.49s/it[A[A[A[A[A
+running tasks |█▍        | 1/7 (14.3%) | ⏳ 01:03<06:21 | 63.52s/it[AI1012 15:55:25.525065  539025 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+running tasks |█▍        | 1/7 (14.3%) | ⏳ 01:05<06:31 | 65.17s/it[A[A[AI1012 15:55:27.699848  539203 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:55:31.271394  539345 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:55:32.527177  539413 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+running tasks |█▍        | 1/7 (14.3%) | ⏳ 01:11<07:06 | 71.15s/it[A[Arunning tasks |█▍        | 1/7 (14.3%) | ⏳ 01:11<07:07 | 71.22s/itI1012 15:55:34.519614  539504 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:55:35.135008  539544 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+
+
+running tasks |█▍        | 1/7 (14.3%) | ⏳ 01:14<07:24 | 74.12s/it[A[A[A[A[A[AI1012 15:55:36.071432  539582 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:55:36.186030  539625 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:55:36.868739  539673 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:55:38.567543  539740 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:56:28.480009  540726 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:56:28.489677  540757 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+running tasks |██▊       | 2/7 (28.6%) | ⏳ 02:08<06:07 | 73.47s/it[A[A[A[AI1012 15:56:36.419378  541395 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:56:36.497716  541424 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:56:42.238818  541580 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:57:27.035996  543232 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:57:28.143244  543285 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:57:28.846151  543332 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:57:32.449761  543420 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:57:33.872030  543481 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+running tasks |██▊       | 2/7 (28.6%) | ⏳ 03:12<08:28 | 101.77s/it[A[A[AI1012 15:57:35.452489  543548 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:57:35.495959  543575 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+running tasks |██▊       | 2/7 (28.6%) | ⏳ 03:13<08:26 | 101.37s/itI1012 15:58:26.097079  545168 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:58:27.444516  545239 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:58:29.476689  545292 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:58:31.800607  545425 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:58:32.611543  536146 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+I1012 15:58:32.615162  545468 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+running tasks |██▊       | 2/7 (28.6%) | ⏳ 04:10<11:22 | 136.42s/it[A
+
+
+
+
+
+running tasks |██▊       | 2/7 (28.6%) | ⏳ 04:10<11:12 | 134.55s/it[A[A[A[A[A[AI1012 15:58:36.776776  545540 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:58:36.800251  545567 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+
+running tasks |██▊       | 2/7 (28.6%) | ⏳ 05:05<14:03 | 168.67s/it[A[A[A[A[A
+
+
+
+running tasks |████▎     | 3/7 (42.9%) | ⏳ 05:06<08:05 | 121.47s/it[A[A[A[AI1012 15:59:33.557923  546885 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:59:34.209227  546931 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:59:34.484404  546969 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:59:35.131995  547009 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:59:36.001736  547052 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:59:37.100467  547098 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 15:59:38.526649  547148 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:00:25.938222  548807 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:00:27.449921  548886 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:00:30.864269  548970 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+running tasks |██▊       | 2/7 (28.6%) | ⏳ 06:09<17:04 | 204.93s/it[A[AI1012 16:00:34.328519  549148 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:00:35.808139  549194 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+running tasks |████▎     | 3/7 (42.9%) | ⏳ 06:15<08:43 | 130.97s/it[AI1012 16:00:38.677888  549263 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+running tasks |████▎     | 3/7 (42.9%) | ⏳ 06:18<09:18 | 139.65s/itI1012 16:01:27.361506  550587 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:28.326156  550640 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:28.553380  550676 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:29.883035  550721 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:30.317399  550764 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+running tasks |█████▋    | 4/7 (57.1%) | ⏳ 07:09<06:05 | 121.77s/it[A[A[A[A
+
+
+
+
+
+running tasks |████▎     | 3/7 (42.9%) | ⏳ 07:10<10:20 | 155.04s/it[A[A[A[A[A[AI1012 16:01:33.069751  551063 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:33.950363  551125 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:34.915305  551178 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:35.332553  551218 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+running tasks |████▎     | 3/7 (42.9%) | ⏳ 07:13<11:02 | 165.52s/it[A[A[AI1012 16:01:37.637938  551285 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:38.355975  551335 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:41.717249  551420 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:01:43.340489  551469 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+running tasks |███████▏  | 5/7 (71.4%) | ⏳ 08:03<03:14 | 97.49s/it [A[A[A[AI1012 16:02:25.976836  552355 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:02:27.577510  552407 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:02:27.935545  552448 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:02:29.157858  552508 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:02:29.380431  552546 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:02:31.945085  552623 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:02:32.061069  552662 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+running tasks |█████▋    | 4/7 (57.1%) | ⏳ 08:14<06:29 | 129.99s/itI1012 16:02:37.714810  552850 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:02:40.260792  553134 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:02:40.771132  553196 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+
+
+running tasks |█████▋    | 4/7 (57.1%) | ⏳ 08:19<06:03 | 121.23s/it[A[A[A[A[A[AI1012 16:03:26.594027  554589 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:03:29.947621  554784 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:03:30.170488  554824 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:03:32.685409  554907 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+running tasks |█████▋    | 4/7 (57.1%) | ⏳ 09:13<07:21 | 147.20s/it[A[A[AI1012 16:03:35.275332  554997 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:03:36.760556  555050 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:03:37.313049  555094 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:03:38.135527  555140 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+
+running tasks |████▎     | 3/7 (42.9%) | ⏳ 09:18<13:48 | 207.12s/it[A[A[A[A[AI1012 16:03:41.810987  555235 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+running tasks |█████▋    | 4/7 (57.1%) | ⏳ 10:04<08:29 | 169.78s/it[AI1012 16:04:27.495976  556061 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:04:29.726342  556132 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:04:30.867517  556184 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+running tasks |███████▏  | 5/7 (71.4%) | ⏳ 10:11<04:10 | 125.28s/it
+
+
+running tasks |███████▏  | 5/7 (71.4%) | ⏳ 10:11<03:50 | 115.18s/it[A[A[AI1012 16:04:34.575475  556314 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:04:36.342194  556370 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:04:37.317143  556501 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:04:38.379283  556608 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:04:39.398901  556691 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+running tasks |████████▌ | 6/7 (85.7%) | ⏳ 10:17<01:49 | 109.94s/it[A[A[A[AI1012 16:04:40.301058  556760 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+
+running tasks |█████▋    | 4/7 (57.1%) | ⏳ 10:19<07:27 | 149.24s/it[A[A[A[A[AI1012 16:04:41.609371  556817 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:04:45.829477  556962 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:05:25.603699  557629 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+running tasks |███████▏  | 5/7 (71.4%) | ⏳ 11:05<04:21 | 130.61s/it[A
+
+running tasks |████▎     | 3/7 (42.9%) | ⏳ 11:06<16:26 | 246.75s/it[A[AI1012 16:05:28.914876  557693 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+
+
+running tasks |███████▏  | 5/7 (71.4%) | ⏳ 11:09<04:37 | 138.67s/it[A[A[A[A[A[AI1012 16:05:33.091286  557770 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+running tasks |████████▌ | 6/7 (85.7%) | ⏳ 11:11<01:36 | 96.60s/it [A[A[Arunning tasks |████████▌ | 6/7 (85.7%) | ⏳ 11:15<01:44 | 104.50s/it
+
+
+
+
+running tasks |███████▏  | 5/7 (71.4%) | ⏳ 12:05<04:27 | 133.76s/it[A[A[A[A[AI1012 16:06:34.475426  559226 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:06:36.714270  559296 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:06:36.893987  559336 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:06:38.546051  559393 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:06:39.234589  559439 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:06:40.084400  559482 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:06:40.417944  559525 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:06:42.376196  559591 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:07:27.948432  560563 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:07:30.227026  560642 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+running tasks |████████▌ | 6/7 (85.7%) | ⏳ 13:09<02:08 | 128.17s/it[AI1012 16:07:33.619107  560733 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:07:33.684489  560763 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:07:36.458415  560854 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+
+
+running tasks |████████▌ | 6/7 (85.7%) | ⏳ 13:15<02:14 | 134.49s/it[A[A[A[A[A[A
+
+
+
+running tasks |██████████| 7/7 (100.0%) | ⏳ 13:18<00:00 | 132.95s/it[A[A[A[Arunning tasks |██████████| 7/7 (100.0%) | ⏳ 13:18<00:00 | 114.01s/it
+✅ Task runs completed.
+🧠 Evaluation started.
+
+
+
+
+running experiment evaluations |          | 0/77 (0.0%) | ⏳ 00:00<? | ?it/s[A[A[A[A
+
+
+
+running experiment evaluations |▏         | 1/77 (1.3%) | ⏳ 00:02<03:39 |  2.89s/it[A[A[A[A
+
+
+
+running experiment evaluations |▎         | 2/77 (2.6%) | ⏳ 00:05<03:17 |  2.64s/it[A[A[A[A
+
+
+
+running experiment evaluations |▊         | 6/77 (7.8%) | ⏳ 00:05<00:49 |  1.44it/s[A[A[A[A
+
+
+
+running experiment evaluations |▉         | 7/77 (9.1%) | ⏳ 00:06<00:53 |  1.32it/s[A[A[A[A
+
+
+
+running experiment evaluations |█         | 8/77 (10.4%) | ⏳ 00:07<00:54 |  1.27it/s[A[A[A[A
+
+
+
+running experiment evaluations |█▏        | 9/77 (11.7%) | ⏳ 00:08<00:56 |  1.20it/s[A[A[A[A
+
+
+
+running experiment evaluations |█▎        | 10/77 (13.0%) | ⏳ 00:09<00:56 |  1.19it/s[A[A[A[A
+
+
+
+running experiment evaluations |█▍        | 11/77 (14.3%) | ⏳ 00:10<00:58 |  1.14it/s[A[A[A[A
+
+
+
+running experiment evaluations |█▌        | 12/77 (15.6%) | ⏳ 00:13<01:33 |  1.44s/it[A[A[A[A
+
+
+
+running experiment evaluations |█▋        | 13/77 (16.9%) | ⏳ 00:15<01:40 |  1.56s/it[A[A[A[A
+
+
+
+running experiment evaluations |██▏       | 17/77 (22.1%) | ⏳ 00:15<00:39 |  1.52it/s[A[A[A[A
+
+
+
+running experiment evaluations |██▎       | 18/77 (23.4%) | ⏳ 00:16<00:41 |  1.42it/s[A[A[A[A
+
+
+
+running experiment evaluations |██▍       | 19/77 (24.7%) | ⏳ 00:17<00:42 |  1.37it/s[A[A[A[A
+
+
+
+running experiment evaluations |██▌       | 20/77 (26.0%) | ⏳ 00:18<00:42 |  1.34it/s[A[A[A[A
+
+
+
+running experiment evaluations |██▋       | 21/77 (27.3%) | ⏳ 00:19<00:46 |  1.22it/s[A[A[A[A
+
+
+
+running experiment evaluations |██▊       | 22/77 (28.6%) | ⏳ 00:19<00:42 |  1.30it/s[A[A[A[A
+
+
+
+running experiment evaluations |██▉       | 23/77 (29.9%) | ⏳ 00:22<01:14 |  1.37s/it[A[A[A[A
+
+
+
+running experiment evaluations |███       | 24/77 (31.2%) | ⏳ 00:24<01:20 |  1.52s/it[A[A[A[A
+
+
+
+running experiment evaluations |███▊      | 29/77 (37.7%) | ⏳ 00:25<00:28 |  1.68it/s[A[A[A[A
+
+
+
+running experiment evaluations |███▉      | 30/77 (39.0%) | ⏳ 00:26<00:29 |  1.61it/s[A[A[A[A
+
+
+
+running experiment evaluations |████      | 31/77 (40.3%) | ⏳ 00:26<00:29 |  1.56it/s[A[A[A[A
+
+
+
+running experiment evaluations |████▏     | 32/77 (41.6%) | ⏳ 00:27<00:30 |  1.50it/s[A[A[A[A
+
+
+
+running experiment evaluations |████▎     | 33/77 (42.9%) | ⏳ 00:28<00:29 |  1.47it/s[A[A[A[A
+
+
+
+running experiment evaluations |████▍     | 34/77 (44.2%) | ⏳ 00:30<00:47 |  1.11s/it[A[A[A[A
+
+
+
+running experiment evaluations |████▌     | 35/77 (45.5%) | ⏳ 00:32<00:53 |  1.28s/it[A[A[A[A
+
+
+
+running experiment evaluations |█████     | 39/77 (50.6%) | ⏳ 00:32<00:20 |  1.81it/s[A[A[A[A
+
+
+
+running experiment evaluations |█████▏    | 40/77 (51.9%) | ⏳ 00:33<00:22 |  1.68it/s[A[A[A[A
+
+
+
+running experiment evaluations |█████▎    | 41/77 (53.2%) | ⏳ 00:34<00:21 |  1.66it/s[A[A[A[A
+
+
+
+running experiment evaluations |█████▍    | 42/77 (54.5%) | ⏳ 00:35<00:22 |  1.56it/s[A[A[A[A
+
+
+
+running experiment evaluations |█████▌    | 43/77 (55.8%) | ⏳ 00:35<00:21 |  1.57it/s[A[A[A[A
+
+
+
+running experiment evaluations |█████▋    | 44/77 (57.1%) | ⏳ 00:36<00:21 |  1.54it/s[A[A[A[A
+
+
+
+running experiment evaluations |█████▊    | 45/77 (58.4%) | ⏳ 00:39<00:40 |  1.25s/it[A[A[A[A
+
+
+
+running experiment evaluations |█████▉    | 46/77 (59.7%) | ⏳ 00:44<01:13 |  2.36s/it[A[A[A[A
+
+
+
+running experiment evaluations |███████▏  | 55/77 (71.4%) | ⏳ 00:44<00:11 |  1.90it/s[A[A[A[A
+
+
+
+
+running tasks |████████▌ | 6/7 (85.7%) | ⏳ 14:05<02:09 | 129.22s/it[A[A[A[A[A
+
+
+
+running experiment evaluations |███████▌  | 58/77 (75.3%) | ⏳ 00:49<00:15 |  1.26it/s[A[A[A[A
+
+
+
+running experiment evaluations |████████▍ | 65/77 (84.4%) | ⏳ 00:49<00:05 |  2.17it/s[A[A[A[Arunning tasks |██████████| 7/7 (100.0%) | ⏳ 14:08<00:00 | 127.08s/itrunning tasks |██████████| 7/7 (100.0%) | ⏳ 14:08<00:00 | 121.25s/it
+✅ Task runs completed.
+🧠 Evaluation started.
+running experiment evaluations |          | 0/77 (0.0%) | ⏳ 00:00<? | ?it/s
+
+
+
+running experiment evaluations |████████▋ | 67/77 (87.0%) | ⏳ 00:52<00:06 |  1.63it/s[A[A[A[Arunning experiment evaluations |▏         | 1/77 (1.3%) | ⏳ 00:03<04:05 |  3.24s/it
+
+
+
+running experiment evaluations |████████▉ | 69/77 (89.6%) | ⏳ 00:54<00:05 |  1.53it/s[A[A[A[A
+
+
+
+running experiment evaluations |█████████▍| 73/77 (94.8%) | ⏳ 00:54<00:01 |  2.24it/s[A[A[A[A
+
+running tasks |█████▋    | 4/7 (57.1%) | ⏳ 14:13<11:10 | 223.37s/it[A[A
+
+
+
+running experiment evaluations |█████████▋| 75/77 (97.4%) | ⏳ 00:55<00:00 |  2.10it/s[A[A[A[Arunning experiment evaluations |▎         | 2/77 (2.6%) | ⏳ 00:05<03:16 |  2.63s/it
+
+
+
+running experiment evaluations |█████████▊| 76/77 (98.7%) | ⏳ 00:56<00:00 |  2.05it/s[A[A[A[Arunning experiment evaluations |▊         | 6/77 (7.8%) | ⏳ 00:05<00:48 |  1.46it/s
+
+
+
+running experiment evaluations |██████████| 77/77 (100.0%) | ⏳ 00:56<00:00 |  2.00it/s[A[A[A[Arunning experiment evaluations |██████████| 77/77 (100.0%) | ⏳ 00:56<00:00 |  1.35it/s
+running experiment evaluations |▉         | 7/77 (9.1%) | ⏳ 00:07<00:54 |  1.28it/srunning experiment evaluations |█         | 8/77 (10.4%) | ⏳ 00:07<00:52 |  1.31it/srunning experiment evaluations |█▏        | 9/77 (11.7%) | ⏳ 00:08<00:54 |  1.25it/srunning experiment evaluations |█▎        | 10/77 (13.0%) | ⏳ 00:09<00:55 |  1.22it/sI1012 16:08:40.401143  561904 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+running experiment evaluations |█▍        | 11/77 (14.3%) | ⏳ 00:10<00:57 |  1.16it/s
+running tasks |██████████| 7/7 (100.0%) | ⏳ 14:19<00:00 | 109.25s/it[Arunning tasks |██████████| 7/7 (100.0%) | ⏳ 14:19<00:00 | 122.80s/it
+✅ Task runs completed.
+🧠 Evaluation started.
+
+running experiment evaluations |          | 0/77 (0.0%) | ⏳ 00:00<? | ?it/s[AI1012 16:08:42.196763  562021 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+running experiment evaluations |█▌        | 12/77 (15.6%) | ⏳ 00:13<01:35 |  1.48s/it
+running experiment evaluations |▏         | 1/77 (1.3%) | ⏳ 00:03<03:53 |  3.08s/it[Arunning experiment evaluations |█▋        | 13/77 (16.9%) | ⏳ 00:15<01:42 |  1.60s/itrunning experiment evaluations |██▏       | 17/77 (22.1%) | ⏳ 00:15<00:38 |  1.55it/s
+running experiment evaluations |▎         | 2/77 (2.6%) | ⏳ 00:05<03:19 |  2.66s/it[Arunning experiment evaluations |██▎       | 18/77 (23.4%) | ⏳ 00:16<00:39 |  1.49it/s
+running experiment evaluations |▊         | 6/77 (7.8%) | ⏳ 00:05<00:49 |  1.44it/s[Arunning experiment evaluations |██▍       | 19/77 (24.7%) | ⏳ 00:17<00:41 |  1.39it/s
+running experiment evaluations |▉         | 7/77 (9.1%) | ⏳ 00:06<00:51 |  1.35it/s[Arunning experiment evaluations |██▌       | 20/77 (26.0%) | ⏳ 00:18<00:43 |  1.32it/s
+running experiment evaluations |█         | 8/77 (10.4%) | ⏳ 00:07<00:53 |  1.29it/s[Arunning experiment evaluations |██▋       | 21/77 (27.3%) | ⏳ 00:19<00:42 |  1.30it/s
+running experiment evaluations |█▏        | 9/77 (11.7%) | ⏳ 00:08<00:56 |  1.21it/s[Arunning experiment evaluations |██▊       | 22/77 (28.6%) | ⏳ 00:19<00:44 |  1.24it/s
+running experiment evaluations |█▎        | 10/77 (13.0%) | ⏳ 00:09<00:56 |  1.19it/s[A
+running experiment evaluations |█▍        | 11/77 (14.3%) | ⏳ 00:10<00:56 |  1.17it/s[Arunning experiment evaluations |██▉       | 23/77 (29.9%) | ⏳ 00:22<01:11 |  1.33s/it
+running experiment evaluations |█▌        | 12/77 (15.6%) | ⏳ 00:14<01:46 |  1.63s/it[Arunning experiment evaluations |███       | 24/77 (31.2%) | ⏳ 00:32<03:11 |  3.61s/itrunning experiment evaluations |███▏      | 25/77 (32.5%) | ⏳ 00:32<02:16 |  2.62s/it
+running experiment evaluations |█▋        | 13/77 (16.9%) | ⏳ 00:23<04:13 |  3.96s/it[Arunning experiment evaluations |████▍     | 34/77 (44.2%) | ⏳ 00:40<00:54 |  1.27s/it
+running experiment evaluations |██▉       | 23/77 (29.9%) | ⏳ 00:32<01:17 |  1.44s/it[A
+running experiment evaluations |███       | 24/77 (31.2%) | ⏳ 00:39<01:49 |  2.07s/it[A
+running experiment evaluations |███▋      | 28/77 (36.4%) | ⏳ 00:39<01:05 |  1.33s/it[Arunning experiment evaluations |████▌     | 35/77 (45.5%) | ⏳ 00:52<01:44 |  2.49s/itrunning experiment evaluations |█████▌    | 43/77 (55.8%) | ⏳ 00:52<00:37 |  1.10s/it
+running experiment evaluations |████▍     | 34/77 (44.2%) | ⏳ 00:44<00:47 |  1.10s/it[AI1012 16:09:27.565396  562765 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+running tasks |██████████| 7/7 (100.0%) | ⏳ 15:06<00:00 | 141.82s/it[A[A[Arunning tasks |██████████| 7/7 (100.0%) | ⏳ 15:06<00:00 | 129.56s/it
+✅ Task runs completed.
+🧠 Evaluation started.
+
+
+
+running experiment evaluations |          | 0/77 (0.0%) | ⏳ 00:00<? | ?it/s[A[A[A
+
+
+
+
+
+running tasks |██████████| 7/7 (100.0%) | ⏳ 15:07<00:00 | 126.95s/it[A[A[A[A[A[Arunning tasks |██████████| 7/7 (100.0%) | ⏳ 15:07<00:00 | 129.60s/it
+✅ Task runs completed.
+🧠 Evaluation started.
+
+
+
+
+running experiment evaluations |          | 0/77 (0.0%) | ⏳ 00:00<? | ?it/s[A[A[A[A
+
+
+running experiment evaluations |▏         | 1/77 (1.3%) | ⏳ 00:04<05:09 |  4.07s/it[A[A[Arunning experiment evaluations |█████▉    | 46/77 (59.7%) | ⏳ 01:03<00:52 |  1.69s/it
+running experiment evaluations |████▌     | 35/77 (45.5%) | ⏳ 00:54<01:19 |  1.90s/it[AI1012 16:09:36.109457  562920 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+running experiment evaluations |▏         | 1/77 (1.3%) | ⏳ 00:07<09:05 |  7.17s/it[A[A[A[Arunning experiment evaluations |███████▎  | 56/77 (72.7%) | ⏳ 01:13<00:27 |  1.33s/itI1012 16:09:44.787348  563045 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+running experiment evaluations |▎         | 2/77 (2.6%) | ⏳ 00:16<10:55 |  8.74s/it[A[A[A
+
+running tasks |███████▏  | 5/7 (71.4%) | ⏳ 15:23<05:36 | 168.06s/it[A[A
+running experiment evaluations |█████▊    | 45/77 (58.4%) | ⏳ 01:05<00:46 |  1.44s/it[Arunning experiment evaluations |███████▌  | 58/77 (75.3%) | ⏳ 01:16<00:25 |  1.36s/itI1012 16:09:50.606464  563167 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+I1012 16:09:53.359319  563248 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+
+running experiment evaluations |▎         | 2/77 (2.6%) | ⏳ 00:24<16:33 | 13.24s/it[A[A[A[AI1012 16:09:54.376712  563290 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+running experiment evaluations |█▌        | 12/77 (15.6%) | ⏳ 00:26<02:02 |  1.88s/it[A[A[Arunning experiment evaluations |████████▌ | 66/77 (85.7%) | ⏳ 01:32<00:14 |  1.36s/it
+
+
+
+running experiment evaluations |█▌        | 12/77 (15.6%) | ⏳ 00:33<02:25 |  2.24s/it[A[A[A[Arunning experiment evaluations |████████▋ | 67/77 (87.0%) | ⏳ 01:34<00:16 |  1.62s/it
+
+
+running experiment evaluations |█▋        | 13/77 (16.9%) | ⏳ 00:42<03:42 |  3.48s/it[A[A[A
+
+
+running experiment evaluations |██▌       | 20/77 (26.0%) | ⏳ 00:42<01:33 |  1.64s/it[A[A[Arunning experiment evaluations |████████▊ | 68/77 (88.3%) | ⏳ 01:43<00:18 |  2.10s/itrunning experiment evaluations |██████████| 77/77 (100.0%) | ⏳ 01:43<00:00 |  1.34s/it
+
+
+
+
+running experiment evaluations |█▋        | 13/77 (16.9%) | ⏳ 00:52<04:21 |  4.09s/it[A[A[A[A
+
+
+
+running experiment evaluations |██▌       | 20/77 (26.0%) | ⏳ 00:52<01:49 |  1.93s/it[A[A[A[A
+running experiment evaluations |█████▉    | 46/77 (59.7%) | ⏳ 01:40<02:03 |  3.99s/it[A
+
+
+running experiment evaluations |██▊       | 22/77 (28.6%) | ⏳ 00:53<01:30 |  1.64s/it[A[A[A
+
+
+running experiment evaluations |██▉       | 23/77 (29.9%) | ⏳ 00:57<02:13 |  2.47s/it[A[A[A
+
+
+
+
+running tasks |██████████| 7/7 (100.0%) | ⏳ 16:05<00:00 | 126.01s/it[A[A[A[A[Arunning tasks |██████████| 7/7 (100.0%) | ⏳ 16:05<00:00 | 137.90s/it
+✅ Task runs completed.
+🧠 Evaluation started.
+running experiment evaluations |          | 0/77 (0.0%) | ⏳ 00:00<? | ?it/srunning experiment evaluations |▏         | 1/77 (1.3%) | ⏳ 00:05<06:57 |  5.49s/it
+
+
+
+running experiment evaluations |██▉       | 23/77 (29.9%) | ⏳ 01:03<01:43 |  1.93s/it[A[A[A[A
+running experiment evaluations |███████▎  | 56/77 (72.7%) | ⏳ 01:51<00:53 |  2.52s/it[A
+
+
+
+running experiment evaluations |███       | 24/77 (31.2%) | ⏳ 01:05<02:04 |  2.35s/it[A[A[A[A
+
+
+
+running experiment evaluations |████▎     | 33/77 (42.9%) | ⏳ 01:06<00:52 |  1.20s/it[A[A[A[A
+running experiment evaluations |███████▍  | 57/77 (74.0%) | ⏳ 01:54<00:50 |  2.50s/it[A
+running experiment evaluations |████████▎ | 64/77 (83.1%) | ⏳ 01:54<00:19 |  1.49s/it[A
+running experiment evaluations |████████▋ | 67/77 (87.0%) | ⏳ 02:02<00:17 |  1.77s/it[A
+
+
+running experiment evaluations |███       | 24/77 (31.2%) | ⏳ 01:17<03:46 |  4.28s/it[A[A[A
+
+
+running experiment evaluations |████▏     | 32/77 (41.6%) | ⏳ 01:17<01:27 |  1.95s/it[A[A[Arunning experiment evaluations |▎         | 2/77 (2.6%) | ⏳ 00:19<13:29 | 10.79s/itrunning experiment evaluations |█▎        | 10/77 (13.0%) | ⏳ 00:20<01:34 |  1.41s/it
+
+
+
+running experiment evaluations |████▍     | 34/77 (44.2%) | ⏳ 01:23<00:51 |  1.20s/it[A[A[A[A
+running experiment evaluations |████████▉ | 69/77 (89.6%) | ⏳ 02:11<00:17 |  2.20s/it[Arunning experiment evaluations |██████████| 77/77 (100.0%) | ⏳ 02:11<00:00 |  1.71s/it
+I1012 16:10:55.831561  564418 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+running tasks |████████▌ | 6/7 (85.7%) | ⏳ 16:40<02:16 | 136.93s/it[A[A
+
+
+running experiment evaluations |████▍     | 34/77 (44.2%) | ⏳ 01:33<01:24 |  1.95s/it[A[A[Arunning experiment evaluations |█▍        | 11/77 (14.3%) | ⏳ 00:35<01:32 |  1.41s/it
+
+
+
+running experiment evaluations |████▌     | 35/77 (45.5%) | ⏳ 01:33<02:02 |  2.92s/it[A[A[A[Arunning experiment evaluations |█▌        | 12/77 (15.6%) | ⏳ 00:37<03:24 |  3.14s/it
+
+
+running experiment evaluations |████▌     | 35/77 (45.5%) | ⏳ 01:43<02:23 |  3.43s/it[A[A[Arunning experiment evaluations |█▋        | 13/77 (16.9%) | ⏳ 00:46<04:16 |  4.00s/itrunning experiment evaluations |██▉       | 23/77 (29.9%) | ⏳ 00:51<01:29 |  1.66s/it
+
+
+running experiment evaluations |█████▊    | 45/77 (58.4%) | ⏳ 01:52<01:07 |  2.12s/it[A[A[A
+
+
+
+running experiment evaluations |█████▊    | 45/77 (58.4%) | ⏳ 01:57<01:24 |  2.65s/it[A[A[A[AI1012 16:11:27.513878  565236 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(36, generation: 1)
+
+
+
+running experiment evaluations |██████▎   | 49/77 (63.6%) | ⏳ 02:01<01:00 |  2.17s/it[A[A[Arunning experiment evaluations |██▉       | 23/77 (29.9%) | ⏳ 01:05<01:29 |  1.66s/it
+
+
+
+running experiment evaluations |█████▉    | 46/77 (59.7%) | ⏳ 02:04<01:30 |  2.92s/it[A[A[A[A
+
+
+
+running experiment evaluations |██████▊   | 52/77 (67.5%) | ⏳ 02:04<00:46 |  1.87s/it[A[A[A[Arunning experiment evaluations |███       | 24/77 (31.2%) | ⏳ 01:07<02:30 |  2.85s/itrunning experiment evaluations |████▎     | 33/77 (42.9%) | ⏳ 01:07<00:59 |  1.35s/it
+
+
+running experiment evaluations |███████▎  | 56/77 (72.7%) | ⏳ 02:05<00:33 |  1.61s/it[A[A[A
+
+
+running experiment evaluations |███████▌  | 58/77 (75.3%) | ⏳ 02:15<00:37 |  2.00s/it[A[A[A
+
+
+
+running experiment evaluations |███████▍  | 57/77 (74.0%) | ⏳ 02:15<00:39 |  2.00s/it[A[A[A[A
+
+
+running experiment evaluations |████████▋ | 67/77 (87.0%) | ⏳ 02:17<00:11 |  1.18s/it[A[A[A
+
+running tasks |██████████| 7/7 (100.0%) | ⏳ 17:24<00:00 | 106.51s/it[A[Arunning tasks |██████████| 7/7 (100.0%) | ⏳ 17:24<00:00 | 149.16s/it
+✅ Task runs completed.
+🧠 Evaluation started.
+
+running experiment evaluations |          | 0/77 (0.0%) | ⏳ 00:00<? | ?it/s[Arunning experiment evaluations |████▍     | 34/77 (44.2%) | ⏳ 01:25<00:57 |  1.35s/itrunning experiment evaluations |████▌     | 35/77 (45.5%) | ⏳ 01:26<01:46 |  2.53s/itrunning experiment evaluations |████▉     | 38/77 (49.4%) | ⏳ 01:26<01:15 |  1.94s/itrunning experiment evaluations |█████▋    | 44/77 (57.1%) | ⏳ 01:26<00:38 |  1.17s/it
+running experiment evaluations |▏         | 1/77 (1.3%) | ⏳ 00:09<11:40 |  9.21s/it[A
+running experiment evaluations |▎         | 2/77 (2.6%) | ⏳ 00:19<12:04 |  9.66s/it[A
+running experiment evaluations |█▎        | 10/77 (13.0%) | ⏳ 00:19<01:24 |  1.26s/it[A
+
+
+running experiment evaluations |████████▊ | 68/77 (88.3%) | ⏳ 02:42<00:25 |  2.81s/it[A[A[A
+
+
+running experiment evaluations |█████████▊| 76/77 (98.7%) | ⏳ 02:42<00:01 |  1.60s/it[A[A[Arunning experiment evaluations |██████████| 77/77 (100.0%) | ⏳ 02:42<00:00 |  2.11s/it
+
+
+
+
+running experiment evaluations |████████▋ | 67/77 (87.0%) | ⏳ 02:43<00:23 |  2.36s/it[A[A[A[Arunning experiment evaluations |█████▊    | 45/77 (58.4%) | ⏳ 01:45<00:37 |  1.17s/itrunning experiment evaluations |█████▉    | 46/77 (59.7%) | ⏳ 01:55<01:41 |  3.28s/itrunning experiment evaluations |███████   | 54/77 (70.1%) | ⏳ 01:55<00:39 |  1.71s/it
+running experiment evaluations |█▌        | 12/77 (15.6%) | ⏳ 00:36<01:22 |  1.26s/it[A
+running experiment evaluations |█▋        | 13/77 (16.9%) | ⏳ 00:40<03:19 |  3.12s/it[A
+
+
+
+running experiment evaluations |████████▊ | 68/77 (88.3%) | ⏳ 03:00<00:29 |  3.26s/it[A[A[A[Arunning experiment evaluations |██████████| 77/77 (100.0%) | ⏳ 03:00<00:00 |  2.35s/it
+running experiment evaluations |███████▏  | 55/77 (71.4%) | ⏳ 02:05<00:37 |  1.71s/itrunning experiment evaluations |███████▎  | 56/77 (72.7%) | ⏳ 02:05<00:46 |  2.24s/it
+running experiment evaluations |██▉       | 23/77 (29.9%) | ⏳ 00:47<01:30 |  1.68s/it[Arunning experiment evaluations |███████▍  | 57/77 (74.0%) | ⏳ 02:08<00:45 |  2.25s/itrunning experiment evaluations |████████▎ | 64/77 (83.1%) | ⏳ 02:08<00:15 |  1.17s/it
+running experiment evaluations |███▍      | 26/77 (33.8%) | ⏳ 00:49<01:14 |  1.46s/it[A
+running experiment evaluations |████▍     | 34/77 (44.2%) | ⏳ 00:57<00:54 |  1.27s/it[A
+running experiment evaluations |████▋     | 36/77 (46.8%) | ⏳ 01:00<00:51 |  1.26s/it[Arunning experiment evaluations |████████▉ | 69/77 (89.6%) | ⏳ 02:20<00:12 |  1.56s/itrunning experiment evaluations |██████████| 77/77 (100.0%) | ⏳ 02:20<00:00 |  1.82s/it
+
+running experiment evaluations |█████▊    | 45/77 (58.4%) | ⏳ 01:08<00:35 |  1.12s/it[A
+running experiment evaluations |█████▉    | 46/77 (59.7%) | ⏳ 01:11<00:37 |  1.22s/it[A
+running experiment evaluations |███████▎  | 56/77 (72.7%) | ⏳ 01:16<00:18 |  1.15it/s[A
+running experiment evaluations |███████▍  | 57/77 (74.0%) | ⏳ 01:19<00:20 |  1.00s/it[A
+running experiment evaluations |████████▋ | 67/77 (87.0%) | ⏳ 01:25<00:08 |  1.25it/s[A
+running experiment evaluations |████████▊ | 68/77 (88.3%) | ⏳ 01:27<00:07 |  1.14it/s[A
+running experiment evaluations |█████████▌| 74/77 (96.1%) | ⏳ 01:27<00:01 |  1.75it/s[Arunning experiment evaluations |██████████| 77/77 (100.0%) | ⏳ 01:27<00:00 |  1.14s/it
+
+controller           n   acc hedged  grnd    $/run   route$ active s  steps forced invalid
+jev                  7   86%      0   71%   0.0022   0.0005     22.8    5.9      2       0
+msft                 7   71%      2  100%   0.0022   0.0003     24.4    6.1      3       0
+oai                  7   71%      0  100%   0.0024   0.0009     27.5    5.9      2       0
+claude-haiku-5.5     7   86%      0  100%   0.0032   0.0017     38.4    5.9      2       0
+claude-sonnet-5.5    7   86%      0   86%   0.0212   0.0198     32.6    5.1      2       0
+claude-opus-5.5      7   57%      0   67%   0.0479   0.0467     37.3    4.7      1       0
+fixed                7   71%      1   71%   0.0023   0.0000     24.1    7.0      0       0
+
+agent cost $0.5693 + judges $0.1263 = $0.6956 for 49 runs
+
+records: /Users/abel/Arize_takehome/results/pilot-v2.jsonl
+Phoenix: http://localhost:6006/datasets/RGF0YXNldDo0/experiments

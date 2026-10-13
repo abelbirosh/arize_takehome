@@ -3,7 +3,6 @@ __pycache__/
 *.pyc
 .env
 .pytest_cache/
-results/
 node_modules/
 frontend/dist/
 .vercel/
