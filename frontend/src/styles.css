@@ -89,3 +89,4 @@
 .metric-note{font-size:13px;line-height:1.6;color:var(--muted);margin-top:8px;font-style:italic}
 @media(max-width:820px){.metric-grid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){.metric{padding:20px 16px 18px}.bars{height:170px}.bar-value{font-size:11px}.bar-name{font-size:11px}}
+.question-summary{font-size:17px;line-height:1.7;margin-top:20px}
