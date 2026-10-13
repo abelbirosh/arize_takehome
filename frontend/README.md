@@ -24,4 +24,4 @@ Text renders as plain text, and links must be http(s).
 
 ## Navigation
 
-The chapter index, the arrow keys, Page Up/Down and Home/End all change chapters. Each chapter has its own URL fragment, so browser back and forward work.
+The chapter index, the arrow keys, Page Up/Down and Home/End all change chapters. Each chapter has its own path (for example `/detailed-results`), so links and browser back and forward work; old `#chapter` links redirect to the path.

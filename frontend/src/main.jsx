@@ -11,11 +11,20 @@ const chapters = [
   { id: 'challenges', name: 'What went wrong and how we fixed it?', title: 'What went wrong and how we fixed it?' },
   { id: 'takeaways', name: 'Takeaways', title: 'Takeaways' },
 ];
-const legacyHashes = { 'when-to-jev': 'question', mechanism: 'methodology', experiment: 'methodology', results: 'detailed-results', findings: 'detailed-results', learnings: 'phoenix', practice: 'takeaways', sources: 'phoenix' };
-const indexFromHash = () => {
-  const hash = window.location.hash.slice(1);
-  return Math.max(0, chapters.findIndex(c => c.id === (legacyHashes[hash] || hash)));
+const legacyIds = { 'when-to-jev': 'question', mechanism: 'methodology', experiment: 'methodology', results: 'detailed-results', findings: 'detailed-results', learnings: 'phoenix', practice: 'takeaways', sources: 'phoenix' };
+// Chapters live at clean paths (/methodology); the opening chapter is the root.
+const chapterPath = id => id === 'question' ? '/' : `/${id}`;
+const indexFromPath = () => {
+  const id = window.location.pathname.replace(/^\/+|\/+$/g, '') || 'question';
+  return Math.max(0, chapters.findIndex(c => c.id === (legacyIds[id] || id)));
 };
+// Old links used #chapter fragments; move them onto the matching path.
+const redirectLegacyHash = () => {
+  const hash = window.location.hash.slice(1);
+  const index = chapters.findIndex(c => c.id === (legacyIds[hash] || hash));
+  if (index >= 0) window.history.replaceState(null, '', chapterPath(chapters[index].id));
+};
+redirectLegacyHash();
 
 function Icon({ name, ...props }) {
   if (name === 'github') return <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" {...props}><path d="M12 .297a12 12 0 0 0-3.793 23.385c.6.111.82-.261.82-.577v-2.234c-3.338.726-4.043-1.416-4.043-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.835 2.809 1.305 3.493.998.108-.776.419-1.305.762-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 0 1 6.006 0c2.291-1.552 3.297-1.23 3.297-1.23.655 1.652.243 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.216.694.825.576A12.001 12.001 0 0 0 12 .297Z"/></svg>;
@@ -139,7 +148,7 @@ function FixList({ items }) {
 }
 
 function App() {
-  const [chapter, setChapter] = useState(indexFromHash);
+  const [chapter, setChapter] = useState(indexFromPath);
   const [research, setResearch] = useState(emptyResearch);
   const [benchmark, setBenchmark] = useState(null);
   const [error, setError] = useState('');
@@ -151,9 +160,11 @@ function App() {
     const controller = new AbortController();
     fetch('/research.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setResearch(validateResearch(data))).catch(e => { if (e.name !== 'AbortError') setError('Research could not be loaded. Please refresh to try again.'); });
     fetch('/benchmark.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setBenchmark(validateBenchmark(data))).catch(e => { if (e.name !== 'AbortError') setError('Benchmark results could not be loaded. Please refresh to try again.'); });
-    const hash = () => setChapter(indexFromHash());
-    window.addEventListener('hashchange', hash);
-    return () => { controller.abort(); window.removeEventListener('hashchange', hash); };
+    const onPop = () => setChapter(indexFromPath());
+    const onHash = () => { redirectLegacyHash(); setChapter(indexFromPath()); };
+    window.addEventListener('popstate', onPop);
+    window.addEventListener('hashchange', onHash);
+    return () => { controller.abort(); window.removeEventListener('popstate', onPop); window.removeEventListener('hashchange', onHash); };
   }, []);
 
   useEffect(() => {
@@ -167,7 +178,7 @@ function App() {
   function navigate(index) {
     const next = Math.min(chapters.length - 1, Math.max(0, index));
     if (next === chapter) return;
-    window.location.hash = chapters[next].id;
+    window.history.pushState(null, '', chapterPath(chapters[next].id));
     setChapter(next);
     window.scrollTo({ top: 0 });
     requestAnimationFrame(() => heading.current?.focus({ preventScroll: true }));
@@ -187,9 +198,9 @@ function App() {
 
   return <div className="app">
     <a href="#main" className="skip-link">Skip to presentation</a>
-    <header className="topbar"><a className="brand" href="#question" onClick={() => navigate(0)} aria-label="Presentation home">When and When Not to Jev</a><div className="header-actions"><a className="present-button repo-link" href="https://github.com/abelbirosh/arize_takehome" target="_blank" rel="noreferrer"><Icon name="github"/>Github Repo</a></div></header>
+    <header className="topbar"><a className="brand" href="/" onClick={e => { e.preventDefault(); navigate(0); }} aria-label="Presentation home">When and When Not to Jev</a><div className="header-actions"><a className="present-button repo-link" href="https://github.com/abelbirosh/arize_takehome" target="_blank" rel="noreferrer"><Icon name="github"/>Github Repo</a></div></header>
     <div className="workspace">
-      <aside className="sidebar"><nav ref={chapterNav} aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={`#${item.id}`} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav></aside>
+      <aside className="sidebar"><nav ref={chapterNav} aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={chapterPath(item.id)} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav></aside>
       <main id="main" className={`main chapter-${current.id}`}>
         {error && <div className="notice error" role="alert"><span>{error}</span><button aria-label="Dismiss message" onClick={() => setError('')}><Icon name="close"/></button></div>}
         <div className="chapter-content" key={current.id}>
