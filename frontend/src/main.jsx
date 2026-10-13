@@ -167,6 +167,50 @@ function Methodology({ benchmark }) {
   </>;
 }
 
+const traceTree = `research_agent              AGENT      run metadata: decider, generator model, step budget
+  step.N <action>           CHAIN      one per step
+    route.<decider>         CHAIN      chosen action, confidence, valid, escalated, latency
+      jev.decide            DECISION   decision-model call
+      ChatCompletion        LLM        Claude decider call (auto-instrumented)
+    wikipedia/web.search    RETRIEVER  the returned results
+    read_source             TOOL       page read
+    ChatCompletion          LLM        Haiku writing a query, notes, or the answer`;
+
+function PhoenixUsage() {
+  return <>
+    <section className="subsection"><h2>Tracing Each Run</h2>
+      <ul className="method-list">
+        <li>Connected to Phoenix with <code>phoenix.otel.register(auto_instrument=True)</code>. Every run produces one OpenInference trace:</li>
+      </ul>
+      <pre className="trace-tree">{traceTree}</pre>
+      <ul className="method-list">
+        <li>Decision-model calls use OpenInference's <code>DECISION</code> span kind and record the chosen action, confidence, full probabilities, evidence-sufficient probability, read target, token counts, latency, and cost.</li>
+        <li>A Claude decider's routing call appears as an LLM span inside the same <code>route.*</code> span, so all seven deciders share one trace layout.</li>
+        <li>The root span carries the run's stats (steps, costs, latency, forced answer).</li>
+        <li>Sorting traces according to the metrics using Phoenix.</li>
+      </ul>
+    </section>
+    <section className="subsection"><h2>Dataset Storage</h2>
+      <ul className="method-list">
+        <li>I uploaded each set of questions as a dataset. Initially, the system used a 25 question set, which was then increased to 50. Uploading datasets for each of these tests made the process functionally easier.</li>
+        <li>Before running the full suite, I ran testing pilots to ensure it was functioning. Phoenix dataset splits were helpful for this.</li>
+      </ul>
+    </section>
+    <section className="subsection"><h2>Running Experiments</h2>
+      <ul className="method-list">
+        <li>I used Phoenix experiment runner to run one experiment per decider in parallel. The experiment metadata recorded the decider, generator model, budgets, and reasoning settings.</li>
+        <li>Phoenix's experiment comparison view was helpful to visualize decider comparisons. I stored the run details to <code>results/&lt;tag&gt;.jsonl</code> for cross-project analysis.</li>
+      </ul>
+    </section>
+    <section className="subsection"><h2>Evaluators (Inside the Experiment)</h2>
+      <ul className="method-list">
+        <li>LLM evaluators, which used GPT-6.1 Sol, were used for correctness and groundedness.</li>
+        <li>Code evaluators for routing fit and telemetry metrics.</li>
+      </ul>
+    </section>
+  </>;
+}
+
 function DetailedResults({ benchmark }) {
   const { tests, deciders } = benchmark;
   return <>
@@ -254,6 +298,7 @@ function App() {
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
             {current.id === 'methodology' && benchmark && <Methodology benchmark={benchmark}/>}
             {current.id === 'detailed-results' && benchmark && <DetailedResults benchmark={benchmark}/>}
+            {current.id === 'phoenix' && <PhoenixUsage/>}
             {current.id === 'challenges' && <FixList items={research.challenges}/>}
 
           </>}

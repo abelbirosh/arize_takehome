@@ -179,3 +179,6 @@
   .tool-list li span{grid-column:1/-1;grid-row:2}
   .model-columns{grid-template-columns:1fr}
 }
+.trace-tree{margin:12px 0 4px;padding:16px 18px;border-radius:6px;background:var(--chart-surface);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;white-space:pre}
+.method-list code,.tool-list code{overflow-wrap:anywhere}
+.trace-tree{max-width:100%}

@@ -136,6 +136,36 @@
       ]
     },
     {
+      "challenge": "Phoenix doesn't price decision-model spans; they report decision.* token counts, not llm.*.",
+      "solution": "The agent computes each decision's cost itself and records it as decision.cost_usd.",
+      "links": [
+        {
+          "title": "fd29ec3",
+          "url": "https://github.com/abelbirosh/arize_takehome/commit/fd29ec3"
+        }
+      ]
+    },
+    {
+      "challenge": "When a Claude model both decided and wrote text, routing and writing costs blended together.",
+      "solution": "Each decider LLM gets its own usage accounting, separate from the generator.",
+      "links": [
+        {
+          "title": "fd29ec3",
+          "url": "https://github.com/abelbirosh/arize_takehome/commit/fd29ec3"
+        }
+      ]
+    },
+    {
+      "challenge": "Running the full suite would have rerun, and paid again for, the seven pilot questions.",
+      "solution": "Split the Phoenix dataset into pilot and main, then copied the pilot runs into the full experiments with merge_pilot.py.",
+      "links": [
+        {
+          "title": "a6be121",
+          "url": "https://github.com/abelbirosh/arize_takehome/commit/a6be121"
+        }
+      ]
+    },
+    {
       "challenge": "Microsoft and OpenAI decision models reject choice questions with fewer than two options.",
       "solution": "Ask which result to read only when two or more are unread.",
       "links": [
