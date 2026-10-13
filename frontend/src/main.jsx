@@ -205,7 +205,7 @@ function PhoenixUsage() {
         <li>Connected to Phoenix with <code>phoenix.otel.register(auto_instrument=True)</code>. Every run produces one OpenInference trace:</li>
       </ul>
       <pre className="trace-tree">{traceTree}</pre>
-      {Shot({ src: "/phoenix/trace-tree.webp", alt: "Phoenix trace view: span tree of a Jev run next to the run's output and stats", caption: "A Jev run's span tree, with the recorded answer and run stats." })}
+      {Shot({ src: "/phoenix/trace-tree.webp", alt: "Phoenix trace view: span tree of a Jev run next to the run's output and stats", caption: "Jev run's trace with the recorded answer and run stats" })}
       <ul className="method-list">
         <li>Decision-model calls use OpenInference's <code>DECISION</code> span kind and record the chosen action, confidence, full probabilities, evidence-sufficient probability, read target, token counts, latency, and cost.</li>
         <li>A Claude decider's routing call appears as an LLM span inside the same <code>route.*</code> span, so all seven deciders share one trace layout.</li>
