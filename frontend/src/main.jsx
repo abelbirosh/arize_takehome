@@ -42,14 +42,13 @@ function App() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [presenting, setPresenting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const heading = useRef(null);
   const chapterNav = useRef(null);
   const current = chapters[chapter];
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch('/research.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setResearch(validateResearch(data))).catch(e => { if (e.name !== 'AbortError') setError('Research could not be loaded. Please refresh to try again.'); }).finally(() => setLoading(false));
+    fetch('/research.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setResearch(validateResearch(data))).catch(e => { if (e.name !== 'AbortError') setError('Research could not be loaded. Please refresh to try again.'); });
     const hash = () => setChapter(indexFromHash());
     const full = () => setPresenting(Boolean(document.fullscreenElement));
     window.addEventListener('hashchange', hash);
@@ -94,12 +93,11 @@ function App() {
   }
 
   const ready = research.status === 'ready';
-  const researchNote = loading ? 'Loading presentation content.' : ready ? 'Research and attached links are available.' : research.learnings.length ? 'Implementation learnings are loaded.\nFinal analysis is pending.' : 'The question is set.\nResearch content is pending.';
   return <div className={`app ${presenting ? 'presenting' : ''}`}>
     <a href="#main" className="skip-link">Skip to presentation</a>
     <header className="topbar"><a className="brand" href="#question" onClick={() => navigate(0)} aria-label="Presentation home">When and When Not to Jev</a><div className="header-actions"><a className="present-button repo-link" href="https://github.com/abelbirosh/arize_takehome" target="_blank" rel="noreferrer"><Icon name="github"/>Github Repo</a><button className="present-button" onClick={togglePresentation}><Icon name={presenting ? 'close' : 'expand'}/>{presenting ? 'Exit presentation' : 'Present'}</button></div></header>
     <div className="workspace">
-      <aside className="sidebar"><nav ref={chapterNav} aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={`#${item.id}`} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav><div className="sidebar-note"><span className={`status-label ${ready ? 'ready' : ''}`}><span/>{loading ? 'Loading research' : ready ? 'Research loaded' : 'Research in progress'}</span><p>{researchNote}</p></div></aside>
+      <aside className="sidebar"><nav ref={chapterNav} aria-label="Presentation chapters">{chapters.map((item, i) => <a key={item.id} href={`#${item.id}`} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span>{chapter === i && <Icon name="arrow"/>}</a>)}</nav></aside>
       <main id="main" className={`main chapter-${current.id}`}>
         {(message || error) && <div className={`notice ${error ? 'error' : ''}`} role={error ? 'alert' : 'status'}><span>{error || message}</span><button aria-label="Dismiss message" onClick={() => { setMessage(''); setError(''); }}><Icon name="close"/></button></div>}
         <div className="chapter-content" key={current.id}>
