@@ -205,7 +205,7 @@ function App() {
         {error && <div className="notice error" role="alert"><span>{error}</span><button aria-label="Dismiss message" onClick={() => setError('')}><Icon name="close"/></button></div>}
         <div className="chapter-content" key={current.id}>
           {chapter === 0 ? <>
-            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">Empirical analysis of usage of decision model for agent design</h1><h2 className="question-followup">{current.title}</h2><p className="question-summary">For the contained experiment we ran with 50 search x 7 models, we found that decision models reached similar accuracy scores with a fraction of the costs and latency. The examples consisted of a range of task complexities and failure cases, like searching for unavailable information.</p></div></div>
+            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">Empirical analysis of usage of decision model for agent design</h1><h2 className="question-followup">{current.title}</h2><p className="question-summary">In the controlled experiment we ran with 50 searches across seven models, we found that decision models achieved similar accuracy with a fraction of the cost and latency. The examples covered a range of task complexities and failure cases, such as searches for unavailable information.</p></div></div>
             {benchmark && <BenchmarkCharts benchmark={benchmark}/>}
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
