@@ -70,7 +70,7 @@
     },
     {
       "id": "cost",
-      "label": "$/run",
+      "label": "Cost per run",
       "scale": [
         "Cheaper",
         "More expensive"
@@ -90,7 +90,7 @@
     },
     {
       "id": "route-cost",
-      "label": "Route $",
+      "label": "Cost per decision",
       "scale": [
         "Cheaper routing",
         "Costlier routing"
@@ -110,7 +110,7 @@
     },
     {
       "id": "active",
-      "label": "Active seconds",
+      "label": "Time per run",
       "scale": [
         "Faster",
         "Slower"
@@ -132,8 +132,31 @@
       }
     },
     {
+      "id": "decision-ms",
+      "label": "Time per decision",
+      "scale": [
+        "Faster decisions",
+        "Slower decisions"
+      ],
+      "format": "ms",
+      "better": "lower",
+      "description": "Mean latency per routing call.",
+      "values": {
+        "jev": 299.070939,
+        "msft": 485.617056,
+        "oai": 363.757902,
+        "claude-haiku-5.5": 36150.642407,
+        "claude-sonnet-5.5": 2182.775183,
+        "claude-opus-5.5": 4078.911361,
+        "fixed": 0.0
+      },
+      "excluded": {
+        "claude-haiku-5.5": "Haiku 5.5 excluded: one routing call stalled 2.2 h, skewing the mean."
+      }
+    },
+    {
       "id": "steps",
-      "label": "Steps",
+      "label": "Steps taken",
       "scale": [
         "Fewer steps",
         "More steps"
@@ -153,7 +176,7 @@
     },
     {
       "id": "out-of-turns",
-      "label": "Out of turns",
+      "label": "Reached turn limit",
       "scale": [
         "Rarely ran out",
         "Often ran out"
@@ -169,29 +192,6 @@
         "claude-sonnet-5.5": 10,
         "claude-opus-5.5": 5,
         "fixed": 0
-      }
-    },
-    {
-      "id": "decision-ms",
-      "label": "ms/decision",
-      "scale": [
-        "Faster decisions",
-        "Slower decisions"
-      ],
-      "format": "ms",
-      "better": "lower",
-      "description": "Mean latency per routing call.",
-      "values": {
-        "jev": 299.070939,
-        "msft": 485.617056,
-        "oai": 363.757902,
-        "claude-haiku-5.5": 36150.642407,
-        "claude-sonnet-5.5": 2182.775183,
-        "claude-opus-5.5": 4078.911361,
-        "fixed": 0.0
-      },
-      "excluded": {
-        "claude-haiku-5.5": "Haiku 5.5 excluded: one routing call stalled 2.2 h, skewing the mean."
       }
     }
   ]
