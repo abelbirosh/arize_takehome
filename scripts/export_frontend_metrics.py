@@ -54,33 +54,33 @@ def main(source: str = SOURCE, target: str = TARGET) -> None:
                   f"{slowest / 3_600_000:.1f} hours, which swamps its average.")
 
     metrics = [
-        {"id": "accuracy", "label": "Accuracy", "format": "percent", "better": "higher",
+        {"id": "accuracy", "label": "Accuracy", "scale": ["More accurate", "Less accurate"], "format": "percent", "better": "higher",
          "max": 1.0,
          "description": "Share of the 50 answers the judge graded correct against the "
                         "accepted variants. Hedged answers do not count.",
          "values": per_decider(lambda rs: mean([r["judge"]["label"] == "correct" for r in rs]))},
-        {"id": "cost", "label": "$/run", "format": "usd", "better": "lower",
+        {"id": "cost", "label": "$/run", "scale": ["Cheaper", "More expensive"], "format": "usd", "better": "lower",
          "description": "Average total cost of one run: routing plus Haiku writing the "
                         "queries, notes, and answer.",
          "values": per_decider(lambda rs: mean([r["stats"]["total_cost_usd"] for r in rs]))},
-        {"id": "route-cost", "label": "Route $", "format": "usd", "better": "lower",
+        {"id": "route-cost", "label": "Route $", "scale": ["Cheaper routing", "Costlier routing"], "format": "usd", "better": "lower",
          "description": "The part of each run's cost spent deciding the next step. "
                         "The fixed sequence makes no decisions.",
          "values": per_decider(lambda rs: mean([r["stats"]["routing_cost_usd"] for r in rs]))},
-        {"id": "active", "label": "Active seconds", "format": "seconds", "better": "lower",
+        {"id": "active", "label": "Active seconds", "scale": ["Faster", "Slower"], "format": "seconds", "better": "lower",
          "description": "Average seconds per run, excluding time queued behind the "
                         "shared rate limiter.",
          "values": per_decider(lambda rs: mean([r["stats"]["active_ms"] for r in rs]) / 1000),
          "excluded": {HAIKU: haiku_note}},
-        {"id": "steps", "label": "Steps", "format": "decimal", "better": "lower",
+        {"id": "steps", "label": "Steps", "scale": ["Fewer steps", "More steps"], "format": "decimal", "better": "lower",
          "description": "Average actions per run (searches, reads, and the answer) out "
                         "of a budget of eight.",
          "values": per_decider(lambda rs: mean([r["stats"]["steps"] for r in rs]))},
-        {"id": "out-of-turns", "label": "Out of turns", "format": "count", "better": "lower",
+        {"id": "out-of-turns", "label": "Out of turns", "scale": ["Rarely ran out", "Often ran out"], "format": "count", "better": "lower",
          "description": "Runs that used all eight steps without answering, so the "
                         "harness forced a final answer.",
          "values": per_decider(lambda rs: sum(bool(r["stats"]["forced_answer"]) for r in rs))},
-        {"id": "decision-ms", "label": "ms/decision", "format": "ms", "better": "lower",
+        {"id": "decision-ms", "label": "ms/decision", "scale": ["Faster decisions", "Slower decisions"], "format": "ms", "better": "lower",
          "description": "Average time for one routing decision. The fixed sequence "
                         "makes none.",
          "values": per_decider(ms_per_decision),

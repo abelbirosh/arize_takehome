@@ -69,6 +69,7 @@ function MetricChart({ metric, deciders }) {
         <span className="bar-name">{d.short}</span>
       </div>)}
     </div>
+    {metric.scale && <div className="metric-scale" aria-hidden="true"><span>{metric.scale[0]}</span><span className="scale-arrow"/><span>{metric.scale[1]}</span></div>}
     <p className="metric-description">{metric.description}</p>
     {notes.map(note => <p className="metric-note" key={note}>* {note}</p>)}
     <div className="visually-hidden"><table><caption>{metric.label}, best to worst</caption><thead><tr><th scope="col">Decider</th><th scope="col">{metric.label}</th></tr></thead>

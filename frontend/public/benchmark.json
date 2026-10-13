@@ -50,6 +50,10 @@
     {
       "id": "accuracy",
       "label": "Accuracy",
+      "scale": [
+        "More accurate",
+        "Less accurate"
+      ],
       "format": "percent",
       "better": "higher",
       "max": 1.0,
@@ -67,6 +71,10 @@
     {
       "id": "cost",
       "label": "$/run",
+      "scale": [
+        "Cheaper",
+        "More expensive"
+      ],
       "format": "usd",
       "better": "lower",
       "description": "Average total cost of one run: routing plus Haiku writing the queries, notes, and answer.",
@@ -83,6 +91,10 @@
     {
       "id": "route-cost",
       "label": "Route $",
+      "scale": [
+        "Cheaper routing",
+        "Costlier routing"
+      ],
       "format": "usd",
       "better": "lower",
       "description": "The part of each run's cost spent deciding the next step. The fixed sequence makes no decisions.",
@@ -99,6 +111,10 @@
     {
       "id": "active",
       "label": "Active seconds",
+      "scale": [
+        "Faster",
+        "Slower"
+      ],
       "format": "seconds",
       "better": "lower",
       "description": "Average seconds per run, excluding time queued behind the shared rate limiter.",
@@ -118,6 +134,10 @@
     {
       "id": "steps",
       "label": "Steps",
+      "scale": [
+        "Fewer steps",
+        "More steps"
+      ],
       "format": "decimal",
       "better": "lower",
       "description": "Average actions per run (searches, reads, and the answer) out of a budget of eight.",
@@ -134,6 +154,10 @@
     {
       "id": "out-of-turns",
       "label": "Out of turns",
+      "scale": [
+        "Rarely ran out",
+        "Often ran out"
+      ],
       "format": "count",
       "better": "lower",
       "description": "Runs that used all eight steps without answering, so the harness forced a final answer.",
@@ -150,6 +174,10 @@
     {
       "id": "decision-ms",
       "label": "ms/decision",
+      "scale": [
+        "Faster decisions",
+        "Slower decisions"
+      ],
       "format": "ms",
       "better": "lower",
       "description": "Average time for one routing decision. The fixed sequence makes none.",
