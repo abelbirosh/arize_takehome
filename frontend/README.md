@@ -1,71 +1,27 @@
-# System one research presentation
+# Presentation
 
-From the repository root:
-
-Use Node 24 (`nvm use` with the checked-in `.nvmrc`); Vite requires Node 22.12 or newer.
+React + Vite, deployed on Vercel from `main` ([arizetakehome.vercel.app](https://arizetakehome.vercel.app)). Run from the repository root on Node 22.12+ (`nvm use`):
 
 ```sh
 npm install
-npm run dev
-npm run build
-npm run test:frontend
+npm run dev              # http://127.0.0.1:5173
+npm run build            # -> frontend/dist
+npm run test:frontend    # validates both content files
 ```
 
-Vercel: import this repository, use the repository root as the root directory, and keep the checked-in Vercel configuration. The build outputs `frontend/dist`. No Python runtime or API keys are required for this frontend.
+Vercel uses the repository root and the checked-in `vercel.json`. The frontend needs no Python and no API keys.
 
-## Benchmark charts
+## Content
 
-The Question page opens with one chart per headline metric (accuracy, $/run, route $, active seconds, steps, out of turns, ms/decision), each sorted best to worst from left to right. The numbers live in `frontend/public/benchmark.json`, generated from the merged v2 run with no model calls:
+Both files in `frontend/public/` are loaded at runtime and validated by `src/research.js`:
 
-```sh
-python3 scripts/export_frontend_metrics.py
-```
+| File | Feeds | How to change it |
+|---|---|---|
+| `benchmark.json` | the charts on the Question page | Generated: `python3 scripts/export_frontend_metrics.py`. Edit the script to change labels, descriptions or exclusions. |
+| `research.json` | Methodology, Detailed results, Phoenix, challenges and takeaways | Edit by hand. Each entry is `{ "title", "body", "links": [{ "title", "url" }] }`. Challenges use `challenge` and `solution` instead of `body`. |
 
-Edit the script, not the JSON, to change labels, descriptions, or excluded deciders.
+Text renders as plain text, and links must be http(s).
 
-## Update the research
+## Navigation
 
-Edit `frontend/public/research.json` and rebuild to publish research for everyone. The presentation reads this file automatically; there are no upload or research-download controls. All text uses Times New Roman, with size, regular/bold weight, and italics defining the hierarchy.
-
-The header reads **When and When Not to Jev**, without a logo. Its browser thumbnail is a three-slice pie in the chart colours. The six sections are:
-
-- **Question** — original question, thesis, motivation, and study design.
-- **Methodology** — what changes between runs, what stays fixed, the dataset, and how runs are graded.
-- **Detailed results** — measured findings, with an honest pending state until supplied.
-- **How I used Phoenix?** — datasets, experiments, traces, and evaluations.
-- **What went wrong and how we fixed it?** — problem/solution pairs.
-- **Takeaways** — working or final recommendations.
-
-Labels wrap in the sidebar and in a two-column mobile index so the full wording remains visible. Flowcharts are deferred.
-
-```json
-{
-  "version": 2,
-  "status": "pending",
-  "thesis": {
-    "body": "The hypothesis being tested.",
-    "why": "Why this experiment matters.",
-    "when": ["A condition under which Jev is worth testing."],
-    "whenNot": ["A condition favoring another approach."],
-    "method": "The experimental comparison and controls.",
-    "links": [{ "title": "Study design", "url": "https://example.com/study" }]
-  },
-  "methodology": [{ "title": "A design choice", "body": "How the benchmark was set up.", "links": [] }],
-  "results": [],
-  "phoenix": [{ "title": "How Phoenix was used", "body": "Workflow and evidence.", "links": [] }],
-  "learnings": [{ "title": "A learning", "body": "What the evidence supports.", "links": [] }],
-  "challenges": [{ "title": "A challenge", "challenge": "The problem.", "solution": "The fix.", "links": [] }],
-  "takeaways": [{ "title": "A takeaway", "body": "A recommendation and its limits.", "links": [] }],
-  "sources": []
-}
-```
-
-Use `pending` while research is in progress, including when implementation learnings are available but a final performance analysis is not. A `ready` file requires at least one result or legacy learning. Methodology, results, and Phoenix notes are optional lists, defaulting to empty. The legacy learnings list remains supported for compatibility. Lists support up to 100 entries. Attached links are optional and accept only HTTP(S) URLs. Content renders as plain text. Version 1 files remain supported: findings become learnings and recommendations become takeaways.
-
-The initial section content is grounded in pushed repository commit `440dc8f`, with commit-pinned links beside the observations. It describes implementation and the benchmark plan, not a completed performance comparison. Ongoing local research changes are not automatically published as presentation findings.
-
-## Present
-
-Choose a chapter in the index or use the bottom navigation. Left/right arrows and Page Up/Page Down change chapters when focus is on the presentation; Home/End jump to the first/last chapter. Chapter links use URL fragments and work with browser back/forward. **Present** enters full screen and hides the chapter index; Escape or **Exit presentation** returns. Browsers without full-screen support use a focus view.
-
-Old chapter URLs remain compatible: thesis opens Question, mechanism/experiment open Methodology, results/findings open Detailed results, learnings/sources open Phoenix, and practice opens Takeaways.
+The chapter index, the arrow keys, Page Up/Down and Home/End all change chapters. Each chapter has its own URL fragment, so browser back and forward work. **Present** opens full screen without the index.

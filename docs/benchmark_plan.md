@@ -1,4 +1,6 @@
-# Benchmark plan
+# Benchmark plan (v1)
+
+> Superseded by the v2 suite: 50 questions, 7 deciders including Microsoft and OpenAI decision models, and groundedness and routing-fit evaluators. The v2 results and how to rerun them are in the [README](../README.md). This page records the original 25-question plan.
 
 **Question:** can a $0.04/M-token decision model (Jev) make a research agent's routing decisions as well as Claude models of increasing size, and what does each cost in accuracy, money and latency?
 
@@ -46,5 +48,5 @@ $0.21 for 10 runs. Measured per run: Jev $0.0009, Haiku $0.0027, Sonnet $0.018, 
 
 - [x] Controllers, dataset, metrics agreed
 - [x] Pilot
-- [ ] Full run (`full-v1`). Interrupted by a network outage while the machine slept; failed runs are resumed with `--resume`.
-- [ ] Analysis and write-up
+- [x] Full run (`full-v1`). Interrupted by a network outage while the machine slept, then finished with `--resume` and `scripts/backfill_evals.py` (`results/full-v1*.{jsonl,log}`).
+- [x] Superseded by v2 (`results/full-v2-merged.jsonl`)

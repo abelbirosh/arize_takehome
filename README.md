@@ -1,90 +1,89 @@
-# Jev-routed research agent
+# Can a decision model route a research agent?
 
-A research agent with **adaptive tool routing**. Each step, it chooses its next action (search Wikipedia, search the web, read a result, or answer) from what it has learned so far, instead of following a fixed sequence.
+A research agent where a cheap **decision model** picks each next step (search Wikipedia, search the web, read a result, or answer) and a general LLM writes the text. It's benchmarked in [Phoenix](https://phoenix.arize.com) against Claude deciders and a fixed sequence.
 
-The experiment: give the *deciding* to [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), TypeSafe's "System One" decision model, and keep a general-purpose LLM for *generating*. Jev returns typed, calibrated probabilities instead of text, so it can't hallucinate an action or a source. It is also roughly 100× cheaper and faster per call than an LLM. Does that make a better agent controller? Phoenix is used to trace it and to benchmark it across controllers and LLM providers.
+**Presentation:** [arizetakehome.vercel.app](https://arizetakehome.vercel.app)
 
-## Division of labour
+## Result
 
-| Step | Who | Shape |
+50 questions × 7 deciders = 350 runs (`results/full-v2-merged.jsonl`). Claude Haiku 5.5 writes every query, note and answer, so only the decider changes between runs.
+
+| Decider | Kind | Accuracy | $/run | Routing $/run | Active s/run |
+|---|---|---|---|---|---|
+| Jev (TypeSafe) | decision model | 70% | 0.0019 | 0.0004 | 21.7 |
+| Microsoft Decision 1 | decision model | 72% | 0.0020 | 0.0003 | 21.9 |
+| OpenAI GPT-6 Luna Decisions | decision model | 66% | 0.0022 | 0.0007 | 23.3 |
+| Claude Haiku 5.5 | LLM, JSON reply | 66% | 0.0028 | 0.0014 | n/a* |
+| Claude Sonnet 5.5 | LLM, JSON reply | 66% | 0.0219 | 0.0204 | 32.4 |
+| Claude Opus 5.5 | LLM, JSON reply | 60% | 0.0433 | 0.0420 | 37.4 |
+| Fixed sequence | no model | 72% | 0.0024 | 0 | 26.3 |
+
+Decision models matched or beat the Claude deciders on accuracy at a fraction of the routing cost and latency. On this suite, a fixed search → read → answer sequence was just as accurate.
+
+\* One Haiku routing call stalled for 2.2 hours, which skews its mean latency.
+
+## How it works
+
+| Step | Who decides | Output |
 |---|---|---|
-| Next action: `search_wikipedia` / `search_web` / `read_source` / `answer` | **Jev** | `Choice` + probabilities |
-| Which unread result to read next (asked speculatively, in the same call) | **Jev** | `Choice` over result ids |
-| "Do the notes already answer the question?" (logged for calibration analysis) | **Jev** | `Noul` |
-| Write the search query, take notes from a source, write the final answer | **LLM** | text |
+| Next action: `search_wikipedia` / `search_web` / `read_source` / `answer` | decider | choice + probabilities |
+| Which unread result to read next | decider | choice over result ids |
+| Search query, notes from a source, final answer | Haiku 5.5 | text |
 
-All three Jev questions go in **one** request, are evaluated in parallel, and see the same structured state (`AgentState.snapshot()`): the question, budget, searches run, notes, unread results, and history.
+Every decider sees the same structured state (`AgentState.snapshot()`) and runs under the same guards: an 8-step budget, a forced answer on the last step, and a fallback for invalid or repeated reads. Each run is traced to Phoenix and scored by:
 
-## Controllers (the benchmark axis)
+- an LLM judge for correctness and groundedness;
+- a code check for routing fit;
+- code evaluators for cost, latency, steps, forced answers and invalid decisions.
 
-Only the decider changes. Query writing, note taking and answering always use the same LLM, so differences come from routing alone.
-
-| `--controller` | Who decides |
-|---|---|
-| `jev` | Jev |
-| `llm` | The LLM, replying in JSON (classic ReAct-style). Invalid replies (bad JSON, made-up actions or source ids) are counted and replaced by a fallback. |
-| `hybrid` | Jev; if its `next_action` confidence is below `HYBRID_THRESHOLD`, the LLM decides that step |
-| `fixed` | No model: search Wikipedia → read 2 → search web → read 2 → answer |
-
-The harness applies the same guards to every controller: the last step of the budget is always `answer`, and a read target that's invalid or already read is replaced.
-
-## Tracing (Phoenix / OpenInference)
+## Repository
 
 ```
-research_agent                 AGENT     metadata: controller, llm_model
-  step.N <action>              CHAIN
-    route.<controller>         CHAIN     route.action / confidence / valid / escalated / latency
-      jev.decide               DECISION  decision.* model + tokens, probabilities, evidence_sufficient
-      ChatCompletion           LLM       (LLM controller only; auto-instrumented)
-    wikipedia.search|web.search RETRIEVER retrieval.documents
-    read_source                TOOL
-    ChatCompletion             LLM       query / notes / answer
+src/research_agent/   agent loop, controllers (deciders), LLM wrapper, tools, tracing, judges
+scripts/              dataset prep, Phoenix experiments, resume/backfill, analysis, chart export
+data/                 question suites (v1: 25, v2: 50) and candidate pools
+results/              every run's answer, steps, stats and grades (.jsonl) plus raw logs
+frontend/             the presentation (React + Vite, deployed on Vercel)
+tests/                agent, controller, evaluator, tool and tracing tests with fakes
+docs/                 the original v1 benchmark plan
 ```
 
-Jev calls use OpenInference's `DECISION` span kind, which exists for models that "score or select among candidate options supplied in the request rather than generating text".
+## Run it
 
-## Research presentation frontend
-
-The Vercel-ready frontend presents **“When should I use a system one model, and how?”** under the title **When and When Not to Jev**, with chapter navigation, full-screen viewing, and automatically loaded research content. Its sections are **Question**, **Methodology**, **Detailed results**, **How I used Phoenix?**, **What went wrong and how we fixed it?**, and **Takeaways**, with attached evidence links. Performance conclusions remain provisional until the full-run analysis is supplied.
-
-Use Node 24 (`nvm use`), then run `npm install` and `npm run dev` from the repository root. See [frontend/README.md](frontend/README.md) for research-file format, presentation controls, and Vercel setup.
-
-## Setup
+Requires Python 3.12+ with [uv](https://docs.astral.sh/uv/), an OpenRouter key (covers Jev and every LLM), and the [TinyFish](https://tinyfish.ai) CLI for web search (`tinyfish auth login`).
 
 ```bash
 uv sync
-cp .env.example .env   # add OPENROUTER_API_KEY
+cp .env.example .env                              # add OPENROUTER_API_KEY
+uv run pytest                                     # offline; uses fakes
 ```
 
-One OpenRouter key covers Jev (`/api/v1/systemone`) and every LLM provider. To call TypeSafe directly, unset `TYPESAFE_BASE_URL` and set `TYPESAFE_API_KEY`. Web search and fetch go through the [TinyFish](https://tinyfish.ai) CLI (`tinyfish auth login`). Wikipedia needs no key.
-
-### Phoenix
+Ask one question:
 
 ```bash
-uv run phoenix serve                            # UI + collector on http://localhost:6006
-uv run python scripts/register_pricing.py       # teach Phoenix the OpenRouter model prices
+uv run research-agent "Who was the UK prime minister when the author of The Coal Question died?" --controller jev
 ```
 
-Phoenix prices spans from its own model table, which doesn't know OpenRouter ids such as `anthropic/claude-haiku-5.5`. Without this step the cost columns show $0. Jev's cost is not priced by Phoenix, because decision spans report `decision.*` token counts rather than `llm.*`. The agent records it itself as `jev_cost_usd`. To use Phoenix Cloud instead, set `PHOENIX_COLLECTOR_ENDPOINT` and `PHOENIX_API_KEY` in `.env`.
+`--controller` accepts `jev`, `msft`, `oai`, `claude-haiku-5.5`, `claude-sonnet-5.5`, `claude-opus-5.5`, `fixed`, `llm` or `hybrid`. Add `--trace` to send spans to Phoenix.
 
-## Run
+Reproduce the benchmark (this makes paid model calls, about $4 for the full v2 grid):
 
 ```bash
-uv run research-agent "Who was the prime minister of the UK when the author of The Coal Question died?" --controller jev
-uv run research-agent "..." --controller llm --model openai/gpt-5.6-luna --trace   # send to Phoenix
-uv run pytest
+uv run phoenix serve                                              # http://localhost:6006
+uv run python scripts/register_pricing.py                         # OpenRouter prices for Phoenix cost columns
+uv run python scripts/prepare_dataset.py --suite v2 --upload
+uv run python scripts/run_experiments.py --dataset research-bench-50-pilot --tag pilot-v2   # 7 questions
+uv run python scripts/run_experiments.py --dataset research-bench-v2 --split main --tag full-v2   # other 43
+uv run python scripts/merge_pilot.py                              # -> results/full-v2-merged.jsonl
+uv run python scripts/analyze.py results/full-v2-merged.jsonl     # summary tables, no model calls
 ```
 
-## Layout
+The presentation runs on Node 22.12+:
 
+```bash
+npm install
+npm run dev
+python3 scripts/export_frontend_metrics.py      # regenerate the charts from results/
 ```
-src/research_agent/
-  state.py        AgentState, Decision, StepRecord; snapshot() is what every controller sees
-  controllers.py  Jev / LLM / hybrid / fixed controllers + shared action definitions
-  agent.py        decide → act → observe loop, budget guard, per-run stats
-  llm.py          OpenAI-compatible LLM wrapper (query, notes, answer, LLM routing)
-  tools.py        Wikipedia (MediaWiki API) + web (TinyFish CLI), traced
-  tracing.py      Phoenix registration + OpenInference tracer
-  cli.py          single-question runner
-tests/            fake Jev/LLM/tools; loop, guards, hybrid escalation, span tree
-```
+
+See [frontend/README.md](frontend/README.md) for the content files.
