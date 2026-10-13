@@ -27,7 +27,7 @@ Edit the script, not the JSON, to change labels, descriptions, or excluded decid
 
 Edit `frontend/public/research.json` and rebuild to publish research for everyone. The presentation reads this file automatically; there are no upload or research-download controls. All text uses Times New Roman, with size, regular/bold weight, and italics defining the hierarchy.
 
-The header reads **When and When Not to Jev**, without a logo. Its browser thumbnail is an abstract color blob. The six sections are:
+The header reads **When and When Not to Jev**, without a logo. Its browser thumbnail is a three-slice pie in the chart colours. The six sections are:
 
 - **Question** — original question, thesis, motivation, and study design.
 - **Methodology** — what changes between runs, what stays fixed, the dataset, and how runs are graded.

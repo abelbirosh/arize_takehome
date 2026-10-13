@@ -198,4 +198,4 @@ Chapter changes reveal content over 0.42s with an 8px upward travel and a shallo
 - **Don't** replace the open, rule-separated composition with a generic shadowed-card grid.
 - **Don't** infer additional approved aesthetic preferences from this observed implementation.
 
-The header is the text-only title “When and When Not to Jev”, with no adjacent mark. The browser favicon is a single abstract green/lime color blob. Current sections are Question, Methodology, Detailed results, How I used Phoenix?, What went wrong and how we fixed it?, and Takeaways. No flowcharts appear in the interface.
+The header is the text-only title “When and When Not to Jev”, with no adjacent mark. The browser favicon is a three-slice pie in the chart colours (green, amber, blue). Current sections are Question, Methodology, Detailed results, How I used Phoenix?, What went wrong and how we fixed it?, and Takeaways. No flowcharts appear in the interface.
