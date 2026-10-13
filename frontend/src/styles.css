@@ -123,7 +123,10 @@
 .test-list dt{font-weight:700}
 .test-list dd{margin:0}
 .result-key{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px 20px;font-size:13px}
-.result-key li{display:inline-flex;align-items:baseline;gap:7px}
+.result-key li{position:relative;display:inline-flex;align-items:baseline;gap:7px;cursor:help;text-decoration:underline dotted var(--muted);text-underline-offset:4px}
+.result-key li:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+.result-key .key-tip{display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:3;width:max-content;max-width:260px;padding:8px 10px;border-radius:4px;background:var(--ink);color:var(--paper);font-size:13px;font-weight:400;line-height:1.5;white-space:normal;text-align:left}
+.result-key li:hover .key-tip,.result-key li:focus .key-tip{display:block}
 .result-key span{font-weight:700;font-size:15px}
 .results-table{min-width:760px}
 .results-table .q-cell{max-width:0;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

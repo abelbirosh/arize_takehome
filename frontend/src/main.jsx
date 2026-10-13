@@ -86,7 +86,12 @@ function BenchmarkCharts({ benchmark }) {
   </section>;
 }
 
-const resultMarks = { correct: ['✓', 'Correct'], hedged: ['~', 'Hedged'], incorrect: ['✗', 'Incorrect'], no_answer: ['–', 'No answer'] };
+const resultMarks = {
+  correct: ['✓', 'Correct', 'Commits to the right answer, or rejects the false premise of an unanswerable question.'],
+  hedged: ['~', 'Hedged', "Mentions the right answer but doesn't commit to it: lists other candidates or calls it unverified."],
+  incorrect: ['✗', 'Incorrect', 'Commits to a wrong answer, or invents one for an unanswerable question.'],
+  no_answer: ['–', 'No answer', "Says it couldn't determine the answer."],
+};
 
 function Methodology({ benchmark }) {
   const { counts, tiers, tests } = benchmark;
@@ -113,12 +118,12 @@ function Methodology({ benchmark }) {
 function DetailedResults({ benchmark }) {
   const { tests, deciders } = benchmark;
   return <>
-    <ul className="result-key">{Object.entries(resultMarks).map(([k, [mark, label]]) => <li key={k}><span className={`mark-${k}`} aria-hidden="true">{mark}</span>{label}</li>)}</ul>
+    <ul className="result-key">{Object.entries(resultMarks).map(([k, [mark, label, meaning]]) => <li key={k} tabIndex="0" aria-describedby={`meaning-${k}`}><span className={`mark-${k}`} aria-hidden="true">{mark}</span>{label}<span className="key-tip" role="tooltip" id={`meaning-${k}`}>{meaning}</span></li>)}</ul>
     <div className="table-scroll"><table className="data-table results-table">
       <thead><tr><th scope="col" className="num">#</th><th scope="col">Question</th>{deciders.map(d => <th scope="col" key={d.id} className="mark-col"><span className={`swatch kind-${d.kind}`}/>{d.short}</th>)}</tr></thead>
       <tbody>{tests.map(t => <tr key={t.id}>
         <td className="num">{t.n}</td><td className="q-cell" title={t.question}>{t.question}</td>
-        {deciders.map(d => { const [mark, label] = resultMarks[t.results[d.id]]; return <td key={d.id} className={`mark-col mark-${t.results[d.id]}`}><span aria-hidden="true">{mark}</span><span className="visually-hidden">{label}</span></td>; })}
+        {deciders.map(d => { const [mark, label, meaning] = resultMarks[t.results[d.id]]; return <td key={d.id} className={`mark-col mark-${t.results[d.id]}`} title={`${label}: ${meaning}`}><span aria-hidden="true">{mark}</span><span className="visually-hidden">{label}</span></td>; })}
       </tr>)}</tbody>
       <tfoot><tr><th scope="row" colSpan="2">Correct</th>{deciders.map(d => <td key={d.id} className="mark-col">{tests.filter(t => t.results[d.id] === 'correct').length}/{tests.length}</td>)}</tr></tfoot>
     </table></div>
