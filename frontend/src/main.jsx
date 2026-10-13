@@ -46,6 +46,8 @@ const formatValue = (format, v) => ({
   ms: () => `${Math.round(v).toLocaleString('en-US')} ms`,
 })[format]();
 
+const kindLabels = { decision: 'Decision model', reasoning: 'Claude model', fixed: 'Fixed sequence' };
+
 function MetricChart({ metric, deciders }) {
   const excluded = metric.excluded || {};
   // Best on the left, worst on the right; ties keep the decider order.
@@ -75,7 +77,9 @@ function MetricChart({ metric, deciders }) {
 }
 
 function BenchmarkCharts({ benchmark }) {
+  const kinds = [...new Set(benchmark.deciders.map(d => d.kind))];
   return <section className="benchmark" aria-label="Benchmark results">
+    <ul className="legend">{kinds.map(k => <li key={k}><span className={`swatch kind-${k}`}/>{kindLabels[k]}</li>)}</ul>
     <div className="metric-grid">{benchmark.metrics.map(m => <MetricChart key={m.id} metric={m} deciders={benchmark.deciders}/>)}</div>
   </section>;
 }

@@ -67,9 +67,12 @@
 
 /* Headline benchmark charts on the opening page. */
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.benchmark{--decision:#1e7b47;--reasoning:#c8913a;--fixed:#3f6fc0;--chart-surface:#eeefe5}
-.kind-reasoning .bar{background:var(--reasoning)}
-.kind-fixed .bar{background:var(--fixed)}
+.benchmark{--decision:#0e9f4f;--reasoning:#f59e0b;--fixed:#2563eb;--chart-surface:#eeefe5}
+.legend{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px}
+.legend li{display:inline-flex;align-items:center;gap:8px}
+.swatch{width:10px;height:10px;border-radius:2px;background:var(--decision)}
+.swatch.kind-reasoning,.kind-reasoning .bar{background:var(--reasoning)}
+.swatch.kind-fixed,.kind-fixed .bar{background:var(--fixed)}
 .metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 .metric{position:relative;margin:0;background:var(--chart-surface);border-radius:8px;padding:24px 24px 22px;min-width:0}
 .metric figcaption{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
