@@ -37,7 +37,6 @@ function ResearchNotes({ items, challenges = false, emptyTitle }) {
   </article>)}</div>;
 }
 
-const kindLabels = { decision: 'Decision model', reasoning: 'Claude model', fixed: 'Fixed sequence' };
 const formatValue = (format, v) => ({
   percent: () => `${Math.round(v * 100)}%`,
   usd: () => v === 0 ? '$0' : `$${v < 0.01 ? v.toFixed(4) : v.toFixed(3)}`,
@@ -56,13 +55,12 @@ function MetricChart({ metric, deciders }) {
   const max = metric.max ?? (Math.max(...ranked.map(d => metric.values[d.id])) || 1);
   const notes = [...new Set(Object.values(excluded))];
   return <figure className="metric">
-    <figcaption><h2>{metric.label}</h2><span>{metric.better === 'higher' ? 'Higher' : 'Lower'} is better</span></figcaption>
+    <figcaption><h2>{metric.label}</h2></figcaption>
     <div className="bars" aria-hidden="true">
       {ranked.map(d => <div className={`bar-col kind-${d.kind} ${d.id === 'jev' ? 'is-jev' : ''}`} key={d.id}>
         <span className="bar-value">{formatValue(metric.format, metric.values[d.id])}</span>
         <span className="bar" style={{ height: `${metric.values[d.id] / max * 100}%` }}/>
         <span className="bar-name">{d.short}</span>
-        <span className="bar-tip">{d.name}<br/>{formatValue(metric.format, metric.values[d.id])}</span>
       </div>)}
       {left.map(d => <div className={`bar-col kind-${d.kind} is-excluded`} key={d.id}>
         <span className="bar-value">*</span>
@@ -77,12 +75,7 @@ function MetricChart({ metric, deciders }) {
 }
 
 function BenchmarkCharts({ benchmark }) {
-  const kinds = [...new Set(benchmark.deciders.map(d => d.kind))];
   return <section className="benchmark" aria-label="Benchmark results">
-    <div className="benchmark-key">
-      <p>{benchmark.questions} questions × {benchmark.deciders.length} deciders, {benchmark.runs} runs. Each chart runs best to worst, left to right.</p>
-      <ul className="legend">{kinds.map(k => <li key={k}><span className={`swatch kind-${k}`}/>{kindLabels[k]}</li>)}</ul>
-    </div>
     <div className="metric-grid">{benchmark.metrics.map(m => <MetricChart key={m.id} metric={m} deciders={benchmark.deciders}/>)}</div>
   </section>;
 }
