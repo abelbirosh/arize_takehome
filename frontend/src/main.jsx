@@ -243,8 +243,8 @@ const takeaways = [
   'Bigger reasoning models do not necessarily route better.',
   'For lookup based questions, fixed sequences had comparable accuracy.',
   "Fixed sequences are still more expensive than Jev due to more reading across steps (6.9 steps vs Jev's 5).",
-  'Jev and Opus performed better on declining to answer than Microsoft Decision 1 and Luna Decisions.',
-  'Decision 1 gave the best citation supported answers.',
+  'Jev and Opus declined to answer more often than Microsoft Decision 1 and Luna Decisions.',
+  'Decision 1 gave the best evidence-supported answers.',
 ];
 
 function Takeaways() {
