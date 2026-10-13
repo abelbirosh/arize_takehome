@@ -57,7 +57,7 @@
       "format": "percent",
       "better": "higher",
       "max": 1.0,
-      "description": "Share of the 50 answers the judge graded correct against the accepted variants. Hedged answers do not count.",
+      "description": "Judge-graded correct answers over 50 questions; hedges count as wrong.",
       "values": {
         "jev": 0.7,
         "msft": 0.72,
@@ -77,7 +77,7 @@
       ],
       "format": "usd",
       "better": "lower",
-      "description": "Average total cost of one run: routing plus Haiku writing the queries, notes, and answer.",
+      "description": "Mean total spend per run: routing + generation.",
       "values": {
         "jev": 0.001934,
         "msft": 0.002009,
@@ -97,7 +97,7 @@
       ],
       "format": "usd",
       "better": "lower",
-      "description": "The part of each run's cost spent deciding the next step. The fixed sequence makes no decisions.",
+      "description": "Mean routing-only spend per run.",
       "values": {
         "jev": 0.000403,
         "msft": 0.000268,
@@ -117,7 +117,7 @@
       ],
       "format": "seconds",
       "better": "lower",
-      "description": "Average seconds per run, excluding time queued behind the shared rate limiter.",
+      "description": "Mean wall time per run, minus rate-limiter queueing.",
       "values": {
         "jev": 21.696881,
         "msft": 21.929175,
@@ -128,7 +128,7 @@
         "fixed": 26.309397
       },
       "excluded": {
-        "claude-haiku-5.5": "Haiku 5.5 is left out: one of its routing calls stalled for 2.2 hours, which swamps its average."
+        "claude-haiku-5.5": "Haiku 5.5 excluded: one routing call stalled 2.2 h, skewing the mean."
       }
     },
     {
@@ -140,7 +140,7 @@
       ],
       "format": "decimal",
       "better": "lower",
-      "description": "Average actions per run (searches, reads, and the answer) out of a budget of eight.",
+      "description": "Mean actions per run against an 8-step budget.",
       "values": {
         "jev": 5.08,
         "msft": 5.02,
@@ -160,7 +160,7 @@
       ],
       "format": "count",
       "better": "lower",
-      "description": "Runs that used all eight steps without answering, so the harness forced a final answer.",
+      "description": "Runs that hit the 8-step budget and were forced to answer.",
       "values": {
         "jev": 11,
         "msft": 6,
@@ -180,7 +180,7 @@
       ],
       "format": "ms",
       "better": "lower",
-      "description": "Average time for one routing decision. The fixed sequence makes none.",
+      "description": "Mean latency per routing call.",
       "values": {
         "jev": 299.070939,
         "msft": 485.617056,
@@ -191,7 +191,7 @@
         "fixed": 0.0
       },
       "excluded": {
-        "claude-haiku-5.5": "Haiku 5.5 is left out: one of its routing calls stalled for 2.2 hours, which swamps its average."
+        "claude-haiku-5.5": "Haiku 5.5 excluded: one routing call stalled 2.2 h, skewing the mean."
       }
     }
   ]

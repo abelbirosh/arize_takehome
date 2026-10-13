@@ -50,39 +50,31 @@ def main(source: str = SOURCE, target: str = TARGET) -> None:
         return sum(r["stats"]["routing_latency_ms"] for r in rs) / calls if calls else 0.0
 
     slowest = max(s["latency_ms"] or 0 for r in by[HAIKU] for s in r["steps"])
-    haiku_note = (f"Haiku 5.5 is left out: one of its routing calls stalled for "
-                  f"{slowest / 3_600_000:.1f} hours, which swamps its average.")
+    haiku_note = f"Haiku 5.5 excluded: one routing call stalled {slowest / 3_600_000:.1f} h, skewing the mean."
 
     metrics = [
         {"id": "accuracy", "label": "Accuracy", "scale": ["More accurate", "Less accurate"], "format": "percent", "better": "higher",
          "max": 1.0,
-         "description": "Share of the 50 answers the judge graded correct against the "
-                        "accepted variants. Hedged answers do not count.",
+         "description": "Judge-graded correct answers over 50 questions; hedges count as wrong.",
          "values": per_decider(lambda rs: mean([r["judge"]["label"] == "correct" for r in rs]))},
         {"id": "cost", "label": "$/run", "scale": ["Cheaper", "More expensive"], "format": "usd", "better": "lower",
-         "description": "Average total cost of one run: routing plus Haiku writing the "
-                        "queries, notes, and answer.",
+         "description": "Mean total spend per run: routing + generation.",
          "values": per_decider(lambda rs: mean([r["stats"]["total_cost_usd"] for r in rs]))},
         {"id": "route-cost", "label": "Route $", "scale": ["Cheaper routing", "Costlier routing"], "format": "usd", "better": "lower",
-         "description": "The part of each run's cost spent deciding the next step. "
-                        "The fixed sequence makes no decisions.",
+         "description": "Mean routing-only spend per run.",
          "values": per_decider(lambda rs: mean([r["stats"]["routing_cost_usd"] for r in rs]))},
         {"id": "active", "label": "Active seconds", "scale": ["Faster", "Slower"], "format": "seconds", "better": "lower",
-         "description": "Average seconds per run, excluding time queued behind the "
-                        "shared rate limiter.",
+         "description": "Mean wall time per run, minus rate-limiter queueing.",
          "values": per_decider(lambda rs: mean([r["stats"]["active_ms"] for r in rs]) / 1000),
          "excluded": {HAIKU: haiku_note}},
         {"id": "steps", "label": "Steps", "scale": ["Fewer steps", "More steps"], "format": "decimal", "better": "lower",
-         "description": "Average actions per run (searches, reads, and the answer) out "
-                        "of a budget of eight.",
+         "description": "Mean actions per run against an 8-step budget.",
          "values": per_decider(lambda rs: mean([r["stats"]["steps"] for r in rs]))},
         {"id": "out-of-turns", "label": "Out of turns", "scale": ["Rarely ran out", "Often ran out"], "format": "count", "better": "lower",
-         "description": "Runs that used all eight steps without answering, so the "
-                        "harness forced a final answer.",
+         "description": "Runs that hit the 8-step budget and were forced to answer.",
          "values": per_decider(lambda rs: sum(bool(r["stats"]["forced_answer"]) for r in rs))},
         {"id": "decision-ms", "label": "ms/decision", "scale": ["Faster decisions", "Slower decisions"], "format": "ms", "better": "lower",
-         "description": "Average time for one routing decision. The fixed sequence "
-                        "makes none.",
+         "description": "Mean latency per routing call.",
          "values": per_decider(ms_per_decision),
          "excluded": {HAIKU: haiku_note}},
     ]
