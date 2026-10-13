@@ -219,7 +219,7 @@ function PhoenixUsage() {
         <li>I uploaded each set of questions as a dataset. Initially, the system used a 25 question set, which was then increased to 50. Uploading datasets for each of these tests made the process functionally easier.</li>
         <li>Before running the full suite, I ran testing pilots to ensure it was functioning. Phoenix dataset splits were helpful for this.</li>
       </ul>
-      {Shot({ src: "/phoenix/dataset-splits.webp", alt: "Phoenix dataset examples, each tagged with a pilot or main split", caption: "The 50-question dataset, each example tagged with its pilot or main split." })}
+      {Shot({ src: "/phoenix/dataset-splits.webp", alt: "Phoenix dataset examples, each tagged with a pilot or main split", caption: "50 question dataset with split enabled" })}
     </section>
     <section className="subsection"><h2>Running Experiments</h2>
       <ul className="method-list">
