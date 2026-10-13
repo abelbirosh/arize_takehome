@@ -233,7 +233,7 @@ function PhoenixUsage() {
         <li>LLM evaluators, which used GPT-6.1 Sol, were used for correctness and groundedness.</li>
         <li>Code evaluators for routing fit and telemetry metrics.</li>
       </ul>
-      {Shot({ src: "/phoenix/evaluator-scores.webp", alt: "Mean correctness, forced-answer and grounded scores per experiment", caption: "Mean evaluator scores per experiment: correctness, forced answers, and groundedness." })}
+      {Shot({ src: "/phoenix/evaluator-scores.webp", alt: "Mean correctness, forced-answer and grounded scores per experiment", caption: "Mean evaluator scores per experiment." })}
     </section>
   </>;
 }
