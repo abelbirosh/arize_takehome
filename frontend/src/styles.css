@@ -182,6 +182,12 @@
 .trace-tree{margin:12px 0 4px;padding:16px 18px;border-radius:6px;background:var(--chart-surface);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;white-space:pre}
 .method-list code,.tool-list code{overflow-wrap:anywhere}
 .trace-tree{max-width:100%}
-.phoenix-shot{margin:18px 0 0}
-.phoenix-shot img{display:block;width:100%;height:auto;border-radius:6px;border:1px solid var(--rule)}
-.phoenix-shot figcaption{margin-top:8px;font-size:14px;color:var(--muted);font-style:italic}
+.phoenix-shot{margin:34px auto 38px;max-width:420px;text-align:center}
+.shot-button{display:block;width:100%;padding:0;border-radius:6px;cursor:zoom-in}
+.phoenix-shot img{display:block;width:100%;height:auto;border-radius:6px;border:1px solid var(--rule);transition:opacity .18s ease}
+.shot-button:hover img{opacity:.85}
+.phoenix-shot figcaption{margin-top:8px;font-size:14px;color:var(--muted);font-style:italic;text-align:center}
+.lightbox{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:48px 24px;background:rgba(20,24,22,.86);cursor:zoom-out}
+.lightbox img{max-width:min(1400px,100%);max-height:100%;width:auto;height:auto;border-radius:6px;cursor:default;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.lightbox-close{position:absolute;top:14px;right:14px;display:flex;padding:8px;border-radius:50%;background:var(--paper);color:var(--ink)}
+.lightbox-close:focus-visible{outline-color:var(--paper)}

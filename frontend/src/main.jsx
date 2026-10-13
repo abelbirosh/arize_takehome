@@ -176,46 +176,64 @@ const traceTree = `research_agent              AGENT      run metadata: decider,
     read_source             TOOL       page read
     ChatCompletion          LLM        Haiku writing a query, notes, or the answer`;
 
-function Shot({ src, alt, caption }) {
-  return <figure className="phoenix-shot"><img src={src} alt={alt} loading="lazy"/><figcaption>{caption}</figcaption></figure>;
+function Lightbox({ shot, onClose }) {
+  const close = useRef(null);
+  useEffect(() => {
+    const previous = document.activeElement;
+    close.current?.focus();
+    const onKey = e => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; previous?.focus?.(); };
+  }, [onClose]);
+  return <div className="lightbox" role="dialog" aria-modal="true" aria-label={shot.alt} onClick={onClose}>
+    <button ref={close} className="lightbox-close" aria-label="Close image" onClick={onClose}><Icon name="close"/></button>
+    <img src={shot.src} alt={shot.alt} onClick={e => e.stopPropagation()}/>
+  </div>;
 }
 
 function PhoenixUsage() {
+  const [open, setOpen] = useState(null);
+  const Shot = shot => <figure className="phoenix-shot">
+    <button className="shot-button" aria-label={`Enlarge: ${shot.alt}`} onClick={() => setOpen(shot)}><img src={shot.src} alt={shot.alt} loading="lazy"/></button>
+    <figcaption>{shot.caption}</figcaption>
+  </figure>;
   return <>
+    {open && <Lightbox shot={open} onClose={() => setOpen(null)}/>}
     <section className="subsection"><h2>Tracing Each Run</h2>
       <ul className="method-list">
         <li>Connected to Phoenix with <code>phoenix.otel.register(auto_instrument=True)</code>. Every run produces one OpenInference trace:</li>
       </ul>
       <pre className="trace-tree">{traceTree}</pre>
-      <Shot src="/phoenix/trace-tree.webp" alt="Phoenix trace view: span tree of a Jev run next to the run's output and stats" caption="A Jev run's span tree, with the recorded answer and run stats."/>
+      {Shot({ src: "/phoenix/trace-tree.webp", alt: "Phoenix trace view: span tree of a Jev run next to the run's output and stats", caption: "A Jev run's span tree, with the recorded answer and run stats." })}
       <ul className="method-list">
         <li>Decision-model calls use OpenInference's <code>DECISION</code> span kind and record the chosen action, confidence, full probabilities, evidence-sufficient probability, read target, token counts, latency, and cost.</li>
         <li>A Claude decider's routing call appears as an LLM span inside the same <code>route.*</code> span, so all seven deciders share one trace layout.</li>
         <li>The root span carries the run's stats (steps, costs, latency, forced answer).</li>
         <li>Sorting traces according to the metrics using Phoenix.</li>
       </ul>
-      <Shot src="/phoenix/traces-sorted.png" alt="Phoenix trace list sorted by cumulative tokens, showing latency and cost columns" caption="Traces sorted by cumulative tokens, with each run's latency and cost."/>
+      {Shot({ src: "/phoenix/traces-sorted.png", alt: "Phoenix trace list sorted by cumulative tokens, showing latency and cost columns", caption: "Traces sorted by cumulative tokens, with each run's latency and cost." })}
     </section>
     <section className="subsection"><h2>Dataset Storage</h2>
       <ul className="method-list">
         <li>I uploaded each set of questions as a dataset. Initially, the system used a 25 question set, which was then increased to 50. Uploading datasets for each of these tests made the process functionally easier.</li>
         <li>Before running the full suite, I ran testing pilots to ensure it was functioning. Phoenix dataset splits were helpful for this.</li>
       </ul>
-      <Shot src="/phoenix/dataset-splits.webp" alt="Phoenix dataset examples, each tagged with a pilot or main split" caption="The 50-question dataset, each example tagged with its pilot or main split."/>
+      {Shot({ src: "/phoenix/dataset-splits.webp", alt: "Phoenix dataset examples, each tagged with a pilot or main split", caption: "The 50-question dataset, each example tagged with its pilot or main split." })}
     </section>
     <section className="subsection"><h2>Running Experiments</h2>
       <ul className="method-list">
         <li>I used Phoenix experiment runner to run one experiment per decider in parallel. The experiment metadata recorded the decider, generator model, budgets, and reasoning settings.</li>
         <li>Phoenix's experiment comparison view was helpful to visualize decider comparisons. I stored the run details to <code>results/&lt;tag&gt;.jsonl</code> for cross-project analysis.</li>
       </ul>
-      <Shot src="/phoenix/experiments.webp" alt="Phoenix experiments page for research-bench-v2 with score, latency and cost charts" caption="The seven experiments, one per decider, with score, latency, and cost charts."/>
+      {Shot({ src: "/phoenix/experiments.webp", alt: "Phoenix experiments page for research-bench-v2 with score, latency and cost charts", caption: "The seven experiments, one per decider, with score, latency, and cost charts." })}
     </section>
     <section className="subsection"><h2>Evaluators (Inside the Experiment)</h2>
       <ul className="method-list">
         <li>LLM evaluators, which used GPT-6.1 Sol, were used for correctness and groundedness.</li>
         <li>Code evaluators for routing fit and telemetry metrics.</li>
       </ul>
-      <Shot src="/phoenix/evaluator-scores.webp" alt="Mean correctness, forced-answer and grounded scores per experiment" caption="Mean evaluator scores per experiment: correctness, forced answers, and groundedness."/>
+      {Shot({ src: "/phoenix/evaluator-scores.webp", alt: "Mean correctness, forced-answer and grounded scores per experiment", caption: "Mean evaluator scores per experiment: correctness, forced answers, and groundedness." })}
     </section>
   </>;
 }
