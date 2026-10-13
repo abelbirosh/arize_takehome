@@ -2,7 +2,7 @@
 
 A research agent where a cheap **decision model** picks each next step (search Wikipedia, search the web, read a result, or answer) and a general LLM writes the text. It's benchmarked in [Phoenix](https://phoenix.arize.com) against Claude deciders and a fixed sequence.
 
-**Presentation:** [arizetakehome.vercel.app](https://arizetakehome.vercel.app)
+**Presentation:** [abel-arizetakehome.vercel.app](https://abel-arizetakehome.vercel.app)
 
 ## Result
 
@@ -45,7 +45,7 @@ data/                 question suites (v1: 25, v2: 50) and candidate pools
 results/              every run's answer, steps, stats and grades (.jsonl) plus raw logs
 frontend/             the presentation (React + Vite, deployed on Vercel)
 tests/                agent, controller, evaluator, tool and tracing tests with fakes
-docs/                 the original v1 benchmark plan
+docs/                 the original v1 benchmark plan and presentation design notes
 ```
 
 ## Run it
@@ -71,7 +71,7 @@ Reproduce the benchmark (this makes paid model calls, about $4 for the full v2 g
 ```bash
 uv run phoenix serve                                              # http://localhost:6006
 uv run python scripts/register_pricing.py                         # OpenRouter prices for Phoenix cost columns
-uv run python scripts/prepare_dataset.py --suite v2 --upload
+uv run python scripts/prepare_dataset.py --suite v2 --upload --split-upload   # 50 questions, pilot, and pilot/main splits
 uv run python scripts/run_experiments.py --dataset research-bench-50-pilot --tag pilot-v2   # 7 questions
 uv run python scripts/run_experiments.py --dataset research-bench-v2 --split main --tag full-v2   # other 43
 uv run python scripts/merge_pilot.py                              # -> results/full-v2-merged.jsonl

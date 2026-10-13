@@ -1,0 +1,112 @@
+[
+  {
+    "problem": "The first full run was interrupted by a network outage while the machine slept.",
+    "fix": "Added --resume to rerun only failed or missing runs.",
+    "links": [
+      {
+        "title": "fd29ec3",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/fd29ec3"
+      }
+    ]
+  },
+  {
+    "problem": "Phoenix named every code evaluator \"evaluator\", collapsing them into one column.",
+    "fix": "Set each evaluator's __qualname__ explicitly.",
+    "links": [
+      {
+        "title": "213165f",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/213165f"
+      }
+    ]
+  },
+  {
+    "problem": "Resumed runs kept the failed attempt's grade.",
+    "fix": "backfill_evals.py redoes any evaluation older than its run.",
+    "links": [
+      {
+        "title": "213165f",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/213165f"
+      }
+    ]
+  },
+  {
+    "problem": "Concurrent agents exceeded OpenRouter's 20 requests per minute per model.",
+    "fix": "Per-model rate limiter; latency metrics exclude queue time.",
+    "links": [
+      {
+        "title": "fd29ec3",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/fd29ec3"
+      }
+    ]
+  },
+  {
+    "problem": "Phoenix cost columns showed $0 for OpenRouter model ids.",
+    "fix": "register_pricing.py adds OpenRouter prices to Phoenix's model table.",
+    "links": [
+      {
+        "title": "a4a7a2b",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/a4a7a2b"
+      }
+    ]
+  },
+  {
+    "problem": "Phoenix doesn't price decision-model spans; they report decision.* token counts, not llm.*.",
+    "fix": "The agent computes each decision's cost itself and records it as decision.cost_usd.",
+    "links": [
+      {
+        "title": "fd29ec3",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/fd29ec3"
+      }
+    ]
+  },
+  {
+    "problem": "When a Claude model both decided and wrote text, routing and writing costs blended together.",
+    "fix": "Each decider LLM gets its own usage accounting, separate from the generator.",
+    "links": [
+      {
+        "title": "fd29ec3",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/fd29ec3"
+      }
+    ]
+  },
+  {
+    "problem": "Running the full suite would have rerun, and paid again for, the seven pilot questions.",
+    "fix": "Split the Phoenix dataset into pilot and main, then copied the pilot runs into the full experiments with merge_pilot.py.",
+    "links": [
+      {
+        "title": "a6be121",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/a6be121"
+      }
+    ]
+  },
+  {
+    "problem": "Microsoft and OpenAI decision models reject choice questions with fewer than two options.",
+    "fix": "Ask which result to read only when two or more are unread.",
+    "links": [
+      {
+        "title": "a6be121",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/a6be121"
+      }
+    ]
+  },
+  {
+    "problem": "Phoenix returned uploaded metadata as strings, so \"False\" read as true.",
+    "fix": "Restore real types before the evaluators read them.",
+    "links": [
+      {
+        "title": "a6be121",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/a6be121"
+      }
+    ]
+  },
+  {
+    "problem": "One Haiku routing call stalled for 2.2 hours, skewing its latency.",
+    "fix": "Excluded Haiku from the latency charts.",
+    "links": [
+      {
+        "title": "6893031",
+        "url": "https://github.com/abelbirosh/arize_takehome/commit/6893031"
+      }
+    ]
+  }
+]

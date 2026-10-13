@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
-import { emptyResearch, validateBenchmark, validateResearch } from './research.js';
+import { validateBenchmark, validateFixes } from './data.js';
 
 const chapters = [
   { id: 'question', name: 'Question', title: 'Can a decision model choose the next steps of a research agent as well as a reasoning model?' },
@@ -11,7 +11,7 @@ const chapters = [
   { id: 'challenges', name: 'What went wrong and how I fixed it?', title: 'What went wrong and how I fixed it?' },
   { id: 'takeaways', name: 'Takeaways', title: 'Takeaways' },
 ];
-const legacyIds = { 'when-to-jev': 'question', mechanism: 'methodology', experiment: 'methodology', results: 'detailed-results', findings: 'detailed-results', learnings: 'phoenix', practice: 'takeaways', sources: 'phoenix' };
+const legacyIds = { results: 'detailed-results' };
 // Chapters live at clean paths (/methodology); the opening chapter is the root.
 const chapterPath = id => id === 'question' ? '/' : `/${id}`;
 const indexFromPath = () => {
@@ -274,14 +274,14 @@ function DetailedResults({ benchmark }) {
 function FixList({ items }) {
   return <div className="table-scroll"><table className="data-table fix-table">
     <thead><tr><th scope="col">Problem</th><th scope="col">Fix</th><th scope="col">Code</th></tr></thead>
-    <tbody>{items.map((item, i) => <tr key={i}><td>{item.challenge}</td><td>{item.solution}</td>
+    <tbody>{items.map((item, i) => <tr key={i}><td>{item.problem}</td><td>{item.fix}</td>
       <td>{item.links.map(link => <a key={link.url} className="commit-link" href={link.url} target="_blank" rel="noreferrer">{link.title}<Icon name="arrow"/></a>)}</td></tr>)}</tbody>
   </table></div>;
 }
 
 function App() {
   const [chapter, setChapter] = useState(indexFromPath);
-  const [research, setResearch] = useState(emptyResearch);
+  const [fixes, setFixes] = useState([]);
   const [benchmark, setBenchmark] = useState(null);
   const [error, setError] = useState('');
   const heading = useRef(null);
@@ -290,7 +290,7 @@ function App() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch('/research.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setResearch(validateResearch(data))).catch(e => { if (e.name !== 'AbortError') setError('Research could not be loaded. Please refresh to try again.'); });
+    fetch('/fixes.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setFixes(validateFixes(data))).catch(e => { if (e.name !== 'AbortError') setError('The problem list could not be loaded. Please refresh to try again.'); });
     fetch('/benchmark.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setBenchmark(validateBenchmark(data))).catch(e => { if (e.name !== 'AbortError') setError('Benchmark results could not be loaded. Please refresh to try again.'); });
     const onPop = () => setChapter(indexFromPath());
     const onHash = () => { redirectLegacyHash(); setChapter(indexFromPath()); };
@@ -344,7 +344,7 @@ function App() {
             {current.id === 'methodology' && benchmark && <Methodology benchmark={benchmark}/>}
             {current.id === 'detailed-results' && benchmark && <DetailedResults benchmark={benchmark}/>}
             {current.id === 'phoenix' && <PhoenixUsage/>}
-            {current.id === 'challenges' && <FixList items={research.challenges}/>}
+            {current.id === 'challenges' && <FixList items={fixes}/>}
             {current.id === 'takeaways' && <Takeaways/>}
 
           </>}
