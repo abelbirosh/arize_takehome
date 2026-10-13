@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { validateResearch, emptyResearch } from './research.js';
+import { validateResearch, validateBenchmark, emptyResearch } from './research.js';
 
 test('loads the published presentation and Phoenix evidence links', () => {
   const data = validateResearch(JSON.parse(readFileSync(new URL('../public/research.json', import.meta.url))));
@@ -31,4 +31,12 @@ test('rejects malformed sections, incomplete challenge pairs, unsafe links and f
 test("accepts a results-first research file", () => {
   const data = validateResearch({ ...emptyResearch, status: "ready", results: [{ title: "Synthetic test result", body: "Schema validation fixture." }] });
   assert.equal(data.results.length, 1);
+});
+
+test('loads the generated benchmark charts and rejects missing values', () => {
+  const data = validateBenchmark(JSON.parse(readFileSync(new URL('../public/benchmark.json', import.meta.url))));
+  assert.equal(data.deciders.length, 7);
+  assert.ok(data.metrics.length >= 7);
+  const broken = { ...data, metrics: [{ ...data.metrics[0], values: { jev: 0.7 } }] };
+  assert.throws(() => validateBenchmark(broken));
 });

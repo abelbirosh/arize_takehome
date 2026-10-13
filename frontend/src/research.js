@@ -48,3 +48,16 @@ export function validateResearch(value) {
   if (result.status === 'ready' && !result.results.length && !result.learnings.length) throw new Error('Add at least one result before marking the research ready.');
   return result;
 }
+
+const METRIC_FORMATS = ['percent', 'usd', 'seconds', 'decimal', 'count', 'ms'];
+
+export function validateBenchmark(value) {
+  if (!value || !Array.isArray(value.deciders) || !Array.isArray(value.metrics)) throw new Error('The benchmark needs deciders and metrics.');
+  const ids = value.deciders.map(d => d.id);
+  if (value.deciders.some(d => !d || typeof d.id !== 'string' || typeof d.short !== 'string' || typeof d.name !== 'string' || !['decision', 'reasoning', 'fixed'].includes(d.kind))) throw new Error('Each decider needs an id, short name, name, and kind.');
+  for (const m of value.metrics) {
+    if (!m || typeof m.label !== 'string' || typeof m.description !== 'string' || !METRIC_FORMATS.includes(m.format) || !['higher', 'lower'].includes(m.better)) throw new Error('Each metric needs a label, description, format, and direction.');
+    if (ids.some(id => typeof m.values?.[id] !== 'number' || !Number.isFinite(m.values[id]))) throw new Error(`${m.label} needs a number for every decider.`);
+  }
+  return value;
+}

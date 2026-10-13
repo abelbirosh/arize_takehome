@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
-import { emptyResearch, validateResearch } from './research.js';
+import { emptyResearch, validateBenchmark, validateResearch } from './research.js';
 
 const chapters = [
   { id: 'question', name: 'Question', title: 'Can a decision model choose the next steps of a research agent as well as a reasoning model?' },
@@ -37,9 +37,60 @@ function ResearchNotes({ items, challenges = false, emptyTitle }) {
   </article>)}</div>;
 }
 
+const kindLabels = { decision: 'Decision model', reasoning: 'Claude model', fixed: 'Fixed sequence' };
+const formatValue = (format, v) => ({
+  percent: () => `${Math.round(v * 100)}%`,
+  usd: () => v === 0 ? '$0' : `$${v < 0.01 ? v.toFixed(4) : v.toFixed(3)}`,
+  seconds: () => `${v.toFixed(1)} s`,
+  decimal: () => v.toFixed(1),
+  count: () => String(v),
+  ms: () => `${Math.round(v).toLocaleString('en-US')} ms`,
+})[format]();
+
+function MetricChart({ metric, deciders }) {
+  const excluded = metric.excluded || {};
+  // Best on the left, worst on the right; ties keep the decider order.
+  const ranked = deciders.filter(d => !(d.id in excluded))
+    .sort((a, b) => metric.better === 'higher' ? metric.values[b.id] - metric.values[a.id] : metric.values[a.id] - metric.values[b.id]);
+  const left = deciders.filter(d => d.id in excluded);
+  const max = metric.max ?? (Math.max(...ranked.map(d => metric.values[d.id])) || 1);
+  const notes = [...new Set(Object.values(excluded))];
+  return <figure className="metric">
+    <figcaption><h2>{metric.label}</h2><span>{metric.better === 'higher' ? 'Higher' : 'Lower'} is better</span></figcaption>
+    <div className="bars" aria-hidden="true">
+      {ranked.map(d => <div className={`bar-col kind-${d.kind} ${d.id === 'jev' ? 'is-jev' : ''}`} key={d.id}>
+        <span className="bar-value">{formatValue(metric.format, metric.values[d.id])}</span>
+        <span className="bar" style={{ height: `${metric.values[d.id] / max * 100}%` }}/>
+        <span className="bar-name">{d.short}</span>
+        <span className="bar-tip">{d.name}<br/>{formatValue(metric.format, metric.values[d.id])}</span>
+      </div>)}
+      {left.map(d => <div className={`bar-col kind-${d.kind} is-excluded`} key={d.id}>
+        <span className="bar-value">*</span>
+        <span className="bar-name">{d.short}</span>
+      </div>)}
+    </div>
+    <p className="metric-description">{metric.description}</p>
+    {notes.map(note => <p className="metric-note" key={note}>* {note}</p>)}
+    <div className="visually-hidden"><table><caption>{metric.label}, best to worst</caption><thead><tr><th scope="col">Decider</th><th scope="col">{metric.label}</th></tr></thead>
+      <tbody>{ranked.map(d => <tr key={d.id}><th scope="row">{d.name}</th><td>{formatValue(metric.format, metric.values[d.id])}</td></tr>)}{left.map(d => <tr key={d.id}><th scope="row">{d.name}</th><td>Not plotted. {excluded[d.id]}</td></tr>)}</tbody></table></div>
+  </figure>;
+}
+
+function BenchmarkCharts({ benchmark }) {
+  const kinds = [...new Set(benchmark.deciders.map(d => d.kind))];
+  return <section className="benchmark" aria-label="Benchmark results">
+    <div className="benchmark-key">
+      <p>{benchmark.questions} questions × {benchmark.deciders.length} deciders, {benchmark.runs} runs. Each chart runs best to worst, left to right.</p>
+      <ul className="legend">{kinds.map(k => <li key={k}><span className={`swatch kind-${k}`}/>{kindLabels[k]}</li>)}</ul>
+    </div>
+    <div className="metric-grid">{benchmark.metrics.map(m => <MetricChart key={m.id} metric={m} deciders={benchmark.deciders}/>)}</div>
+  </section>;
+}
+
 function App() {
   const [chapter, setChapter] = useState(indexFromHash);
   const [research, setResearch] = useState(emptyResearch);
+  const [benchmark, setBenchmark] = useState(null);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [presenting, setPresenting] = useState(false);
@@ -50,6 +101,7 @@ function App() {
   useEffect(() => {
     const controller = new AbortController();
     fetch('/research.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setResearch(validateResearch(data))).catch(e => { if (e.name !== 'AbortError') setError('Research could not be loaded. Please refresh to try again.'); });
+    fetch('/benchmark.json', { signal: controller.signal }).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(data => setBenchmark(validateBenchmark(data))).catch(e => { if (e.name !== 'AbortError') setError('Benchmark results could not be loaded. Please refresh to try again.'); });
     const hash = () => setChapter(indexFromHash());
     const full = () => setPresenting(Boolean(document.fullscreenElement));
     window.addEventListener('hashchange', hash);
@@ -104,6 +156,7 @@ function App() {
         <div className="chapter-content" key={current.id}>
           {chapter === 0 ? <>
             <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">Empirical analysis of usage of decision model for agent design</h1><h2 className="question-followup">{current.title}</h2></div></div>
+            {benchmark && <BenchmarkCharts benchmark={benchmark}/>}
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
             {current.id === 'methodology' && <>

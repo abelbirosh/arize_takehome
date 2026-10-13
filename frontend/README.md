@@ -13,6 +13,16 @@ npm run test:frontend
 
 Vercel: import this repository, use the repository root as the root directory, and keep the checked-in Vercel configuration. The build outputs `frontend/dist`. No Python runtime or API keys are required for this frontend.
 
+## Benchmark charts
+
+The Question page opens with one chart per headline metric (accuracy, $/run, route $, active seconds, steps, out of turns, ms/decision), each sorted best to worst from left to right. The numbers live in `frontend/public/benchmark.json`, generated from the merged v2 run with no model calls:
+
+```sh
+python3 scripts/export_frontend_metrics.py
+```
+
+Edit the script, not the JSON, to change labels, descriptions, or excluded deciders.
+
 ## Update the research
 
 Edit `frontend/public/research.json` and rebuild to publish research for everyone. The presentation reads this file automatically; there are no upload or research-download controls. All text uses Times New Roman, with size, regular/bold weight, and italics defining the hierarchy.

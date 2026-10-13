@@ -1,0 +1,170 @@
+{
+  "source": "results/full-v2-merged.jsonl",
+  "questions": 50,
+  "runs": 350,
+  "deciders": [
+    {
+      "id": "jev",
+      "short": "Jev",
+      "name": "Jev (TypeSafe)",
+      "kind": "decision"
+    },
+    {
+      "id": "msft",
+      "short": "MSFT",
+      "name": "Microsoft Decision 1",
+      "kind": "decision"
+    },
+    {
+      "id": "oai",
+      "short": "OAI",
+      "name": "OpenAI GPT-6 Luna Decisions",
+      "kind": "decision"
+    },
+    {
+      "id": "claude-haiku-5.5",
+      "short": "Haiku",
+      "name": "Claude Haiku 5.5",
+      "kind": "reasoning"
+    },
+    {
+      "id": "claude-sonnet-5.5",
+      "short": "Sonnet",
+      "name": "Claude Sonnet 5.5",
+      "kind": "reasoning"
+    },
+    {
+      "id": "claude-opus-5.5",
+      "short": "Opus",
+      "name": "Claude Opus 5.5",
+      "kind": "reasoning"
+    },
+    {
+      "id": "fixed",
+      "short": "Fixed",
+      "name": "Fixed sequence (no model)",
+      "kind": "fixed"
+    }
+  ],
+  "metrics": [
+    {
+      "id": "accuracy",
+      "label": "Accuracy",
+      "format": "percent",
+      "better": "higher",
+      "max": 1.0,
+      "description": "Share of the 50 answers the judge graded correct against the accepted variants. Hedged answers do not count.",
+      "values": {
+        "jev": 0.7,
+        "msft": 0.72,
+        "oai": 0.66,
+        "claude-haiku-5.5": 0.66,
+        "claude-sonnet-5.5": 0.66,
+        "claude-opus-5.5": 0.6,
+        "fixed": 0.72
+      }
+    },
+    {
+      "id": "cost",
+      "label": "$/run",
+      "format": "usd",
+      "better": "lower",
+      "description": "Average total cost of one run: routing plus Haiku writing the queries, notes, and answer.",
+      "values": {
+        "jev": 0.001934,
+        "msft": 0.002009,
+        "oai": 0.0022,
+        "claude-haiku-5.5": 0.002826,
+        "claude-sonnet-5.5": 0.021904,
+        "claude-opus-5.5": 0.043314,
+        "fixed": 0.002385
+      }
+    },
+    {
+      "id": "route-cost",
+      "label": "Route $",
+      "format": "usd",
+      "better": "lower",
+      "description": "The part of each run's cost spent deciding the next step. The fixed sequence makes no decisions.",
+      "values": {
+        "jev": 0.000403,
+        "msft": 0.000268,
+        "oai": 0.000734,
+        "claude-haiku-5.5": 0.001429,
+        "claude-sonnet-5.5": 0.020403,
+        "claude-opus-5.5": 0.041981,
+        "fixed": 0.0
+      }
+    },
+    {
+      "id": "active",
+      "label": "Active seconds",
+      "format": "seconds",
+      "better": "lower",
+      "description": "Average seconds per run, excluding time queued behind the shared rate limiter.",
+      "values": {
+        "jev": 21.696881,
+        "msft": 21.929175,
+        "oai": 23.29351,
+        "claude-haiku-5.5": 195.652839,
+        "claude-sonnet-5.5": 32.423073,
+        "claude-opus-5.5": 37.373443,
+        "fixed": 26.309397
+      },
+      "excluded": {
+        "claude-haiku-5.5": "Haiku 5.5 is left out: one of its routing calls stalled for 2.2 hours, which swamps its average."
+      }
+    },
+    {
+      "id": "steps",
+      "label": "Steps",
+      "format": "decimal",
+      "better": "lower",
+      "description": "Average actions per run (searches, reads, and the answer) out of a budget of eight.",
+      "values": {
+        "jev": 5.08,
+        "msft": 5.02,
+        "oai": 4.94,
+        "claude-haiku-5.5": 5.06,
+        "claude-sonnet-5.5": 5.14,
+        "claude-opus-5.5": 4.56,
+        "fixed": 6.86
+      }
+    },
+    {
+      "id": "out-of-turns",
+      "label": "Out of turns",
+      "format": "count",
+      "better": "lower",
+      "description": "Runs that used all eight steps without answering, so the harness forced a final answer.",
+      "values": {
+        "jev": 11,
+        "msft": 6,
+        "oai": 11,
+        "claude-haiku-5.5": 11,
+        "claude-sonnet-5.5": 10,
+        "claude-opus-5.5": 5,
+        "fixed": 0
+      }
+    },
+    {
+      "id": "decision-ms",
+      "label": "ms/decision",
+      "format": "ms",
+      "better": "lower",
+      "description": "Average time for one routing decision. The fixed sequence makes none.",
+      "values": {
+        "jev": 299.070939,
+        "msft": 485.617056,
+        "oai": 363.757902,
+        "claude-haiku-5.5": 36150.642407,
+        "claude-sonnet-5.5": 2182.775183,
+        "claude-opus-5.5": 4078.911361,
+        "fixed": 0.0
+      },
+      "excluded": {
+        "claude-haiku-5.5": "Haiku 5.5 is left out: one of its routing calls stalled for 2.2 hours, which swamps its average."
+      }
+    }
+  ]
+}
