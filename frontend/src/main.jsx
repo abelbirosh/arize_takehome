@@ -226,7 +226,7 @@ function PhoenixUsage() {
         <li>I used Phoenix experiment runner to run one experiment per decider in parallel. The experiment metadata recorded the decider, generator model, budgets, and reasoning settings.</li>
         <li>Phoenix's experiment comparison view was helpful to visualize decider comparisons. I stored the run details to <code>results/&lt;tag&gt;.jsonl</code> for cross-project analysis.</li>
       </ul>
-      {Shot({ src: "/phoenix/experiments.webp", alt: "Phoenix experiments page for research-bench-v2 with score, latency and cost charts", caption: "The seven experiments, one per decider, with score, latency, and cost charts." })}
+      {Shot({ src: "/phoenix/experiments.webp", alt: "Phoenix experiments page for research-bench-v2 with score, latency and cost charts", caption: "Score, latency, and cost charts for the 7 experiments" })}
     </section>
     <section className="subsection"><h2>Evaluators (Inside the Experiment)</h2>
       <ul className="method-list">
