@@ -8,7 +8,7 @@ const chapters = [
   { id: 'methodology', name: 'Methodology', title: 'Methodology' },
   { id: 'detailed-results', name: 'Detailed results', title: 'Detailed results' },
   { id: 'phoenix', name: 'How I used Phoenix?', title: 'How I used Phoenix?' },
-  { id: 'challenges', name: 'What went wrong and how we fixed it?', title: 'What went wrong and how we fixed it?' },
+  { id: 'challenges', name: 'What went wrong and how I fixed it?', title: 'What went wrong and how I fixed it?' },
   { id: 'takeaways', name: 'Takeaways', title: 'Takeaways' },
 ];
 const legacyIds = { 'when-to-jev': 'question', mechanism: 'methodology', experiment: 'methodology', results: 'detailed-results', findings: 'detailed-results', learnings: 'phoenix', practice: 'takeaways', sources: 'phoenix' };
@@ -205,7 +205,7 @@ function App() {
         {error && <div className="notice error" role="alert"><span>{error}</span><button aria-label="Dismiss message" onClick={() => setError('')}><Icon name="close"/></button></div>}
         <div className="chapter-content" key={current.id}>
           {chapter === 0 ? <>
-            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">Empirical analysis of usage of decision model for agent design</h1><h2 className="question-followup">{current.title}</h2><p className="question-summary">In the controlled experiment we ran with 50 searches across seven models, we found that decision models achieved similar accuracy with a fraction of the cost and latency. The examples covered a range of task complexities and failure cases, such as searches for unavailable information.</p></div></div>
+            <div className="cover-grid"><div className="cover-copy"><h1 ref={heading} tabIndex="-1">Empirical analysis of usage of decision model for agent design</h1><h2 className="question-followup">{current.title}</h2><p className="question-summary">In the controlled experiment I ran with 50 searches across seven models, I found that decision models achieved similar accuracy with a fraction of the cost and latency. The examples covered a range of task complexities and failure cases, such as searches for unavailable information.</p></div></div>
             {benchmark && <BenchmarkCharts benchmark={benchmark}/>}
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>

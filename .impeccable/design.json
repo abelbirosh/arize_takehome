@@ -279,7 +279,7 @@
       "kind": "nav",
       "refersTo": "navigation-current",
       "description": "Numbered chapter links with a current step.",
-      "html": "<nav class=\"ds-chapter-index\"><a href=\"#question\">Question</a><a href=\"#results\">Results</a><a href=\"#phoenix\">How I used Phoenix?</a><a href=\"#challenges\">What went wrong and how we fixed it?</a><a href=\"#takeaways\">Takeaways</a></nav>",
+      "html": "<nav class=\"ds-chapter-index\"><a href=\"#question\">Question</a><a href=\"#results\">Results</a><a href=\"#phoenix\">How I used Phoenix?</a><a href=\"#challenges\">What went wrong and how I fixed it?</a><a href=\"#takeaways\">Takeaways</a></nav>",
       "css": ".ds-chapter-index{font-family:\"Times New Roman\",Times,serif;display:grid;gap:8px;max-width:228px}.ds-chapter-index a{color:#252c29;padding:10px 12px;white-space:normal;overflow-wrap:anywhere;font-size:12px;text-decoration:none}.ds-chapter-index a:hover{background:#eeeee5}.ds-chapter-index a:focus-visible{outline:2px solid #476542;outline-offset:5px}"
     },
     {
