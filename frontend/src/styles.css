@@ -182,3 +182,6 @@
 .trace-tree{margin:12px 0 4px;padding:16px 18px;border-radius:6px;background:var(--chart-surface);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;white-space:pre}
 .method-list code,.tool-list code{overflow-wrap:anywhere}
 .trace-tree{max-width:100%}
+.phoenix-shot{margin:18px 0 0}
+.phoenix-shot img{display:block;width:100%;height:auto;border-radius:6px;border:1px solid var(--rule)}
+.phoenix-shot figcaption{margin-top:8px;font-size:14px;color:var(--muted);font-style:italic}
