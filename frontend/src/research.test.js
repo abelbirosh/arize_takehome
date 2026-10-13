@@ -9,7 +9,6 @@ test('loads the published presentation and Phoenix evidence links', () => {
   assert.ok(data.thesis.body && data.thesis.why);
   assert.ok(data.learnings.length && data.challenges.length);
   assert.ok(data.challenges.every(row => row.challenge && row.solution && row.links.length));
-  assert.ok(data.phoenix.length && data.phoenix.every(row => row.links.length));
   assert.ok(Array.isArray(data.results));
   assert.deepEqual(validateResearch(emptyResearch), emptyResearch);
 });

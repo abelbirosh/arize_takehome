@@ -32,20 +32,6 @@ function Icon({ name, ...props }) {
   return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>{paths[name] || paths.arrow}</svg>;
 }
 
-function ReferenceLinks({ links = [] }) {
-  if (!links.length) return null;
-  return <ul className="reference-links" aria-label="Attached links">{links.map((link, i) => <li key={i}><a href={link.url} target="_blank" rel="noreferrer">{link.title}<Icon name="arrow"/></a></li>)}</ul>;
-}
-
-function ResearchNotes({ items, emptyTitle }) {
-  if (!items.length) return <div className="empty-evidence"><h2>{emptyTitle}</h2><p>Research for this section is pending.</p><span className="status-label"><span/>Awaiting research</span></div>;
-  return <div className="evidence-list">{items.map((item, i) => <article key={i}>
-    <h2>{item.title}</h2>
-    <p>{item.body}</p>
-    <ReferenceLinks links={item.links}/>
-  </article>)}</div>;
-}
-
 const formatValue = (format, v) => ({
   percent: () => `${Math.round(v * 100)}%`,
   usd: () => v === 0 ? '$0' : `$${v < 0.01 ? v.toFixed(4) : v.toFixed(3)}`,
@@ -268,11 +254,6 @@ function App() {
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
             {current.id === 'methodology' && benchmark && <Methodology benchmark={benchmark}/>}
             {current.id === 'detailed-results' && benchmark && <DetailedResults benchmark={benchmark}/>}
-            {current.id === 'phoenix' && <>
-              <p className="intro wide">How Phoenix helped organize the experiments, trace the research agent, and evaluate the outcomes.</p>
-              <ResearchNotes items={research.phoenix} emptyTitle="The Phoenix walkthrough is on its way."/>
-              {research.sources.length > 0 && <section className="supporting-sources"><h2>Further reading & notes</h2><ReferenceLinks links={research.sources}/></section>}
-            </>}
             {current.id === 'challenges' && <FixList items={research.challenges}/>}
 
           </>}
