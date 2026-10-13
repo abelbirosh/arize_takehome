@@ -45,6 +45,9 @@ V2_PILOT = ["fresh-apple-ceo", "two-slam-count", "multi-earliest-born",
             "arith-usm-final-games", "frames-338", "new-msft-base-model", "unans-wc-shootout"]
 DATASET_V2 = "research-bench-50"
 PILOT_V2 = "research-bench-50-pilot"
+# Same 50 questions, split "pilot" (already run) / "main" (the other 43), so the full
+# run covers only "main" and the pilot runs are copied into the same experiments.
+SPLIT_V2 = "research-bench-v2"
 
 
 def load(name: str) -> dict[str, dict]:
@@ -95,6 +98,27 @@ def upload_v2(rows: list[dict], name: str, description: str) -> None:
     print(f"uploaded {name}: {len(rows)} examples (dataset id {ds.id})")
 
 
+def upload_v2_split(rows: list[dict]) -> None:
+    import pandas as pd
+    from phoenix.client import Client
+
+    client = Client(base_url=os.environ.get("PHOENIX_COLLECTOR_ENDPOINT",
+                                            "http://localhost:6006"))
+    df = pd.DataFrame([{**{k: r[k] for k in ("question", "answer", "accepted", "id", "category",
+                                              "answerable", "needs_web", "evidence")},
+                        "split": "pilot" if r["id"] in V2_PILOT else "main"} for r in rows])
+    ds = client.datasets.create_dataset(
+        name=SPLIT_V2,
+        dataset_description="50-question v2 suite; split 'pilot' = the 7 pilot questions, "
+                            "'main' = the other 43",
+        dataframe=df,
+        input_keys=["question"], output_keys=["answer", "accepted"],
+        metadata_keys=["id", "category", "answerable", "needs_web", "evidence"],
+        split_key="split",
+    )
+    print(f"uploaded {SPLIT_V2}: {len(rows)} examples (dataset id {ds.id})")
+
+
 def write(rows: list[dict], path: Path) -> None:
     with open(path, "w") as f:
         for r in rows:
@@ -122,6 +146,8 @@ def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--upload", action="store_true")
     p.add_argument("--suite", choices=["v1", "v2"], default="v1")
+    p.add_argument("--split-upload", action="store_true",
+                   help="v2: upload the pilot/main split dataset")
     args = p.parse_args()
 
     if args.suite == "v2":
@@ -139,6 +165,8 @@ def main() -> None:
             upload_v2(rows, DATASET_V2, "50 research questions in 7 categories (control, "
                       "two_recent, multi_entity, arithmetic, frames, too_new, unanswerable)")
             upload_v2(pilot, PILOT_V2, "7-question pilot: one per category")
+        if args.split_upload:
+            upload_v2_split(rows)
         return
 
     rows = build()

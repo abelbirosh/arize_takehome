@@ -8,7 +8,7 @@ from types import SimpleNamespace
 from research_agent.evals import Judge
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-from run_experiments import routing_fit  # noqa: E402
+from run_experiments import normalize, routing_fit  # noqa: E402
 
 
 class FakeCompletions:
@@ -77,3 +77,14 @@ def test_routing_fit():
     assert routing_fit(steps("search_web", "search_wikipedia", "answer"), frames)["score"] == 0.0
     assert routing_fit(steps("answer"), frames)["score"] == 0.0
     assert routing_fit(steps("answer"), {})["label"] == "not_applicable"  # v1 dataset
+
+
+def test_stringified_dataframe_fields_are_restored():
+    meta = {"answerable": "False", "needs_web": "False", "evidence": "['https://x']", "id": "q1"}
+    assert normalize(meta) == {"answerable": False, "needs_web": False,
+                               "evidence": ["https://x"], "id": "q1"}
+    # A stringified "False" must not count as needing the web.
+    assert routing_fit(steps("search_wikipedia", "answer"),
+                       {"needs_web": "False"})["score"] == 1.0
+    assert normalize({"accepted": "['Red Bull–Bora–Hansgrohe', 'Red Bull Bora']"})["accepted"] == [
+        "Red Bull–Bora–Hansgrohe", "Red Bull Bora"]

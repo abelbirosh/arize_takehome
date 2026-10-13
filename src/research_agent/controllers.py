@@ -123,9 +123,11 @@ class SystemOneController:
             ),
         }
         unread = state.unread(self.settings.max_unread_candidates)
-        if unread:
+        if len(unread) >= 2:
             # Speculative: only consumed if next_action is read_source. Asking now
-            # saves a second round trip (questions run in parallel).
+            # saves a second round trip (questions run in parallel). Microsoft and
+            # OpenAI reject Choice questions with fewer than 2 options; with a single
+            # unread result there is nothing to choose anyway.
             qs["read_target"] = Choice(
                 instructions=(
                     "If the agent reads exactly one more source from `unread_sources`, "
@@ -139,6 +141,7 @@ class SystemOneController:
     def decide(self, state: AgentState) -> Decision:
         snapshot = state.snapshot(self.settings.max_unread_candidates)
         questions = self.questions(state)
+        unread = state.unread(self.settings.max_unread_candidates)
         with tracer.start_as_current_span(
             f"{self.name}.decide", openinference_span_kind="decision"
         ) as span:
@@ -157,8 +160,9 @@ class SystemOneController:
             nxt = resp.answers["next_action"]
             action = Action(nxt.choice)
             target = None
-            if action is Action.READ_SOURCE and "read_target" in resp.answers:
-                target = resp.answers["read_target"].choice
+            if action is Action.READ_SOURCE:
+                target = (resp.answers["read_target"].choice if "read_target" in resp.answers
+                          else unread[0].id)
             sufficient = resp.answers["evidence_sufficient"].noul
             in_tok = resp.usage.input_tokens or 0
             out_tok = resp.usage.output_tokens or 0
@@ -176,9 +180,9 @@ class SystemOneController:
                 "decision.evidence_sufficient": sufficient,
                 "decision.latency_ms": latency,
                 "decision.cost_usd": cost,
-                **({"decision.read_target": target,
-                    "decision.read_target_confidence": resp.answers["read_target"].confidence}
-                   if target else {}),
+                **({"decision.read_target": target} if target else {}),
+                **({"decision.read_target_confidence": resp.answers["read_target"].confidence}
+                   if target and "read_target" in resp.answers else {}),
             })
             span.set_output(
                 to_json({k: a.model_dump() for k, a in resp.answers.items()}),

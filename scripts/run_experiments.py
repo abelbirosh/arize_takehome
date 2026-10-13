@@ -1,8 +1,8 @@
 """Run the benchmark as Phoenix experiments: one experiment per controller.
 
     uv run python scripts/run_experiments.py --dataset research-bench-50-pilot
-    uv run python scripts/run_experiments.py --dataset research-bench-50 --tag full-v2
-    uv run python scripts/run_experiments.py --dataset research-bench-50 --tag full-v2 --resume
+    uv run python scripts/run_experiments.py --dataset research-bench-v2 --split main --tag full-v2
+    uv run python scripts/run_experiments.py --dataset research-bench-v2 --split main --tag full-v2 --resume
 
 Every controller answers the same dataset; Haiku 5.5 generates in every run, so
 only the routing decider differs. Each run is judged for correctness and
@@ -16,6 +16,7 @@ get the v2 evaluators; v1 datasets keep the original correctness judge.
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import os
 import threading
@@ -70,6 +71,24 @@ def make_task(controller: str, settings: Settings):
     return task
 
 
+def _coerce(value):
+    """Datasets uploaded as a dataframe come back with every field stringified
+    ("False", "['a', 'b']"); a non-empty string is truthy, which would silently
+    mark every question answerable / needing the web. Restore the real types."""
+    if value in ("True", "False"):
+        return value == "True"
+    if isinstance(value, str) and value[:1] == "[" and value[-1:] == "]":
+        try:
+            return ast.literal_eval(value)
+        except (ValueError, SyntaxError):
+            return value
+    return value
+
+
+def normalize(d: dict | None) -> dict:
+    return {k: _coerce(v) for k, v in (d or {}).items()}
+
+
 def _attach(controller: str, example_id: str | None, key: str, judgement) -> None:
     global _judge_cost
     with _lock:
@@ -89,6 +108,7 @@ def _result(j) -> dict:
 def make_correctness(judge: Judge, controller: str):
     @create_evaluator(kind="LLM", name="correctness")
     def correctness(input, output, expected, metadata):  # noqa: A002
+        expected, metadata = normalize(expected), normalize(metadata)
         predicted = (output or {}).get("answer", "")
         if "accepted" in expected:  # v2 dataset
             j = judge.correctness(input["question"], expected["answer"], expected["accepted"],
@@ -113,6 +133,7 @@ def make_grounded(judge: Judge, controller: str):
 def routing_fit(output, metadata):
     """Did it search where the question category needs it? Web for recent or too-new
     questions, Wikipedia first for FRAMES."""
+    metadata = normalize(metadata)
     if "needs_web" not in metadata:
         return {"label": "not_applicable"}
     actions = [s["action"] for s in (output or {}).get("steps", [])]
@@ -226,6 +247,7 @@ def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--dataset", default="research-bench-pilot")
     p.add_argument("--controllers", nargs="*", default=CONTROLLERS)
+    p.add_argument("--split", default=None, help="run only this dataset split (e.g. main)")
     p.add_argument("--tag", default=None, help="label for experiment names / results file")
     p.add_argument("--resume", action="store_true",
                    help="re-run only failed/missing runs of the experiments tagged --tag")
@@ -234,7 +256,8 @@ def main() -> None:
     settings = Settings()
     setup_tracing(settings.phoenix_project)
     client = Client(base_url=os.environ.get("PHOENIX_COLLECTOR_ENDPOINT", "http://localhost:6006"))
-    dataset = client.datasets.get_dataset(dataset=args.dataset)
+    dataset = client.datasets.get_dataset(dataset=args.dataset,
+                                          splits=[args.split] if args.split else None)
     tag = args.tag or f"{args.dataset} {time.strftime('%m-%d %H:%M')}"
     judge = Judge(settings)
 

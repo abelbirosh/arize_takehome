@@ -21,7 +21,7 @@ from pathlib import Path
 from phoenix.client import Client
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from run_experiments import CODE_EVALUATORS, RESULTS, routing_fit  # noqa: E402
+from run_experiments import CODE_EVALUATORS, RESULTS, normalize, routing_fit  # noqa: E402
 
 from research_agent import Settings  # noqa: E402
 from research_agent.evals import Judge  # noqa: E402
@@ -73,14 +73,15 @@ def main() -> None:
         controller, run, name = job
         ex = examples[run["dataset_example_id"]]
         output = run["output"]
-        meta = ex["metadata"] or {}
+        meta = normalize(ex["metadata"])
+        expected = normalize(ex["output"])
         rec = by_key.get((controller, meta.get("id")))
         if name in ("correctness", "grounded"):
             question, answer = ex["input"]["question"], output.get("answer", "")
             if name == "grounded":
                 j = judge.grounded(question, answer, output.get("notes", []))
-            elif "accepted" in ex["output"]:
-                j = judge.correctness(question, ex["output"]["answer"], ex["output"]["accepted"],
+            elif "accepted" in expected:
+                j = judge.correctness(question, expected["answer"], expected["accepted"],
                                       meta.get("answerable", True), answer)
             else:
                 j = judge(question, ex["output"]["answer"], answer)

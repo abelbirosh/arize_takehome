@@ -41,6 +41,20 @@ def test_jev_only_offered_available_actions(settings):
     assert set(second["questions"]["read_target"].criteria) == {"s1", "s2"}
 
 
+def test_single_unread_result_needs_no_read_target(settings):
+    # Microsoft/OpenAI reject 1-option Choice questions: with one unread result,
+    # don't ask, just read it.
+    class OneResultTools(FakeTools):
+        def search(self, engine, query, k=5):
+            return super().search(engine, query, k)[:1]
+
+    jev = FakeJevClient(scripted("search_web", "read_source", "answer"))
+    tools = OneResultTools()
+    make(SystemOneController(settings, "jev", client=jev), FakeLLM(), settings, tools).run("Q?")
+    assert "read_target" not in jev.calls[1]["questions"]
+    assert tools.reads == ["s1"]
+
+
 def test_budget_forces_answer(settings):
     jev = FakeJevClient(lambda q, s: ("search_web", 0.9))  # never wants to stop
     result = make(SystemOneController(settings, "jev", client=jev), FakeLLM(), settings).run("Q?")
