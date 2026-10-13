@@ -212,7 +212,7 @@ function PhoenixUsage() {
         <li>The root span carries the run's stats (steps, costs, latency, forced answer).</li>
         <li>Sorting traces according to the metrics using Phoenix.</li>
       </ul>
-      {Shot({ src: "/phoenix/traces-sorted.png", alt: "Phoenix trace list sorted by cumulative tokens, showing latency and cost columns", caption: "Traces sorted by cumulative tokens, with each run's latency and cost." })}
+      {Shot({ src: "/phoenix/traces-sorted.png", alt: "Phoenix trace list sorted by cumulative tokens, showing latency and cost columns", caption: "Traces sorted by cumulative tokens, with each run's latency and cost" })}
     </section>
     <section className="subsection"><h2>Dataset Storage</h2>
       <ul className="method-list">
@@ -233,7 +233,7 @@ function PhoenixUsage() {
         <li>LLM evaluators, which used GPT-6.1 Sol, were used for correctness and groundedness.</li>
         <li>Code evaluators for routing fit and telemetry metrics.</li>
       </ul>
-      {Shot({ src: "/phoenix/evaluator-scores.webp", alt: "Mean correctness, forced-answer and grounded scores per experiment", caption: "Mean evaluator scores per experiment." })}
+      {Shot({ src: "/phoenix/evaluator-scores.webp", alt: "Mean correctness, forced-answer and grounded scores per experiment", caption: "Mean evaluator scores per experiment" })}
     </section>
   </>;
 }
