@@ -28,11 +28,11 @@ function ReferenceLinks({ links = [] }) {
   return <ul className="reference-links" aria-label="Attached links">{links.map((link, i) => <li key={i}><a href={link.url} target="_blank" rel="noreferrer">{link.title}<Icon name="arrow"/></a></li>)}</ul>;
 }
 
-function ResearchNotes({ items, challenges = false, emptyTitle }) {
+function ResearchNotes({ items, emptyTitle }) {
   if (!items.length) return <div className="empty-evidence"><h2>{emptyTitle}</h2><p>Research for this section is pending.</p><span className="status-label"><span/>Awaiting research</span></div>;
-  return <div className={`evidence-list ${challenges ? 'challenge-list' : ''}`}>{items.map((item, i) => <article key={i}>
+  return <div className="evidence-list">{items.map((item, i) => <article key={i}>
     <h2>{item.title}</h2>
-    {challenges ? <div className="challenge-pair"><div><h3>Challenge</h3><p>{item.challenge}</p></div><div><h3>Solution</h3><p>{item.solution}</p></div></div> : <p>{item.body}</p>}
+    <p>{item.body}</p>
     <ReferenceLinks links={item.links}/>
   </article>)}</div>;
 }
@@ -86,6 +86,53 @@ function BenchmarkCharts({ benchmark }) {
   </section>;
 }
 
+const resultMarks = { correct: ['✓', 'Correct'], hedged: ['~', 'Hedged'], incorrect: ['✗', 'Incorrect'], no_answer: ['–', 'No answer'] };
+
+function Methodology({ benchmark }) {
+  const { counts, tiers, tests } = benchmark;
+  const tierName = Object.fromEntries(tiers.map(t => [t.id, t.name]));
+  return <>
+    <section className="subsection"><h2>Test Counts</h2>
+      <p className="subsection-copy">{counts.questions} questions × {counts.deciders} deciders = {counts.runs} runs. Each decider answered every question once with an {counts.max_steps}-step budget: {counts.main} questions in the main run and {counts.pilot} in a pilot on the same code.</p>
+    </section>
+    <section className="subsection"><h2>Test Tiers</h2>
+      <div className="table-scroll"><table className="data-table tier-table">
+        <thead><tr><th scope="col">Tier</th><th scope="col" className="num">Tests</th><th scope="col">What it checks</th></tr></thead>
+        <tbody>{tiers.map(t => <tr key={t.id}><th scope="row">{t.name}</th><td className="num">{t.count}</td><td>{t.description}</td></tr>)}</tbody>
+      </table></div>
+    </section>
+    <section className="subsection"><h2>Test List</h2>
+      <ol className="test-list">{tests.map(t => <li key={t.id}><details>
+        <summary><span className="test-n">{t.n}</span><span className="test-q">{t.question}</span><span className="test-tier">{tierName[t.tier]}</span></summary>
+        <dl><dt>Answer</dt><dd>{t.answer}</dd></dl>
+      </details></li>)}</ol>
+    </section>
+  </>;
+}
+
+function DetailedResults({ benchmark }) {
+  const { tests, deciders } = benchmark;
+  return <>
+    <ul className="result-key">{Object.entries(resultMarks).map(([k, [mark, label]]) => <li key={k}><span className={`mark-${k}`} aria-hidden="true">{mark}</span>{label}</li>)}</ul>
+    <div className="table-scroll"><table className="data-table results-table">
+      <thead><tr><th scope="col" className="num">#</th><th scope="col">Question</th>{deciders.map(d => <th scope="col" key={d.id} className="mark-col"><span className={`swatch kind-${d.kind}`}/>{d.short}</th>)}</tr></thead>
+      <tbody>{tests.map(t => <tr key={t.id}>
+        <td className="num">{t.n}</td><td className="q-cell" title={t.question}>{t.question}</td>
+        {deciders.map(d => { const [mark, label] = resultMarks[t.results[d.id]]; return <td key={d.id} className={`mark-col mark-${t.results[d.id]}`}><span aria-hidden="true">{mark}</span><span className="visually-hidden">{label}</span></td>; })}
+      </tr>)}</tbody>
+      <tfoot><tr><th scope="row" colSpan="2">Correct</th>{deciders.map(d => <td key={d.id} className="mark-col">{tests.filter(t => t.results[d.id] === 'correct').length}/{tests.length}</td>)}</tr></tfoot>
+    </table></div>
+  </>;
+}
+
+function FixList({ items }) {
+  return <div className="table-scroll"><table className="data-table fix-table">
+    <thead><tr><th scope="col">Problem</th><th scope="col">Fix</th><th scope="col">Code</th></tr></thead>
+    <tbody>{items.map((item, i) => <tr key={i}><td>{item.challenge}</td><td>{item.solution}</td>
+      <td>{item.links.map(link => <a key={link.url} className="commit-link" href={link.url} target="_blank" rel="noreferrer">{link.title}<Icon name="arrow"/></a>)}</td></tr>)}</tbody>
+  </table></div>;
+}
+
 function App() {
   const [chapter, setChapter] = useState(indexFromHash);
   const [research, setResearch] = useState(emptyResearch);
@@ -133,7 +180,6 @@ function App() {
   }, [chapter]);
 
 
-  const ready = research.status === 'ready';
   return <div className="app">
     <a href="#main" className="skip-link">Skip to presentation</a>
     <header className="topbar"><a className="brand" href="#question" onClick={() => navigate(0)} aria-label="Presentation home">When and When Not to Jev</a><div className="header-actions"><a className="present-button repo-link" href="https://github.com/abelbirosh/arize_takehome" target="_blank" rel="noreferrer"><Icon name="github"/>Github Repo</a></div></header>
@@ -147,28 +193,14 @@ function App() {
             {benchmark && <BenchmarkCharts benchmark={benchmark}/>}
           </> : <>
             <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
-            {current.id === 'methodology' && <>
-              <p className="intro wide">How the benchmark was set up: what changes between runs, what stays fixed, and how each run is graded.</p>
-              <ResearchNotes items={research.methodology} emptyTitle="The methodology is on its way."/>
-              <ReferenceLinks links={research.thesis.links}/>
-            </>}
-            {current.id === 'detailed-results' && <>
-              <p className="intro wide">{research.results.length ? 'The measured outcomes of the controller comparison, with supporting evidence.' : 'The study compares answer quality, evidence support, cost, and active latency. Final measured results have not been added to this presentation yet.'}</p>
-              <ResearchNotes items={research.results} emptyTitle="Results are being analyzed."/>
-            </>}
+            {current.id === 'methodology' && benchmark && <Methodology benchmark={benchmark}/>}
+            {current.id === 'detailed-results' && benchmark && <DetailedResults benchmark={benchmark}/>}
             {current.id === 'phoenix' && <>
               <p className="intro wide">How Phoenix helped organize the experiments, trace the research agent, and evaluate the outcomes.</p>
               <ResearchNotes items={research.phoenix} emptyTitle="The Phoenix walkthrough is on its way."/>
               {research.sources.length > 0 && <section className="supporting-sources"><h2>Further reading & notes</h2><ReferenceLinks links={research.sources}/></section>}
             </>}
-            {current.id === 'challenges' && <>
-              <p className="intro wide">The problems that surfaced during the experiment, and the changes made to resolve them.</p>
-              <ResearchNotes items={research.challenges} challenges emptyTitle="Challenges and solutions are on their way."/>
-            </>}
-            {current.id === 'takeaways' && <>
-              <p className="intro wide">{ready ? 'The practical recommendations from the research, with the supporting evidence attached.' : 'Working takeaways from the implementation. Performance recommendations await the full-run analysis.'}</p>
-              <ResearchNotes items={research.takeaways} emptyTitle="Takeaways are on their way."/>
-            </>}
+            {current.id === 'challenges' && <FixList items={research.challenges}/>}
 
           </>}
         </div>

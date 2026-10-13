@@ -41,7 +41,7 @@ export function validateResearch(value) {
     methodology: validateRows(value.methodology ?? [], 'methodology', ['title', 'body']),
     results: validateRows(value.results ?? [], 'results', ['title', 'body']),
     phoenix: validateRows(value.phoenix ?? [], 'phoenix', ['title', 'body']),
-    challenges: validateRows(value.challenges, 'challenges', ['title', 'challenge', 'solution']),
+    challenges: validateRows(value.challenges, 'challenges', ['challenge', 'solution']),
     takeaways: validateRows(value.takeaways, 'takeaways', ['title', 'body']),
     sources: validateLinks(value.sources, 'Sources'),
   };
@@ -49,6 +49,7 @@ export function validateResearch(value) {
   return result;
 }
 
+const RESULT_LABELS = ['correct', 'hedged', 'incorrect', 'no_answer'];
 const METRIC_FORMATS = ['percent', 'usd', 'cents', 'seconds', 'decimal', 'count', 'ms'];
 
 export function validateBenchmark(value) {
@@ -58,6 +59,11 @@ export function validateBenchmark(value) {
   for (const m of value.metrics) {
     if (!m || typeof m.label !== 'string' || typeof m.description !== 'string' || !METRIC_FORMATS.includes(m.format) || !['higher', 'lower'].includes(m.better)) throw new Error('Each metric needs a label, description, format, and direction.');
     if (ids.some(id => typeof m.values?.[id] !== 'number' || !Number.isFinite(m.values[id]))) throw new Error(`${m.label} needs a number for every decider.`);
+  }
+  const tiers = new Set((value.tiers ?? []).map(t => t.id));
+  for (const t of value.tests ?? []) {
+    if (!t || !Number.isInteger(t.n) || typeof t.question !== 'string' || typeof t.answer !== 'string' || !tiers.has(t.tier)) throw new Error('Each test needs a number, question, answer, and known tier.');
+    if (ids.some(id => !RESULT_LABELS.includes(t.results?.[id]))) throw new Error(`Test ${t.n} needs a result for every decider.`);
   }
   return value;
 }

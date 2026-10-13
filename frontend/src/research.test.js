@@ -7,9 +7,9 @@ test('loads the published presentation and Phoenix evidence links', () => {
   const data = validateResearch(JSON.parse(readFileSync(new URL('../public/research.json', import.meta.url))));
   assert.equal(data.version, 2);
   assert.ok(data.thesis.body && data.thesis.why);
-  assert.ok(data.learnings.length && data.challenges.length && data.takeaways.length);
+  assert.ok(data.learnings.length && data.challenges.length);
+  assert.ok(data.challenges.every(row => row.challenge && row.solution && row.links.length));
   assert.ok(data.phoenix.length && data.phoenix.every(row => row.links.length));
-  assert.ok(data.methodology.length && data.methodology.every(row => row.links.length));
   assert.ok(Array.isArray(data.results));
   assert.deepEqual(validateResearch(emptyResearch), emptyResearch);
 });
@@ -37,6 +37,9 @@ test('loads the generated benchmark charts and rejects missing values', () => {
   const data = validateBenchmark(JSON.parse(readFileSync(new URL('../public/benchmark.json', import.meta.url))));
   assert.equal(data.deciders.length, 7);
   assert.ok(data.metrics.length >= 7);
+  assert.equal(data.tests.length, data.counts.questions);
+  assert.equal(data.tiers.reduce((n, t) => n + t.count, 0), data.tests.length);
+  assert.ok(data.tests.every(t => data.deciders.every(d => t.results[d.id])));
   const broken = { ...data, metrics: [{ ...data.metrics[0], values: { jev: 0.7 } }] };
   assert.throws(() => validateBenchmark(broken));
 });

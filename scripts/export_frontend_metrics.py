@@ -1,4 +1,4 @@
-"""Write the presentation's headline charts from a benchmark run (no model calls).
+"""Write the presentation's charts, test suite and per-test results (no model calls).
 
     python3 scripts/export_frontend_metrics.py
     python3 scripts/export_frontend_metrics.py results/full-v2-merged.jsonl frontend/public/benchmark.json
@@ -17,6 +17,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = "results/full-v2-merged.jsonl"
 TARGET = "frontend/public/benchmark.json"
+SUITE = "data/benchmark_v2.jsonl"
+MAX_STEPS = 8
+
+# Display order and one-line description for each question category.
+TIERS = [
+    ("control", "Controls", "Easy post-cutoff facts every decider should get."),
+    ("two_recent", "Two recent facts", "Chain two post-cutoff facts to reach the answer."),
+    ("multi_entity", "Multi-entity", "Compare or count across several people or events."),
+    ("arithmetic", "Arithmetic", "Look up facts, then compute the answer."),
+    ("too_new", "Too new for Wikipedia", "October 2026 releases that only the web covers."),
+    ("unanswerable", "Unanswerable", "False premise; the correct answer rejects it."),
+    ("frames", "Multi-hop (FRAMES)", "Chain 2–4 Wikipedia articles (google/frames-benchmark)."),
+]
 
 DECIDERS = [
     ("jev", "Jev", "Jev (TypeSafe)", "decision"),
@@ -85,12 +98,28 @@ def main(source: str = SOURCE, target: str = TARGET) -> None:
     for m in metrics:
         m["values"] = {k: round(v, 8) for k, v in m["values"].items()}
 
+    suite = [json.loads(line) for line in open(ROOT / SUITE)]
+    tier_order = [t for t, *_ in TIERS]
+    suite.sort(key=lambda q: tier_order.index(q["category"]))
+    ran = {name: {json.loads(line)["id"] for line in open(ROOT / "results" / name)}
+           for name in ("full-v2.jsonl", "pilot-v2.jsonl")}
+    labels = {(r["id"], r["controller"]): r["judge"]["label"] for r in records}
+
     out = {
         "source": source,
-        "questions": len(by[DECIDERS[0][0]]),
+        "questions": len(suite),
         "runs": len(records),
+        "counts": {"questions": len(suite), "deciders": len(DECIDERS), "runs": len(records),
+                   "main": len(ran["full-v2.jsonl"]), "pilot": len(ran["pilot-v2.jsonl"]),
+                   "max_steps": MAX_STEPS},
         "deciders": [{"id": k, "short": s, "name": n, "kind": kind} for k, s, n, kind in DECIDERS],
         "metrics": metrics,
+        "tiers": [{"id": t, "name": name, "description": desc,
+                   "count": sum(q["category"] == t for q in suite)} for t, name, desc in TIERS],
+        "tests": [{"n": i, "id": q["id"], "tier": q["category"], "question": q["question"],
+                   "answer": q["answer"],
+                   "results": {k: labels[(q["id"], k)] for k, *_ in DECIDERS}}
+                  for i, q in enumerate(suite, 1)],
     }
     Path(ROOT / target).write_text(json.dumps(out, indent=2) + "\n")
     print(f"wrote {target} from {len(records)} runs")

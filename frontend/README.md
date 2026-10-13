@@ -17,8 +17,8 @@ Both files in `frontend/public/` are loaded at runtime and validated by `src/res
 
 | File | Feeds | How to change it |
 |---|---|---|
-| `benchmark.json` | the charts on the Question page | Generated: `python3 scripts/export_frontend_metrics.py`. Edit the script to change labels, descriptions or exclusions. |
-| `research.json` | Methodology, Detailed results, Phoenix, challenges and takeaways | Edit by hand. Each entry is `{ "title", "body", "links": [{ "title", "url" }] }`. Challenges use `challenge` and `solution` instead of `body`. |
+| `benchmark.json` | Question-page charts, Methodology (counts, tiers, test list) and the Detailed results table | Generated from `data/benchmark_v2.jsonl` and `results/full-v2-merged.jsonl`: `python3 scripts/export_frontend_metrics.py`. Edit the script to change labels, tier descriptions or exclusions. |
+| `research.json` | How I used Phoenix, the problem/fix list, and takeaways | Edit by hand. Entries are `{ "title", "body", "links": [{ "title", "url" }] }`; problem/fix entries are `{ "challenge", "solution", "links" }`. |
 
 Text renders as plain text, and links must be http(s).
 

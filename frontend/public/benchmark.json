@@ -2,6 +2,14 @@
   "source": "results/full-v2-merged.jsonl",
   "questions": 50,
   "runs": 350,
+  "counts": {
+    "questions": 50,
+    "deciders": 7,
+    "runs": 350,
+    "main": 43,
+    "pilot": 7,
+    "max_steps": 8
+  },
   "deciders": [
     {
       "id": "jev",
@@ -192,6 +200,852 @@
         "claude-sonnet-5.5": 10,
         "claude-opus-5.5": 5,
         "fixed": 0
+      }
+    }
+  ],
+  "tiers": [
+    {
+      "id": "control",
+      "name": "Controls",
+      "description": "Easy post-cutoff facts every decider should get.",
+      "count": 5
+    },
+    {
+      "id": "two_recent",
+      "name": "Two recent facts",
+      "description": "Chain two post-cutoff facts to reach the answer.",
+      "count": 8
+    },
+    {
+      "id": "multi_entity",
+      "name": "Multi-entity",
+      "description": "Compare or count across several people or events.",
+      "count": 7
+    },
+    {
+      "id": "arithmetic",
+      "name": "Arithmetic",
+      "description": "Look up facts, then compute the answer.",
+      "count": 6
+    },
+    {
+      "id": "too_new",
+      "name": "Too new for Wikipedia",
+      "description": "October 2026 releases that only the web covers.",
+      "count": 5
+    },
+    {
+      "id": "unanswerable",
+      "name": "Unanswerable",
+      "description": "False premise; the correct answer rejects it.",
+      "count": 5
+    },
+    {
+      "id": "frames",
+      "name": "Multi-hop (FRAMES)",
+      "description": "Chain 2\u20134 Wikipedia articles (google/frames-benchmark).",
+      "count": 14
+    }
+  ],
+  "tests": [
+    {
+      "n": 1,
+      "id": "fresh-physics-icecube",
+      "tier": "control",
+      "question": "The 2026 Nobel Prize in Physics was awarded for contributions to a neutrino observatory. At which research station is that observatory located?",
+      "answer": "Amundsen\u2013Scott South Pole Station",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 2,
+      "id": "fresh-apple-foldable",
+      "tier": "control",
+      "question": "What is the name of the foldable iPhone that Apple unveiled at its September 2026 event?",
+      "answer": "iPhone Duo",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "hedged",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 3,
+      "id": "fresh-apple-ceo",
+      "tier": "control",
+      "question": "Who presented Apple's September 2026 iPhone launch event as the company's CEO?",
+      "answer": "John Ternus",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 4,
+      "id": "fresh-wc-motm",
+      "tier": "control",
+      "question": "Who was named man of the match in the 2026 FIFA World Cup final?",
+      "answer": "Ferran Torres",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "hedged",
+        "claude-sonnet-5.5": "hedged",
+        "claude-opus-5.5": "hedged",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 5,
+      "id": "fresh-jev-book",
+      "tier": "control",
+      "question": "TypeSafe AI's first System One model, released in September 2026, is named after a 19th-century economist. What is the title of that economist's 1865 book about coal?",
+      "answer": "The Coal Question",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 6,
+      "id": "two-slam-count",
+      "tier": "two_recent",
+      "question": "How many Grand Slam singles titles did the 2026 US Open men's and women's singles champions win in 2026, combined?",
+      "answer": "4",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "incorrect",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 7,
+      "id": "two-ao-final-opponent",
+      "tier": "two_recent",
+      "question": "Whom did the 2026 US Open women's singles champion defeat in the final of the 2026 Australian Open?",
+      "answer": "Aryna Sabalenka",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "hedged",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "no_answer",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 8,
+      "id": "two-french-and-us",
+      "tier": "two_recent",
+      "question": "Which of the two 2026 US Open singles champions also won the 2026 French Open singles title?",
+      "answer": "Alexander Zverev",
+      "results": {
+        "jev": "correct",
+        "msft": "no_answer",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 9,
+      "id": "two-usw-runnerup-born",
+      "tier": "two_recent",
+      "question": "In which city was the runner-up of the 2026 US Open women's singles final born?",
+      "answer": "Minsk",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 10,
+      "id": "two-tdf-runnerup-team",
+      "tier": "two_recent",
+      "question": "Which team did the runner-up of the 2026 Tour de France ride for?",
+      "answer": "Red Bull\u2013Bora\u2013Hansgrohe",
+      "results": {
+        "jev": "no_answer",
+        "msft": "correct",
+        "oai": "hedged",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 11,
+      "id": "two-wc-referee",
+      "tier": "two_recent",
+      "question": "Who refereed the 2026 FIFA World Cup final?",
+      "answer": "Slavko Vin\u010di\u0107",
+      "results": {
+        "jev": "hedged",
+        "msft": "correct",
+        "oai": "hedged",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 12,
+      "id": "two-usm-runnerup-country",
+      "tier": "two_recent",
+      "question": "Which country does the runner-up of the 2026 US Open men's singles final represent?",
+      "answer": "United States",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "no_answer",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 13,
+      "id": "two-tdf-third",
+      "tier": "two_recent",
+      "question": "Which rider from the 2026 Tour de France winner's own team also finished on the podium?",
+      "answer": "Isaac del Toro",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 14,
+      "id": "multi-earliest-born",
+      "tier": "multi_entity",
+      "question": "Of all the 2026 Nobel laureates in Physics, Chemistry, and Physiology or Medicine, who was born earliest?",
+      "answer": "Henri B. Kagan",
+      "results": {
+        "jev": "correct",
+        "msft": "hedged",
+        "oai": "incorrect",
+        "claude-haiku-5.5": "incorrect",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "hedged"
+      }
+    },
+    {
+      "n": 15,
+      "id": "multi-youngest-laureate",
+      "tier": "multi_entity",
+      "question": "Across all six 2026 Nobel Prize categories (including Economic Sciences), who is the youngest laureate?",
+      "answer": "Karl Deisseroth",
+      "results": {
+        "jev": "hedged",
+        "msft": "hedged",
+        "oai": "hedged",
+        "claude-haiku-5.5": "hedged",
+        "claude-sonnet-5.5": "hedged",
+        "claude-opus-5.5": "hedged",
+        "fixed": "hedged"
+      }
+    },
+    {
+      "n": 16,
+      "id": "multi-german-medicine",
+      "tier": "multi_entity",
+      "question": "How many of the 2026 Nobel laureates in Physiology or Medicine were born in Germany?",
+      "answer": "2",
+      "results": {
+        "jev": "hedged",
+        "msft": "correct",
+        "oai": "hedged",
+        "claude-haiku-5.5": "hedged",
+        "claude-sonnet-5.5": "hedged",
+        "claude-opus-5.5": "hedged",
+        "fixed": "hedged"
+      }
+    },
+    {
+      "n": 17,
+      "id": "multi-econ-phd",
+      "tier": "multi_entity",
+      "question": "Both 2026 laureates of the Nobel Memorial Prize in Economic Sciences earned their PhDs at the same university. Which one?",
+      "answer": "Massachusetts Institute of Technology",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "hedged",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 18,
+      "id": "multi-usopen-older",
+      "tier": "multi_entity",
+      "question": "Which of the two 2026 US Open singles champions is older?",
+      "answer": "Alexander Zverev",
+      "results": {
+        "jev": "correct",
+        "msft": "incorrect",
+        "oai": "correct",
+        "claude-haiku-5.5": "no_answer",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 19,
+      "id": "multi-tdf-youngest-podium",
+      "tier": "multi_entity",
+      "question": "Who is the youngest of the three riders on the final podium of the 2026 Tour de France?",
+      "answer": "Isaac del Toro",
+      "results": {
+        "jev": "hedged",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 20,
+      "id": "multi-solo-prizes",
+      "tier": "multi_entity",
+      "question": "In how many of the six 2026 Nobel Prize categories (including Economic Sciences) was the prize awarded to a single laureate?",
+      "answer": "3",
+      "results": {
+        "jev": "correct",
+        "msft": "incorrect",
+        "oai": "hedged",
+        "claude-haiku-5.5": "hedged",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "hedged"
+      }
+    },
+    {
+      "n": 21,
+      "id": "arith-chem-birth-years",
+      "tier": "arithmetic",
+      "question": "How many years apart are the birth years of the two 2026 Nobel laureates in Chemistry?",
+      "answer": "20",
+      "results": {
+        "jev": "correct",
+        "msft": "hedged",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "hedged"
+      }
+    },
+    {
+      "n": 22,
+      "id": "arith-kagan-age",
+      "tier": "arithmetic",
+      "question": "How old was the elder of the two 2026 Nobel laureates in Chemistry when the prize was announced in October 2026?",
+      "answer": "95",
+      "results": {
+        "jev": "correct",
+        "msft": "hedged",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "hedged",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 23,
+      "id": "arith-tdf-years-since-first",
+      "tier": "arithmetic",
+      "question": "How many years after his first Tour de France victory did the winner of the 2026 Tour de France win that race?",
+      "answer": "6",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 24,
+      "id": "arith-peace-lit-age-gap",
+      "tier": "arithmetic",
+      "question": "In complete years, how much older is the 2026 Nobel Peace Prize laureate than the 2026 Nobel laureate in Literature?",
+      "answer": "8",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "hedged",
+        "claude-sonnet-5.5": "no_answer",
+        "claude-opus-5.5": "hedged",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 25,
+      "id": "arith-usm-final-games",
+      "tier": "arithmetic",
+      "question": "How many games in total were played in the 2026 US Open men's singles final?",
+      "answer": "42",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "no_answer",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 26,
+      "id": "arith-wc-to-usopen-days",
+      "tier": "arithmetic",
+      "question": "How many days after the 2026 FIFA World Cup final was the 2026 US Open men's singles final played?",
+      "answer": "56",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 27,
+      "id": "new-msft-base-model",
+      "tier": "too_new",
+      "question": "Microsoft-Decision-1, released in October 2026, was post-trained from which base model?",
+      "answer": "Qwen3.5-9B",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "no_answer",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 28,
+      "id": "new-oai-decisions-model",
+      "tier": "too_new",
+      "question": "Which model is the only one supported by OpenAI's Decisions API in its 2026 public beta?",
+      "answer": "gpt-6-luna",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 29,
+      "id": "new-msft-price",
+      "tier": "too_new",
+      "question": "What price per million input tokens does OpenRouter list for Microsoft-Decision-1?",
+      "answer": "$0.042",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "hedged",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "hedged",
+        "fixed": "no_answer"
+      }
+    },
+    {
+      "n": 30,
+      "id": "new-oai-endpoint",
+      "tier": "too_new",
+      "question": "What is the HTTP endpoint path of OpenAI's Decisions API?",
+      "answer": "POST /v1/decisions",
+      "results": {
+        "jev": "no_answer",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 31,
+      "id": "new-oai-question-types",
+      "tier": "too_new",
+      "question": "What are the three question types supported by OpenAI's Decisions API?",
+      "answer": "predicate, choice, and score",
+      "results": {
+        "jev": "no_answer",
+        "msft": "correct",
+        "oai": "no_answer",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 32,
+      "id": "unans-physics-cowinner",
+      "tier": "unanswerable",
+      "question": "Which physicist shared the 2026 Nobel Prize in Physics with Francis Halzen?",
+      "answer": "No one: Francis Halzen was the sole laureate of the 2026 Nobel Prize in Physics.",
+      "results": {
+        "jev": "correct",
+        "msft": "no_answer",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "hedged",
+        "claude-opus-5.5": "correct",
+        "fixed": "no_answer"
+      }
+    },
+    {
+      "n": 33,
+      "id": "unans-rybakina-round",
+      "tier": "unanswerable",
+      "question": "In which round was Elena Rybakina eliminated at the 2026 US Open?",
+      "answer": "She was not eliminated: Elena Rybakina won the 2026 US Open women's singles title.",
+      "results": {
+        "jev": "no_answer",
+        "msft": "correct",
+        "oai": "hedged",
+        "claude-haiku-5.5": "no_answer",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 34,
+      "id": "unans-wc-shootout",
+      "tier": "unanswerable",
+      "question": "What was the score of the penalty shootout in the 2026 FIFA World Cup final?",
+      "answer": "There was no penalty shootout: Spain won the final 1\u20130 after extra time.",
+      "results": {
+        "jev": "correct",
+        "msft": "hedged",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 35,
+      "id": "unans-nobel-math",
+      "tier": "unanswerable",
+      "question": "Who won the 2026 Nobel Prize in Mathematics?",
+      "answer": "No one: there is no Nobel Prize in Mathematics.",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 36,
+      "id": "unans-ryder-2026",
+      "tier": "unanswerable",
+      "question": "Which team won the 2026 Ryder Cup?",
+      "answer": "No 2026 Ryder Cup was held: the event took place in 2025 (Bethpage Black) and next in 2027 (Adare Manor).",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "no_answer",
+        "claude-sonnet-5.5": "no_answer",
+        "claude-opus-5.5": "no_answer",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 37,
+      "id": "frames-338",
+      "tier": "frames",
+      "question": "What is population in 1968 of the city that hosted the olympic games in which Lucy Steele competed?",
+      "answer": "15,739",
+      "results": {
+        "jev": "no_answer",
+        "msft": "correct",
+        "oai": "incorrect",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "incorrect",
+        "claude-opus-5.5": "correct",
+        "fixed": "incorrect"
+      }
+    },
+    {
+      "n": 38,
+      "id": "frames-536",
+      "tier": "frames",
+      "question": "What was the pseudonym of one of the co-founders of the Eagle Awards that won Favourite Specialist Comics Publication/Trade Publication 1977 and 1978?",
+      "answer": "Burt",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "no_answer"
+      }
+    },
+    {
+      "n": 39,
+      "id": "frames-352",
+      "tier": "frames",
+      "question": "How many days did it take for World War 2 to end after the death of Alois Burgstaller?",
+      "answer": "136 days",
+      "results": {
+        "jev": "correct",
+        "msft": "hedged",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "no_answer",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 40,
+      "id": "frames-618",
+      "tier": "frames",
+      "question": "How many votes did the opposition party get in the Brant riding the election before Justin Trudeau was elected Prime Minister?",
+      "answer": "16,351",
+      "results": {
+        "jev": "no_answer",
+        "msft": "correct",
+        "oai": "hedged",
+        "claude-haiku-5.5": "hedged",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "hedged",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 41,
+      "id": "frames-588",
+      "tier": "frames",
+      "question": "What is the nickname for the city where Mette Solli was born? Give the answer in Norwegian.",
+      "answer": "Rosenes by",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 42,
+      "id": "frames-489",
+      "tier": "frames",
+      "question": "How many days after Peter Tosh died did Bunny Wailer pass away?",
+      "answer": "12,226 days",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "incorrect",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "correct",
+        "claude-opus-5.5": "correct",
+        "fixed": "hedged"
+      }
+    },
+    {
+      "n": 43,
+      "id": "frames-718",
+      "tier": "frames",
+      "question": "How many years had passed since the Commonwealth of Pennsylvania was admitted to the Union by the time Rep. Robert D. Heaton was born?",
+      "answer": "85",
+      "results": {
+        "jev": "no_answer",
+        "msft": "incorrect",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "incorrect",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 44,
+      "id": "frames-10",
+      "tier": "frames",
+      "question": "An Australian artist, born the same year as artist Janet Cumbrae Stewart and fellow member of the Melbourne Society of Women Painters and Sculptors, had her painting featured on the cover of Women's World Magazine in 1923. What is the name of the painting?",
+      "answer": "Reve d'Or",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "correct",
+        "claude-sonnet-5.5": "no_answer",
+        "claude-opus-5.5": "no_answer",
+        "fixed": "no_answer"
+      }
+    },
+    {
+      "n": 45,
+      "id": "frames-243",
+      "tier": "frames",
+      "question": "A United States women's national soccer team player scored her first career international goal during the semi-final match of the 2015 FIFA Women's World Cup. This same player scored her second goal the next year. Tell me the difference in attendance between these two games.",
+      "answer": "43,518",
+      "results": {
+        "jev": "no_answer",
+        "msft": "no_answer",
+        "oai": "no_answer",
+        "claude-haiku-5.5": "no_answer",
+        "claude-sonnet-5.5": "no_answer",
+        "claude-opus-5.5": "no_answer",
+        "fixed": "no_answer"
+      }
+    },
+    {
+      "n": 46,
+      "id": "frames-494",
+      "tier": "frames",
+      "question": "How many years did it take after the FIFA ban was lifted for someone to wear a hijab in the World Cup?",
+      "answer": "11 years",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "incorrect",
+        "claude-haiku-5.5": "incorrect",
+        "claude-sonnet-5.5": "hedged",
+        "claude-opus-5.5": "incorrect",
+        "fixed": "incorrect"
+      }
+    },
+    {
+      "n": 47,
+      "id": "frames-76",
+      "tier": "frames",
+      "question": "A united states island that is only 90 miles away from Cuba has been the home of several famous people. In what year did the famous author who owns a book store there first start writing?",
+      "answer": "1959",
+      "results": {
+        "jev": "incorrect",
+        "msft": "hedged",
+        "oai": "incorrect",
+        "claude-haiku-5.5": "incorrect",
+        "claude-sonnet-5.5": "hedged",
+        "claude-opus-5.5": "no_answer",
+        "fixed": "incorrect"
+      }
+    },
+    {
+      "n": 48,
+      "id": "frames-414",
+      "tier": "frames",
+      "question": "Which U.S. National Park was the first to be established after the Portland Trail Blazers won their only playoff series with LaMarcus Aldridge on the team?",
+      "answer": "Gateway Arch National Park",
+      "results": {
+        "jev": "incorrect",
+        "msft": "correct",
+        "oai": "hedged",
+        "claude-haiku-5.5": "incorrect",
+        "claude-sonnet-5.5": "incorrect",
+        "claude-opus-5.5": "incorrect",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 49,
+      "id": "frames-318",
+      "tier": "frames",
+      "question": "How tall does the flower get on the very first orchid David L. Jones (botanist) described and published in his career?",
+      "answer": "20\u201330 millimetres (0.8\u20131 in)",
+      "results": {
+        "jev": "correct",
+        "msft": "correct",
+        "oai": "correct",
+        "claude-haiku-5.5": "incorrect",
+        "claude-sonnet-5.5": "incorrect",
+        "claude-opus-5.5": "correct",
+        "fixed": "correct"
+      }
+    },
+    {
+      "n": 50,
+      "id": "frames-400",
+      "tier": "frames",
+      "question": "How many times did the victor of the Immortal Game of 1851 lose a chess match to an American-born opponent?",
+      "answer": "2",
+      "results": {
+        "jev": "incorrect",
+        "msft": "incorrect",
+        "oai": "incorrect",
+        "claude-haiku-5.5": "incorrect",
+        "claude-sonnet-5.5": "incorrect",
+        "claude-opus-5.5": "incorrect",
+        "fixed": "correct"
       }
     }
   ]
