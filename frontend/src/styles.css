@@ -145,3 +145,37 @@
 .commit-link{display:inline-flex;align-items:center;gap:6px;color:var(--focus);font-variant-numeric:tabular-nums;text-decoration-color:#a8b39d}
 .commit-link svg{width:13px;height:13px;transform:rotate(-45deg)}
 @media(max-width:600px){.subsection h2{font-size:20px}.test-list summary{grid-template-columns:24px minmax(0,1fr) 10px;gap:10px}.test-tier{display:none}.test-list dl{padding-left:44px}.fix-table,.fix-table tbody{display:block;min-width:0}.fix-table thead{display:none}.fix-table tr{display:block;padding:10px 0}.fix-table td{display:block;width:auto!important;padding:3px 10px}.fix-table td:first-child{font-weight:700}}
+
+/* Methodology: agent loop, tools, state, deciders and harness. */
+.loop-diagram{display:flex;align-items:center;gap:0;margin-top:18px}
+.loop-node{flex:1;min-width:0;padding:14px 10px;border:1px solid var(--rule);border-radius:6px;background:var(--paper);text-align:center;font-size:16px;font-weight:700}
+.loop-io{flex:0 0 auto;min-width:96px;background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.loop-cycle{position:relative;flex:3;display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;align-items:center;padding:18px 18px 46px;border-radius:8px;background:var(--chart-surface)}
+.loop-arrow{position:relative;flex:0 0 32px;height:1px;margin:0 4px;background:var(--muted)}
+.loop-cycle .loop-arrow{margin:0 4px}
+.loop-arrow::after{content:"";position:absolute;right:0;top:-3px;width:6px;height:6px;border:solid var(--muted);border-width:1px 1px 0 0;transform:rotate(45deg)}
+.loop-return{position:absolute;left:calc(18px + (100% - 36px - 64px) / 6);right:calc(18px + (100% - 36px - 64px) / 6);bottom:18px;height:16px;border:1px solid var(--muted);border-top:0;border-radius:0 0 8px 8px}
+.loop-return::after{content:"";position:absolute;left:-4px;top:-2px;width:6px;height:6px;border:solid var(--muted);border-width:1px 0 0 1px;transform:rotate(45deg)}
+.tool-list{list-style:none;margin:14px 0 0;padding:0}
+.tool-list li{display:grid;grid-template-columns:170px minmax(0,1fr) auto;gap:16px;align-items:baseline;padding:10px;font-size:16px;line-height:1.6}
+.tool-list li:nth-child(odd){background:var(--chart-surface)}
+.tool-list code,.method-list code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+.method-list{margin:10px 0 0;padding-left:22px;font-size:16px;line-height:1.7}
+.method-list li+li{margin-top:4px}
+.method-list li::marker{color:var(--muted)}
+.model-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 32px;margin-top:12px;max-width:640px}
+.model-columns ul{list-style:none;margin:0;padding:0;font-size:16px;line-height:1.9}
+.model-columns li{display:flex;align-items:center;gap:10px}
+.method-note{margin-top:32px;padding:14px 16px;border-radius:6px;background:var(--chart-surface);font-size:15px;line-height:1.7;font-style:italic}
+@media(max-width:600px){
+  .loop-diagram{flex-direction:column;align-items:stretch}
+  .loop-io{min-width:0}
+  .loop-arrow,.loop-cycle .loop-arrow{flex:0 0 28px;width:1px;height:28px;margin:4px auto}
+  .loop-arrow::after{right:auto;top:auto;bottom:0;left:-3px;transform:rotate(135deg)}
+  .loop-cycle{grid-template-columns:1fr;grid-template-rows:auto 28px auto 28px auto;padding:16px 46px 16px 16px}
+  .loop-return{left:auto;right:18px;top:calc(16px + 24px);bottom:calc(16px + 24px);width:16px;height:auto;border:1px solid var(--muted);border-left:0;border-radius:0 8px 8px 0}
+  .loop-return::after{left:-2px;top:-4px;transform:rotate(-45deg)}
+  .tool-list li{grid-template-columns:minmax(0,1fr) auto;gap:4px 12px}
+  .tool-list li span{grid-column:1/-1;grid-row:2}
+  .model-columns{grid-template-columns:1fr}
+}

@@ -102,10 +102,65 @@ const resultMarks = {
   no_answer: ['–', 'No answer', "Says it couldn't determine the answer."],
 };
 
+const CODE = 'https://github.com/abelbirosh/arize_takehome/blob/b2982bc/src/research_agent/';
+const tools = [
+  { name: 'search_wikipedia', description: 'Haiku writes a query; the MediaWiki API returns the top 5 results.', file: 'tools.py', url: `${CODE}tools.py#L130-L155` },
+  { name: 'search_web', description: 'Haiku writes a query; the TinyFish CLI returns the top 5 results.', file: 'tools.py', url: `${CODE}tools.py#L157-L183` },
+  { name: 'read_source', description: 'Fetches one unread result, trims it to 15,000 characters, and Haiku extracts notes.', file: 'agent.py', url: `${CODE}agent.py#L130-L144` },
+  { name: 'answer', description: 'Haiku writes the final answer from the notes.', file: 'llm.py', url: `${CODE}llm.py#L137-L154` },
+];
+const snapshotFields = ['The question', 'Step budget used and remaining', 'Searches already run', 'Notes so far', 'Sources already read', 'Up to 20 unread results, with title and snippet', 'Step history'];
+
+function AgentLoop() {
+  return <div className="loop-diagram" role="img" aria-label="Input, then a repeating decide, act, observe loop, then output">
+    <div className="loop-node loop-io">Input</div>
+    <span className="loop-arrow"/>
+    <div className="loop-cycle">
+      <div className="loop-node">Decide</div><span className="loop-arrow"/>
+      <div className="loop-node">Act</div><span className="loop-arrow"/>
+      <div className="loop-node">Observe</div>
+      <span className="loop-return"/>
+    </div>
+    <span className="loop-arrow"/>
+    <div className="loop-node loop-io">Output</div>
+  </div>;
+}
+
 function Methodology({ benchmark }) {
-  const { counts, tiers, tests } = benchmark;
+  const { counts, tiers, tests, deciders } = benchmark;
   const tierName = Object.fromEntries(tiers.map(t => [t.id, t.name]));
+  const modelColumns = ['decision', 'reasoning'].map(kind => deciders.filter(d => d.kind === kind));
   return <>
+    <section className="subsection"><h2>Agent Loop</h2><AgentLoop/></section>
+    <section className="subsection"><h2>Available Tools</h2>
+      <ul className="tool-list">{tools.map(t => <li key={t.name}><code>{t.name}</code><span>{t.description}</span>
+        <a className="commit-link" href={t.url} target="_blank" rel="noreferrer">{t.file}<Icon name="arrow"/></a></li>)}</ul>
+    </section>
+    <section className="subsection"><h2>State</h2>
+      <p className="subsection-copy">The decider gets a structured snapshot containing:</p>
+      <ul className="method-list">{snapshotFields.map(f => <li key={f}>{f}</li>)}</ul>
+    </section>
+    <section className="subsection"><h2>Models Used as Decider</h2>
+      <div className="model-columns">{modelColumns.map((column, i) => <ul key={i}>{column.map(d => <li key={d.id}><span className={`swatch kind-${d.kind}`}/>{d.name}</li>)}</ul>)}</div>
+    </section>
+    <p className="method-note">Note: I used a 8 step budget for testing cost reasons and to observe if knowledge of pending steps altered run behavior. I also do not rerun failed searches and solely note that into agent memory</p>
+    <section className="subsection"><h2>Testing Harness Design</h2>
+      <ul className="method-list">
+        <li><code>prepare_dataset.py</code> creates 50 testing questions with a gold answer version and accepted variants, along with question nature flags. These are uploaded into <strong>Phoenix</strong> as a dataset.</li>
+        <li><code>run_experiments.py</code> creates one <strong>Phoenix</strong> experiment per decider and runs the deciders in parallel. Each run has a 900 second timeout. The logs of each run are recorded in <code>results/&lt;tag&gt;.jsonl</code></li>
+      </ul>
+      <p className="subsection-copy">Evaluators are:</p>
+      <ul className="method-list">
+        <li>LLM as a judge for correctness and groundedness</li>
+        <li>Code checks for routing fit along with telemetry metrics like total cost, routing cost, routing latency, steps, invalid decisions, and web use.</li>
+      </ul>
+      <p className="subsection-copy">Measures to include fairness are:</p>
+      <ul className="method-list">
+        <li>Claude Haiku is used for all writing across runs</li>
+        <li>Per model rate limiter to adhere to OpenRouter's limits. The time spent in queue waiting is subtracted before latency calculations</li>
+        <li>The costs for the generator and decider (even if it's the same model) are counted separately.</li>
+      </ul>
+    </section>
     <section className="subsection"><h2>Test Counts</h2>
       <p className="subsection-copy">{counts.questions} questions × {counts.deciders} deciders = {counts.runs} runs. Each decider answered every question once with an {counts.max_steps}-step budget: {counts.main} questions in the main run and {counts.pilot} in a pilot on the same code.</p>
     </section>
