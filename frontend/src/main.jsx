@@ -143,21 +143,23 @@ function Methodology({ benchmark }) {
     <section className="subsection"><h2>Models Used as Decider</h2>
       <div className="model-columns">{modelColumns.map((column, i) => <ul key={i}>{column.map(d => <li key={d.id}><span className={`swatch kind-${d.kind}`}/>{d.name}</li>)}</ul>)}</div>
     </section>
-    <p className="method-note">Note: I used a 8 step budget for testing cost reasons and to observe if knowledge of pending steps altered run behavior. I also do not rerun failed searches and solely note that into agent memory</p>
+    <p className="method-note">Note: I used a 8 step budget for testing cost reasons and to observe if knowledge of pending steps altered run behavior. I also do not rerun failed searches and solely note that into agent memory.</p>
     <section className="subsection"><h2>Testing Harness Design</h2>
       <ul className="method-list">
         <li><code>prepare_dataset.py</code> creates 50 testing questions with a gold answer version and accepted variants, along with question nature flags. These are uploaded into <strong>Phoenix</strong> as a dataset.</li>
-        <li><code>run_experiments.py</code> creates one <strong>Phoenix</strong> experiment per decider and runs the deciders in parallel. Each run has a 900 second timeout. The logs of each run are recorded in <code>results/&lt;tag&gt;.jsonl</code></li>
+        <li><code>run_experiments.py</code> creates one <strong>Phoenix</strong> experiment per decider and runs the deciders in parallel. Each run has a 900 second timeout. The logs of each run are recorded in <code>results/&lt;tag&gt;.jsonl</code>.</li>
       </ul>
-      <p className="subsection-copy">Evaluators are:</p>
+    </section>
+    <section className="subsection"><h2>Evaluators</h2>
       <ul className="method-list">
-        <li>LLM as a judge for correctness and groundedness</li>
+        <li>LLM as a judge for correctness and groundedness.</li>
         <li>Code checks for routing fit along with telemetry metrics like total cost, routing cost, routing latency, steps, invalid decisions, and web use.</li>
       </ul>
-      <p className="subsection-copy">Measures to include fairness are:</p>
+    </section>
+    <section className="subsection"><h2>Fairness Measures</h2>
       <ul className="method-list">
-        <li>Claude Haiku is used for all writing across runs</li>
-        <li>Per model rate limiter to adhere to OpenRouter's limits. The time spent in queue waiting is subtracted before latency calculations</li>
+        <li>Claude Haiku is used for all writing across runs.</li>
+        <li>Per model rate limiter to adhere to OpenRouter's limits. The time spent in queue waiting is subtracted before latency calculations.</li>
         <li>The costs for the generator and decider (even if it's the same model) are counted separately.</li>
       </ul>
     </section>
