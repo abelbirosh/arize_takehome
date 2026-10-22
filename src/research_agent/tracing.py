@@ -3,10 +3,10 @@
 Span layout for one run:
 
     research_agent (AGENT)
+      route.<controller> (CHAIN)
+        jev.decide (DECISION)        <- Jev call, probabilities as attributes
+        ChatCompletion (LLM)         <- LLM-as-controller, auto-instrumented
       step.N <action> (CHAIN)
-        route.<controller> (CHAIN)
-          jev.decide (DECISION)      <- Jev call, probabilities as attributes
-          ChatCompletion (LLM)       <- LLM-as-controller, auto-instrumented
         wikipedia.search / web.search (RETRIEVER)
         read_source (TOOL)
         ChatCompletion (LLM)         <- query writing / note taking / answering

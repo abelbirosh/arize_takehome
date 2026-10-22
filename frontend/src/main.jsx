@@ -168,10 +168,10 @@ function Methodology({ benchmark }) {
 }
 
 const traceTree = `research_agent              AGENT      run metadata: decider, generator model, step budget
+  route.<decider>           CHAIN      chosen action, confidence, valid, escalated, latency
+    jev.decide              DECISION   decision-model call
+    ChatCompletion          LLM        Claude decider call (auto-instrumented)
   step.N <action>           CHAIN      one per step
-    route.<decider>         CHAIN      chosen action, confidence, valid, escalated, latency
-      jev.decide            DECISION   decision-model call
-      ChatCompletion        LLM        Claude decider call (auto-instrumented)
     wikipedia/web.search    RETRIEVER  the returned results
     read_source             TOOL       page read
     ChatCompletion          LLM        Haiku writing a query, notes, or the answer`;
