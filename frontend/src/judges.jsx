@@ -9,6 +9,7 @@ const BASE = '/judges';
 const chapters = [
   { id: 'problem', name: 'Comparing different judge methods and human annotation', title: 'Comparing different judge methods and human annotation' },
   { id: 'annotator', name: 'Human data annotator', title: 'Human data annotator' },
+  { id: 'comparisons', name: 'Judge comparisons between human grading, reasoning models and decision models', title: 'Judge comparisons between human grading, reasoning models and decision models' },
 ];
 const chapterPath = id => id === chapters[0].id ? BASE : `${BASE}/${id}`;
 const indexFromPath = () => {
@@ -103,6 +104,70 @@ function Annotator() {
   </>;
 }
 
+const kindLabels = { reasoning: 'Reasoning model', decision: 'Decision model' };
+const shortNames = { 'sol-low': 'Sol low', 'sol-high': 'Sol high', opus: 'Opus', jev: 'Jev', msft: 'MSFT', oai: 'Luna' };
+const pct = v => v == null ? '—' : `${Math.round(v * 100)}%`;
+const kappa = v => v == null ? '—' : v.toFixed(2);
+const cents = v => v == null ? '—' : v === 0 ? '0¢' : `${(v * 100).toPrecision(2)}¢`;
+const ms = v => v == null ? '—' : `${Math.round(v).toLocaleString('en-US')} ms`;
+
+function JudgeChart({ label, description, judges, value, format, better, note }) {
+  const shown = judges.filter(j => value(j) != null)
+    .sort((a, b) => better === 'higher' ? value(b) - value(a) : value(a) - value(b));
+  const left = judges.filter(j => value(j) == null);
+  const max = better === 'higher' && format === pct ? 1 : (Math.max(...shown.map(value)) || 1);
+  return <figure className="metric">
+    <figcaption><h2>{label}</h2></figcaption>
+    <div className="bars" aria-hidden="true">
+      {shown.map(j => <div className={`bar-col kind-${j.kind}`} key={j.judge}>
+        <span className="bar-value">{format(value(j))}</span>
+        <span className="bar" style={{ height: `${value(j) / max * 100}%` }}/>
+        <span className="bar-name">{shortNames[j.judge]}</span>
+      </div>)}
+      {left.map(j => <div className={`bar-col kind-${j.kind} is-excluded`} key={j.judge}>
+        <span className="bar-value">*</span><span className="bar-name">{shortNames[j.judge]}</span>
+      </div>)}
+    </div>
+    <p className="metric-description">{description}</p>
+    {left.length > 0 && note && <p className="metric-note">* {note}</p>}
+    <div className="visually-hidden"><table><caption>{label}, best to worst</caption><thead><tr><th scope="col">Judge</th><th scope="col">{label}</th></tr></thead>
+      <tbody>{shown.map(j => <tr key={j.judge}><th scope="row">{j.name}</th><td>{format(value(j))}</td></tr>)}</tbody></table></div>
+  </figure>;
+}
+
+function JudgeComparisons() {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState('');
+  useEffect(() => {
+    fetch('/judges.json').then(r => { if (!r.ok) throw new Error(); return r.json(); })
+      .then(setData).catch(() => setError('The judge results could not be loaded. Please refresh to try again.'));
+  }, []);
+  if (error) return <div className="notice error" role="alert"><span>{error}</span></div>;
+  if (!data) return null;
+  const judges = data.judges;
+  const kinds = [...new Set(judges.map(j => j.kind))];
+  return <>
+    <section className="subsection"><h2>Agreement With My Labels</h2>
+      <ul className="legend">{kinds.map(k => <li key={k}><span className={`swatch kind-${k}`}/>{kindLabels[k]}</li>)}</ul>
+      <div className="metric-grid">
+        <JudgeChart label="Correctness agreement" description={`Runs where the judge's correctness label matched mine, out of ${data.runs}.`} judges={judges} value={j => j.correctness_agree} format={pct} better="higher"/>
+        <JudgeChart label="Grounded agreement" description={`Runs where the judge's grounded label matched mine, out of ${data.runs}.`} judges={judges} value={j => j.grounded_agree} format={pct} better="higher"/>
+        <JudgeChart label="Cost per grade" description="Mean spend per check." judges={judges} value={j => j.cost_per_grade} format={cents} better="lower"/>
+        <JudgeChart label="Time per grade" description="Mean latency per check." judges={judges} value={j => j.latency_per_grade_ms} format={ms} better="lower" note="Sol low's grades come from the benchmark run, which did not time them."/>
+      </div>
+    </section>
+    <section className="subsection"><h2>All Measures</h2>
+      <div className="table-scroll"><table className="data-table judge-table">
+        <thead><tr><th scope="col">Judge</th><th scope="col" className="num">Correctness</th><th scope="col" className="num">κ</th><th scope="col" className="num">Counts as correct κ</th><th scope="col" className="num">Grounded</th><th scope="col" className="num">κ</th><th scope="col" className="num">Cost per grade</th><th scope="col" className="num">Time per grade</th></tr></thead>
+        <tbody>{judges.map(j => <tr key={j.judge}><th scope="row"><span className={`swatch kind-${j.kind}`}/> {j.name}</th>
+          <td className="num">{pct(j.correctness_agree)}</td><td className="num">{kappa(j.correctness_kappa)}</td><td className="num">{kappa(j.counts_as_correct_kappa)}</td>
+          <td className="num">{pct(j.grounded_agree)}</td><td className="num">{kappa(j.grounded_kappa)}</td>
+          <td className="num">{cents(j.cost_per_grade)}</td><td className="num">{ms(j.latency_per_grade_ms)}</td></tr>)}</tbody>
+      </table></div>
+    </section>
+  </>;
+}
+
 function App() {
   const [chapter, setChapter] = useState(indexFromPath);
   const heading = useRef(null);
@@ -142,6 +207,7 @@ function App() {
           <h1 className="chapter-title" ref={heading} tabIndex="-1">{current.title}</h1>
           {current.id === 'problem' && <JudgeProblem/>}
           {current.id === 'annotator' && <Annotator/>}
+          {current.id === 'comparisons' && <JudgeComparisons/>}
         </div>
       </main>
     </div>

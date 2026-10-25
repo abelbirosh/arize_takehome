@@ -24,7 +24,7 @@ Text renders as plain text, and links must be http(s). The prose for the Questio
 
 ## Judge study page
 
-`judges.html` (`src/judges.jsx`) is a separate page at `/judges`, sent on its own: the judge comparison and human annotation study. It shares `styles.css` with the presentation but none of its content; its screenshots are in `public/annotator/`. `vercel.json` and `vite.config.js` route `/judges` and its chapters to it.
+`judges.html` (`src/judges.jsx`) is a separate page at `/judges`, sent on its own: the judge comparison and human annotation study. It shares `styles.css` with the presentation but none of its content; its screenshots are in `public/annotator/`. Its comparison chapter reads `public/judges.json`, written by `scripts/compare_judges.py`. `vercel.json` and `vite.config.js` route `/judges` and its chapters to it.
 
 ## Navigation
 

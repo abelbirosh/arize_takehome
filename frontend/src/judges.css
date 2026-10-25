@@ -1,1 +1,3 @@
 .annotator-shot{max-width:760px}
+.data-table tbody th .swatch{display:inline-block;margin-right:4px;vertical-align:baseline}
+.judge-table th[scope=row]{white-space:nowrap}
