@@ -3,5 +3,9 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "frontend/dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/judges", "destination": "/judges.html" },
+    { "source": "/judges/(.*)", "destination": "/judges.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

@@ -22,6 +22,10 @@ Two files in `frontend/public/` are loaded at runtime and validated by `src/data
 
 Text renders as plain text, and links must be http(s). The prose for the Question, Methodology, Phoenix and Takeaways sections lives in `src/main.jsx`, and the Phoenix screenshots in `public/phoenix/`.
 
+## Judge study page
+
+`judges.html` (`src/judges.jsx`) is a separate page at `/judges`, sent on its own: the judge comparison and human annotation study. It shares `styles.css` with the presentation but none of its content; its screenshots are in `public/annotator/`. `vercel.json` and `vite.config.js` route `/judges` and its chapters to it.
+
 ## Navigation
 
 The chapter index, the arrow keys, Page Up/Down and Home/End all change chapters. Each chapter has its own path (for example `/detailed-results`), so links and browser back and forward work; `vercel.json` rewrites every path to the app.
