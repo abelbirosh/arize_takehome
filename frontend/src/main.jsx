@@ -10,8 +10,6 @@ const chapters = [
   { id: 'phoenix', name: 'How I used Phoenix?', title: 'How I used Phoenix?' },
   { id: 'challenges', name: 'What went wrong and how I fixed it?', title: 'What went wrong and how I fixed it?' },
   { id: 'takeaways', name: 'Takeaways', title: 'Takeaways' },
-  { id: 'judging', name: 'Comparing different judge methods and human annotation', title: 'Comparing different judge methods and human annotation' },
-  { id: 'annotator', name: 'Human data annotator', title: 'Human data annotator' },
 ];
 const legacyIds = { results: 'detailed-results' };
 // Chapters live at clean paths (/methodology); the opening chapter is the root.
@@ -249,72 +247,6 @@ const takeaways = [
   'Decision 1 gave the best evidence-supported answers.',
 ];
 
-const judgeSample = [
-  ['Correct', 'Supported', 6, 203], ['Correct', 'Unsupported', 3, 33],
-  ['Hedged', 'Supported', 3, 25], ['Hedged', 'Unsupported', 3, 23],
-  ['Incorrect', 'Supported', 3, 16], ['Incorrect', 'Unsupported', 3, 15],
-  ['No answer', 'Not applicable', 2, 15], ['No answer', 'Unsupported', 1, 13],
-  ['No answer', 'Supported', 1, 7],
-];
-
-function JudgeProblem() {
-  return <>
-    <section className="subsection"><h2>Problem</h2>
-      <ul className="method-list">
-        <li>Every accuracy number in this benchmark comes from one LLM judge: GPT-6.1 Sol at low reasoning effort, grading correctness against a gold answer and groundedness against the agent's own notes.</li>
-        <li>If the judge is wrong, the decider ranking can be wrong too. Hedged answers are the clearest risk, because they count as wrong.</li>
-      </ul>
-    </section>
-    <section className="subsection"><h2>Questions</h2>
-      <ul className="method-list">
-        <li>How often does the judge agree with a human grader?</li>
-        <li>Does a stronger reasoning model judge better, and is it worth the cost?</li>
-        <li>Can a decision model, the same kind of model that routed the agent, do the judging at a fraction of the cost?</li>
-      </ul>
-    </section>
-    <section className="subsection"><h2>Approach</h2>
-      <ul className="method-list">
-        <li>I graded a blind sample of 25 runs by hand, one per question, with the hard cases taking 19 of the 25 slots.</li>
-        <li>The same 25 runs go to reasoning-model judges (GPT-6.1 Sol at low and high effort, Claude Opus 5.5) and decision-model judges (Jev, Microsoft Decision 1, OpenAI GPT-6 Luna Decisions), all with the same label definitions.</li>
-        <li>Each judge is scored by its agreement with the human labels, raw and as Cohen's κ, and by its cost and time per grade.</li>
-      </ul>
-    </section>
-    <section className="subsection"><h2>Sample</h2>
-      <div className="table-scroll"><table className="data-table">
-        <thead><tr><th scope="col">Correctness</th><th scope="col">Grounded</th><th scope="col" className="num">Sampled</th><th scope="col" className="num">In 350 runs</th></tr></thead>
-        <tbody>{judgeSample.map(([c, g, n, all]) => <tr key={c + g}><td>{c}</td><td>{g}</td><td className="num">{n}</td><td className="num">{all}</td></tr>)}</tbody>
-      </table></div>
-    </section>
-  </>;
-}
-
-function Annotator() {
-  const [open, setOpen] = useState(null);
-  const Shot = shot => <figure className="phoenix-shot annotator-shot">
-    <button className="shot-button" aria-label={`Enlarge: ${shot.alt}`} onClick={() => setOpen(shot)}><img src={shot.src} alt={shot.alt} loading="lazy"/></button>
-  </figure>;
-  return <>
-    {open && <Lightbox shot={open} onClose={() => setOpen(null)}/>}
-    <section className="subsection"><h2>Grading Interface</h2>
-      <ul className="method-list">
-        <li>I built a local grading page (<code>grader/</code>) so the human labels follow the same rubric as the judges.</li>
-        <li>It is blind: the page never loads the judge's labels or the name of the decider.</li>
-        <li>Each run shows the question, the gold answer and its accepted variants beside the agent's answer, then the research notes, with matches of the gold answer highlighted.</li>
-        <li>Two label groups mirror the judges, correctness (correct, hedged, incorrect, no answer) and grounded (supported, unsupported, not applicable), and each label shows the judge's own definition.</li>
-      </ul>
-      {Shot({ src: '/annotator/grader-run.webp', alt: 'Grading page: the run list on the left, the gold answer beside the agent answer with matches highlighted, research notes, and correctness and grounded labels on the right' })}
-    </section>
-    <section className="subsection"><h2>Workflow</h2>
-      <ul className="method-list">
-        <li>Keys 1 to 4 pick correctness, 5 to 7 pick grounded, and Ctrl+Enter moves to the next run.</li>
-        <li>A comment box records why, for every run where the call was close.</li>
-        <li>Grades save in the browser as I click, and Download labels.csv exports them for scoring against the judges.</li>
-      </ul>
-      {Shot({ src: '/annotator/grader-comment.webp', alt: 'A graded run marked hedged and supported, with a comment explaining the call' })}
-    </section>
-  </>;
-}
-
 function Takeaways() {
   return <>
     <ul className="method-list takeaway-list">{takeaways.map(t => <li key={t}>{t}</li>)}</ul>
@@ -414,8 +346,6 @@ function App() {
             {current.id === 'phoenix' && <PhoenixUsage/>}
             {current.id === 'challenges' && <FixList items={fixes}/>}
             {current.id === 'takeaways' && <Takeaways/>}
-            {current.id === 'judging' && <JudgeProblem/>}
-            {current.id === 'annotator' && <Annotator/>}
 
           </>}
         </div>
