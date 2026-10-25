@@ -1,6 +1,7 @@
 """Stratified sample of judged runs for blind human grading (no API calls)."""
 
 import csv
+import json
 import sys
 from collections import Counter
 from pathlib import Path
@@ -9,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 from sample_validation import (
     QUOTAS,
     blind_rows,
+    grader_payload,
     key_rows,
     sample,
     stratum,
@@ -96,3 +98,18 @@ def test_key_lines_up_with_sheet_and_carries_weights():
     assert key[0]["judge_label"] == picked[0]["judge"]["label"]
     k = next(k for k in key if (k["judge_label"], k["grounded_label"]) == ("correct", "supported"))
     assert k["weight"] == 30 / QUOTAS[("correct", "supported")]
+
+
+def test_grader_payload_carries_rows_and_rubric_but_no_judge_labels(tmp_path):
+    picked = sample(population(), seed=1)
+    payload = grader_payload(blind_rows(picked, GOLD))
+    assert len(payload["rows"]) == 25
+    assert [o["label"] for o in payload["rubric"]["correctness"]] == [
+        "correct", "hedged", "incorrect", "no_answer"]
+    assert [o["label"] for o in payload["rubric"]["grounded"]] == [
+        "supported", "unsupported", "not_applicable"]
+    assert all(o["definition"] for group in payload["rubric"].values() for o in group)
+    assert "judge says" not in json.dumps(payload)
+    again = grader_payload(blind_rows(sample(population(), seed=1), GOLD))
+    other = grader_payload(blind_rows(sample(population(), seed=2), GOLD))
+    assert payload["sample_id"] == again["sample_id"] != other["sample_id"]

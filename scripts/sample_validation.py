@@ -8,6 +8,7 @@ declines, unsupported answers). Writes to results/human_validation/:
 - grading.csv  one row per run: question, gold, prediction and notes to read, and empty
                 columns for your two labels; no judge labels
 - README.md    the label definitions (the judges' own rubric)
+- grading.js   the same rows and rubric for the grading page (grader/index.html)
 - key.csv      the judge's labels and stratum weights; open only after grading
 """
 
@@ -15,8 +16,10 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import random
+import re
 import sys
 from collections import Counter, defaultdict
 from itertools import zip_longest
@@ -127,6 +130,24 @@ def _rubric(prompt: str) -> str:
     return body.strip()
 
 
+def _rubric_options(prompt: str) -> list[dict]:
+    """The rubric as [{label, definition}], one per `- "label": ...` item."""
+    items = re.findall(r'^- "([a-z_]+)": (.+?)(?=^- "|\Z)', _rubric(prompt), re.MULTILINE | re.DOTALL)
+    return [{"label": label, "definition": " ".join(text.split())} for label, text in items]
+
+
+def grader_payload(rows: list[dict]) -> dict:
+    """What the grading page loads: the blind rows, the rubric, and an id for the sample
+    so grades saved in the browser never attach to a different draw."""
+    order = "|".join(r["question"] for r in rows)
+    return {
+        "sample_id": hashlib.sha256(order.encode()).hexdigest()[:12],
+        "rows": rows,
+        "rubric": {"correctness": _rubric_options(CORRECTNESS_PROMPT),
+                   "grounded": _rubric_options(GROUNDED_PROMPT)},
+    }
+
+
 GRADING_FIELDS = ["n", "question", "gold", "accepted", "answerable", "predicted", "notes",
                   "human_correctness", "human_grounded", "comment"]
 
@@ -171,6 +192,9 @@ def main() -> None:
     args.out.mkdir(parents=True, exist_ok=True)
     write_grading_csv(args.out / "grading.csv", sheet)
     (args.out / "README.md").write_text(_readme())
+    # A script, not JSON, so grader/index.html can load it straight from the file system.
+    (args.out / "grading.js").write_text(
+        f"window.GRADING = {json.dumps(grader_payload(sheet), ensure_ascii=False, indent=1)};\n")
     key = key_rows(picked, runs)
     _write_csv(args.out / "key.csv", key, list(key[0]))
     strata = Counter(stratum(r) for r in picked)
