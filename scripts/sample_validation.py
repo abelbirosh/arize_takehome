@@ -5,9 +5,10 @@
 Oversamples the cases a judge is most likely to get wrong (hedges, wrong answers,
 declines, unsupported answers). Writes to results/human_validation/:
 
-- grading_sheet.md  the runs to grade: question, gold, prediction, notes; no judge labels
-- labels.csv        one row per run for your two labels
-- key.csv           the judge's labels and stratum weights; open only after grading
+- grading.csv  one row per run: question, gold, prediction and notes to read, and empty
+                columns for your two labels; no judge labels
+- README.md    the label definitions (the judges' own rubric)
+- key.csv      the judge's labels and stratum weights; open only after grading
 """
 
 from __future__ import annotations
@@ -26,20 +27,20 @@ from research_agent.evals import CORRECTNESS_PROMPT, GROUNDED_PROMPT
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# (correctness label, grounded label) -> runs to draw. Hard cases take 38 of 50 slots,
+# (correctness label, grounded label) -> runs to draw. Hard cases take 19 of 25 slots,
 # against 114 of 350 runs in the full grid.
 QUOTAS: dict[tuple[str, str], int] = {
-    ("correct", "supported"): 12,
-    ("correct", "unsupported"): 7,
-    ("hedged", "supported"): 6,
-    ("hedged", "unsupported"): 5,
-    ("incorrect", "supported"): 5,
-    ("incorrect", "unsupported"): 5,
-    ("no_answer", "not_applicable"): 4,
-    ("no_answer", "unsupported"): 3,
-    ("no_answer", "supported"): 3,
+    ("correct", "supported"): 6,
+    ("correct", "unsupported"): 3,
+    ("hedged", "supported"): 3,
+    ("hedged", "unsupported"): 3,
+    ("incorrect", "supported"): 3,
+    ("incorrect", "unsupported"): 3,
+    ("no_answer", "not_applicable"): 2,
+    ("no_answer", "unsupported"): 1,
+    ("no_answer", "supported"): 1,
 }
-MAX_PER_QUESTION = 2
+MAX_PER_QUESTION = 1
 
 
 def stratum(run: dict) -> tuple[str, str]:
@@ -55,7 +56,7 @@ def _interleave_by_controller(runs: list[dict]) -> list[dict]:
 
 
 def sample(runs: list[dict], seed: int = 0, quotas: dict = QUOTAS) -> list[dict]:
-    """Fill each stratum's quota, scarcest first, with at most two runs per question.
+    """Fill each stratum's quota, scarcest first, with each question used once.
     A stratum too small for its quota is taken whole and the total topped up from the
     rest. Returns the picks in a shuffled (blind) order."""
     rng = random.Random(seed)
@@ -126,28 +127,32 @@ def _rubric(prompt: str) -> str:
     return body.strip()
 
 
+GRADING_FIELDS = ["n", "question", "gold", "accepted", "answerable", "predicted", "notes",
+                  "human_correctness", "human_grounded", "comment"]
+
+
+def write_grading_csv(path: Path, rows: list[dict]) -> None:
+    """One file to read and answer in: notes stay multi-line inside their cell."""
+    _write_csv(path, rows, GRADING_FIELDS)
+
+
 def _write_csv(path: Path, rows: list[dict], fields: list[str]) -> None:
-    with path.open("w", newline="") as f:
+    with path.open("w", newline="", encoding="utf-8-sig") as f:  # BOM so Excel reads UTF-8
         w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         w.writeheader()
         w.writerows(rows)
 
 
-def _sheet(rows: list[dict]) -> str:
-    out = ["# Human validation: grading sheet", "",
-           ("Grade each run blind. Put your labels in `labels.csv`; leave `key.csv` closed "
-            "until you're done."), "",
-           "## Correctness labels (same rubric as the judge)", "", _rubric(CORRECTNESS_PROMPT),
-           "", "## Grounded labels (same rubric as the judge)", "",
-           "Judge only against the notes below, not whether the answer is true.", "",
-           _rubric(GROUNDED_PROMPT), ""]
-    for r in rows:
-        out += ["---", "", f"## {r['n']}. {r['question']}", "",
-                f"- **Gold:** {r['gold']}", f"- **Accepted:** {r['accepted'] or '(none)'}",
-                f"- **Answerable as asked:** {r['answerable']}",
-                f"- **Predicted answer:** {r['predicted'] or '(empty)'}", "",
-                "**Research notes**", "", "```", r["notes"], "```", ""]
-    return "\n".join(out)
+def _readme() -> str:
+    return "\n".join([
+        "# Human validation", "",
+        ("Grade each row of `grading.csv` blind: fill in `human_correctness`, "
+         "`human_grounded` and, if useful, `comment`. Leave `key.csv` closed until you're "
+         "done."), "",
+        "## human_correctness", "", _rubric(CORRECTNESS_PROMPT), "",
+        "## human_grounded", "",
+        "Judge only against the row's `notes`, not whether the answer is true.", "",
+        _rubric(GROUNDED_PROMPT), ""])
 
 
 def main() -> None:
@@ -164,9 +169,8 @@ def main() -> None:
     sheet = blind_rows(picked, gold)
 
     args.out.mkdir(parents=True, exist_ok=True)
-    (args.out / "grading_sheet.md").write_text(_sheet(sheet))
-    _write_csv(args.out / "labels.csv", sheet,
-               ["n", "question", "predicted", "human_correctness", "human_grounded", "comment"])
+    write_grading_csv(args.out / "grading.csv", sheet)
+    (args.out / "README.md").write_text(_readme())
     key = key_rows(picked, runs)
     _write_csv(args.out / "key.csv", key, list(key[0]))
     strata = Counter(stratum(r) for r in picked)
