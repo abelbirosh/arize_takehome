@@ -8,8 +8,8 @@ import './judges.css';
 const BASE = '/judges';
 const chapters = [
   { id: 'problem', name: 'Comparing different judge methods and human annotation', title: 'Comparing different judge methods and human annotation' },
-  { id: 'annotator', name: 'Human data annotator', title: 'Human data annotator' },
-  { id: 'comparisons', name: 'Judge comparisons between human grading, reasoning models and decision models', title: 'Judge comparisons between human grading, reasoning models and decision models' },
+  { id: 'annotator', name: 'Data Annotation UI', title: 'Data Annotation UI' },
+  { id: 'comparisons', name: 'Results and Analysis', title: 'Results and Analysis' },
 ];
 const chapterPath = id => id === chapters[0].id ? BASE : `${BASE}/${id}`;
 const indexFromPath = () => {
@@ -111,13 +111,14 @@ const kappa = v => v == null ? '—' : v.toFixed(2);
 const cents = v => v == null ? '—' : v === 0 ? '0¢' : `${(v * 100).toPrecision(2)}¢`;
 const ms = v => v == null ? '—' : `${Math.round(v).toLocaleString('en-US')} ms`;
 
-function JudgeChart({ label, description, judges, value, format, better, note }) {
+function JudgeChart({ label, subtitle, description, judges, value, format, better, note }) {
   const shown = judges.filter(j => value(j) != null)
     .sort((a, b) => better === 'higher' ? value(b) - value(a) : value(a) - value(b));
   const left = judges.filter(j => value(j) == null);
   const max = better === 'higher' && format === pct ? 1 : (Math.max(...shown.map(value)) || 1);
   return <figure className="metric">
     <figcaption><h2>{label}</h2></figcaption>
+    {subtitle && <p className="metric-subtitle">{subtitle}</p>}
     <div className="bars" aria-hidden="true">
       {shown.map(j => <div className={`bar-col kind-${j.kind}`} key={j.judge}>
         <span className="bar-value">{format(value(j))}</span>
@@ -147,11 +148,11 @@ function JudgeComparisons() {
   const judges = data.judges;
   const kinds = [...new Set(judges.map(j => j.kind))];
   return <>
-    <section className="subsection"><h2>Agreement With My Labels</h2>
+    <section className="subsection">
       <ul className="legend">{kinds.map(k => <li key={k}><span className={`swatch kind-${k}`}/>{kindLabels[k]}</li>)}</ul>
       <div className="metric-grid">
-        <JudgeChart label="Correctness agreement" description={`Runs where the judge's correctness label matched mine, out of ${data.runs}.`} judges={judges} value={j => j.correctness_agree} format={pct} better="higher"/>
-        <JudgeChart label="Grounded agreement" description={`Runs where the judge's grounded label matched mine, out of ${data.runs}.`} judges={judges} value={j => j.grounded_agree} format={pct} better="higher"/>
+        <JudgeChart label="Correctness agreement" subtitle="With my labels" description={`Runs where the judge's correctness label matched mine, out of ${data.runs}.`} judges={judges} value={j => j.correctness_agree} format={pct} better="higher"/>
+        <JudgeChart label="Grounded agreement" subtitle="With my labels" description={`Runs where the judge's grounded label matched mine, out of ${data.runs}.`} judges={judges} value={j => j.grounded_agree} format={pct} better="higher"/>
         <JudgeChart label="Cost per grade" description="Mean spend per check." judges={judges} value={j => j.cost_per_grade} format={cents} better="lower"/>
         <JudgeChart label="Time per grade" description="Mean latency per check." judges={judges} value={j => j.latency_per_grade_ms} format={ms} better="lower" note="Sol low's grades come from the benchmark run, which did not time them."/>
       </div>
@@ -199,7 +200,7 @@ function App() {
 
   return <div className="app">
     <a href="#main" className="skip-link">Skip to content</a>
-    <header className="topbar"><a className="brand" href={BASE} onClick={e => { e.preventDefault(); navigate(0); }} aria-label="Comparing Judges home">Comparing Judges</a><div className="header-actions"><a className="present-button repo-link" href="https://github.com/abelbirosh/arize_takehome" target="_blank" rel="noreferrer"><Icon name="github"/>Github Repo</a></div></header>
+    <header className="topbar"><a className="brand" href={BASE} onClick={e => { e.preventDefault(); navigate(0); }} aria-label="Home">Comparing human judges, reasoning models and decision models</a><div className="header-actions"><a className="present-button repo-link" href="https://github.com/abelbirosh/arize_takehome" target="_blank" rel="noreferrer"><Icon name="github"/>Github Repo</a></div></header>
     <div className="workspace">
       <aside className="sidebar"><nav aria-label="Chapters">{chapters.map((item, i) => <a key={item.id} href={chapterPath(item.id)} onClick={e => { e.preventDefault(); navigate(i); }} aria-current={chapter === i ? 'step' : undefined}><span className="chapter-number">{String(i + 1).padStart(2, '0')}</span><span>{item.name}</span></a>)}</nav></aside>
       <main id="main" className={`main chapter-${current.id}`}>

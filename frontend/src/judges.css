@@ -1,3 +1,4 @@
 .annotator-shot{max-width:760px}
+.metric-subtitle{font-size:13px;color:var(--muted);margin-top:4px}
 .data-table tbody th .swatch{display:inline-block;margin-right:4px;vertical-align:baseline}
 .judge-table th[scope=row]{white-space:nowrap}
