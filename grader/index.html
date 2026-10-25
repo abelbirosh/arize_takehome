@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Judge validation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="grader.css">
+</head>
+<body>
+  <div class="app" data-view="item">
+    <header class="topbar">
+      <div class="brand">
+        <svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="9" height="20" rx="2"/><rect x="13" y="2" width="9" height="9" rx="2"/><rect x="13" y="13" width="9" height="9" rx="2" class="mark-open"/></svg>
+        <span class="wordmark">Judge validation</span>
+        <span class="scope">research-bench-v2 · blind sample</span>
+      </div>
+      <div class="progress" aria-live="polite">
+        <span class="progress-text num" id="progress-text"></span>
+        <span class="progress-track" aria-hidden="true"><span class="progress-fill" id="progress-fill"></span></span>
+      </div>
+      <div class="top-actions">
+        <span class="storage-note" id="storage-note" hidden>Browser storage is off: download before you close this tab</span>
+        <button class="button primary" id="download" type="button">Download labels.csv</button>
+      </div>
+    </header>
+
+    <aside class="queue" aria-labelledby="queue-title">
+      <div class="queue-head">
+        <h2 id="queue-title">Runs</h2>
+        <div class="tabs" role="tablist" aria-label="Filter runs">
+          <button role="tab" type="button" data-filter="all" aria-selected="true">All <span class="num" id="count-all"></span></button>
+          <button role="tab" type="button" data-filter="todo" aria-selected="false">To grade <span class="num" id="count-todo"></span></button>
+        </div>
+      </div>
+      <ol class="queue-list" id="queue-list"></ol>
+    </aside>
+
+    <main class="sheet" id="sheet">
+      <div class="sheet-inner" id="item"></div>
+    </main>
+  </div>
+
+  <script src="../results/human_validation/grading.js"></script>
+  <script src="grader.js"></script>
+</body>
+</html>
