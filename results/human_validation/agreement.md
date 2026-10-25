@@ -10,9 +10,9 @@
 
 | Judge \ Human | correct | hedged | incorrect | no_answer |
 |---|---|---|---|---|
-| correct | 8 | 1 |  |  |
+| correct | 9 | 1 |  |  |
 | hedged | 4 | 2 |  |  |
-| incorrect |  |  | 6 |  |
+| incorrect |  |  | 5 |  |
 | no_answer |  |  | 2 | 2 |
 
 ## Grounded: judge (rows) against human (columns)
@@ -86,8 +86,8 @@
 ### 15. How many years did it take after the FIFA ban was lifted for someone to wear a hijab in the World Cup?
 
 - Decider: claude-opus-5.5
-- Judge: incorrect / supported; human: incorrect / unsupported
-- Correctness judge: The prediction commits to about 9 years, whereas the gold answer is 11 years.
+- Judge: correct / supported; human: correct / unsupported
+- Correctness judge: The prediction commits to 9 years, which is an accepted variant.
 - Grounded judge: The notes state that FIFA lifted the ban in 2014 and identify Benzina as the first hijab-wearer at the senior FIFA Women's World Cup in 2023, yielding a nine-year gap.
 - Your comment: Question's gold answering seems to be wrong. It's 9 years.
 
