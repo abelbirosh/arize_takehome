@@ -44,6 +44,7 @@ scripts/              dataset prep, Phoenix experiments, resume/backfill, analys
 data/                 question suites (v1: 25, v2: 50) and candidate pools
 results/              every run's answer, steps, stats and grades (.jsonl) plus raw logs
 frontend/             the presentation (React + Vite, deployed on Vercel)
+grader/               a local page for grading the judges blind (see grader/README.md)
 tests/                agent, controller, evaluator, tool and tracing tests with fakes
 docs/                 the original v1 benchmark plan and presentation design notes
 ```
@@ -76,6 +77,13 @@ uv run python scripts/run_experiments.py --dataset research-bench-50-pilot --tag
 uv run python scripts/run_experiments.py --dataset research-bench-v2 --split main --tag full-v2   # other 43
 uv run python scripts/merge_pilot.py                              # -> results/full-v2-merged.jsonl
 uv run python scripts/analyze.py results/full-v2-merged.jsonl     # summary tables, no model calls
+```
+
+Grade a blind sample of the judges' work by hand (no model calls):
+
+```bash
+uv run python scripts/sample_validation.py results/full-v2-merged.jsonl   # 25 runs -> results/human_validation/
+open grader/index.html                                                     # click labels, then Download labels.csv
 ```
 
 The presentation runs on Node 22.12+:
