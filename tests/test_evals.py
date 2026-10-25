@@ -5,6 +5,8 @@ import sys
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
 from research_agent.evals import Judge
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
@@ -88,3 +90,68 @@ def test_stringified_dataframe_fields_are_restored():
                        {"needs_web": "False"})["score"] == 1.0
     assert normalize({"accepted": "['Red Bull–Bora–Hansgrohe', 'Red Bull Bora']"})["accepted"] == [
         "Red Bull–Bora–Hansgrohe", "Red Bull Bora"]
+
+
+def test_judge_sends_its_reasoning_effort(settings):
+    j, fake = judge_replying({"label": "correct", "explanation": "x"}, settings)
+    j.effort = "high"
+    seen = {}
+    create = fake.create
+    fake.create = lambda **kw: (seen.update(kw), create(**kw))[1]
+    j.correctness("Q?", "Minsk", ["Minsk"], True, "Minsk")
+    assert seen["extra_body"]["reasoning"] == {"effort": "high"}
+
+
+class FakeDecisionClient:
+    def __init__(self, choice: str, confidence: float = 0.8):
+        self.choice, self.confidence = choice, confidence
+        self.calls: list[dict] = []
+
+    def system_one(self, state, questions, model=None):
+        self.calls.append({"state": state, "questions": questions, "model": model})
+        (name, q), = questions.items()
+        probs = {o: (self.confidence if o == self.choice else 0.0) for o in q.criteria}
+        answer = SimpleNamespace(type="choice", choice=self.choice,
+                                 confidence=self.confidence, probabilities=probs)
+        return SimpleNamespace(answers={name: answer}, model=model,
+                               usage=SimpleNamespace(input_tokens=2000, output_tokens=0))
+
+
+def test_decision_judge_grades_correctness_as_one_choice(settings):
+    from research_agent.evals import CORRECTNESS_LABELS, DecisionJudge
+    fake = FakeDecisionClient("hedged", 0.7)
+    j = DecisionJudge(settings, "msft", client=fake)
+    out = j.correctness("Q?", "Minsk", ["Minsk", "Minsk, Belarus"], False, "Maybe Minsk")
+    call = fake.calls[0]
+    (q,) = call["questions"].values()
+    assert tuple(q.criteria) == CORRECTNESS_LABELS
+    assert all(len(text) > 20 for text in q.criteria.values())
+    assert call["state"]["predicted_answer"] == "Maybe Minsk"
+    assert call["state"]["accepted_answers"] == ["Minsk", "Minsk, Belarus"]
+    assert call["state"]["answerable_as_asked"] is False
+    assert out.label == "hedged" and out.score == 0.0
+    assert out.cost_usd == pytest.approx(2000 / 1e6 * 0.042)
+    assert "0.70" in out.explanation
+
+
+def test_decision_judge_grades_grounding_without_the_gold_answer(settings):
+    from research_agent.evals import GROUNDED_LABELS, DecisionJudge
+    fake = FakeDecisionClient("supported")
+    j = DecisionJudge(settings, "oai", client=fake)
+    out = j.grounded("Q?", "Minsk", [{"title": "T", "url": "u", "facts": "- born in Minsk"}])
+    call = fake.calls[0]
+    (q,) = call["questions"].values()
+    assert tuple(q.criteria) == GROUNDED_LABELS
+    assert "gold_answer" not in call["state"]
+    assert call["state"]["research_notes"] == [{"title": "T", "facts": "- born in Minsk"}]
+    assert call["model"] == "openai/gpt-6-luna-decisions"
+    assert out.label == "supported"
+
+
+def test_decision_judge_skips_empty_predictions(settings):
+    from research_agent.evals import DecisionJudge
+    fake = FakeDecisionClient("correct")
+    j = DecisionJudge(settings, "jev", client=fake)
+    assert j.correctness("Q?", "Minsk", [], True, "  ").label == "no_answer"
+    assert j.grounded("Q?", "", []).label == "not_applicable"
+    assert fake.calls == []
