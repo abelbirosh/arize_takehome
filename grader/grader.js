@@ -255,6 +255,14 @@
   $("download").onclick = download;
 
   document.addEventListener("keydown", (e) => {
+    // Ctrl+Enter (or Cmd+Enter) moves on from anywhere, the comment box included.
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      const comment = $("comment");
+      if (comment) save(rows[current].n, { comment: comment.value });
+      go(current + 1, true);
+      return;
+    }
     if (e.target.closest("textarea, input[type=text]") || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === "ArrowRight" || e.key === "j") { e.preventDefault(); go(current + 1); return; }
     if (e.key === "ArrowLeft" || e.key === "k") { e.preventDefault(); go(current - 1); return; }

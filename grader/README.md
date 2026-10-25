@@ -13,4 +13,4 @@ open grader/index.html
 - Data: `results/human_validation/grading.js`, written by `scripts/sample_validation.py`.
 - Grades save in this browser as you click (per sample, so a new draw starts clean).
 - **Download labels.csv** exports `n, question, human_correctness, human_grounded, comment`.
-- Keys: `1`–`4` correctness, `5`–`7` grounded, `←` / `→` previous and next run.
+- Keys: `1`–`4` correctness, `5`–`7` grounded, `←` / `→` previous and next run, `Ctrl+Enter` (or `Cmd+Enter`) next run from anywhere, the comment box included.
